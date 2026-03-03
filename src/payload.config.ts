@@ -5,7 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { Users } from './collections/Users'
+import { Users } from './collections/users/Users'
 import { Media } from './collections/Media'
 
 // Shared
@@ -63,7 +63,11 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    extensions: ['postgis'],
     migrationDir: path.resolve(dirname, 'migrations'),
+    // Never auto-push schema — always use explicit migrations.
+    // This preserves custom columns (e.g. PostGIS geom) not tracked by Drizzle.
+    push: false,
   }),
   sharp,
   plugins: [],

@@ -1,4 +1,7 @@
 import type { CollectionConfig } from 'payload'
+import getNearbyPosts from '@/lib/nearby'
+import editor from '../users/access/editor'
+import { anyone } from '../users/access/anyone'
 
 export const NitfPosts: CollectionConfig = {
   slug: 'nitf_posts',
@@ -7,13 +10,14 @@ export const NitfPosts: CollectionConfig = {
     defaultColumns: ['title', 'type', 'status', 'published_at'],
   },
   access: {
-    read: ({ req }) => {
-      if (!req.user) return { status: { equals: 'published' } }
+    read: () => {
+      // Unauthenticated users should only see published posts — enforce via access control, not API routes
+      if (anyone()) return { status: { equals: 'published' } }
       return true
     },
-    create: ({ req }) => !!req.user,
-    update: ({ req }) => !!req.user,
-    delete: ({ req }) => !!req.user,
+    create: editor,
+    update: editor,
+    delete: editor,
   },
   fields: [
     {
@@ -75,15 +79,36 @@ export const NitfPosts: CollectionConfig = {
     {
       name: 'review_meta',
       type: 'json',
-      admin: { condition: (data) => data.type === 'review' },
+      admin: { condition: (data: any) => data.type === 'review' },
     },
     {
       name: 'recipe_meta',
       type: 'json',
-      admin: { condition: (data) => data.type === 'recipe' },
+      admin: { condition: (data: any) => data.type === 'recipe' },
     },
     { name: 'seo_title', type: 'text' },
     { name: 'seo_description', type: 'textarea' },
+  ],
+  endpoints: [
+    {
+      path: '/nearby',
+      method: 'get',
+      handler: async (req: any) => {
+        const url = new URL(req.url || '', 'http://localhost')
+        const lat = parseFloat(url.searchParams.get('lat') || '')
+        const lon = parseFloat(url.searchParams.get('lon') || '')
+        const radius = parseInt(url.searchParams.get('radius') || '50000', 10)
+
+        if (isNaN(lat) || isNaN(lon)) {
+          return Response.json(
+            { error: 'lat and lon query parameters are required' },
+            { status: 400 },
+          )
+        }
+
+        return getNearbyPosts(lat, lon, radius, req.payload.db)
+      },
+    },
   ],
   timestamps: true,
 }

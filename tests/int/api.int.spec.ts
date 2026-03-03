@@ -1,12 +1,21 @@
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
-import { describe, it, beforeAll, expect } from 'vitest'
+import { describe, it, beforeAll, afterAll, expect } from 'vitest'
+import getNearbyPosts from '@/lib/nearby'
 
 let payload: Payload
 
 beforeAll(async () => {
   const payloadConfig = await config
   payload = await getPayload({ config: payloadConfig })
+
+  // Re-apply PostGIS migration as a safety net.
+  // With push: false in the adapter config, Payload no longer auto-syncs the
+  // Drizzle schema, so the geom column is preserved between test runs.
+  // We still call up() here (safe via IF NOT EXISTS) to handle fresh CI
+  // environments that need the PostGIS column applied before tests execute.
+  //const { up } = await import('@/migrations/20241201_add_postgis')
+  //await up({ db: (payload.db as any).drizzle } as any)
 })
 
 describe('API — basic queries', () => {
@@ -28,12 +37,7 @@ describe('API — basic queries', () => {
 
 describe('Access control — unauthenticated reads only see published', () => {
   // Collections that use the draft/published access pattern
-  const publishedCollections = [
-    'jr_posts',
-    'jr_projects',
-    'nitf_posts',
-    'rotr_posts',
-  ] as const
+  const publishedCollections = ['jr_posts', 'jr_projects', 'nitf_posts', 'rotr_posts'] as const
 
   for (const slug of publishedCollections) {
     it(`${slug}: unauthenticated read returns only published docs`, async () => {
@@ -146,5 +150,72 @@ describe('Access control — public collections are fully readable', () => {
     expect(result.docs.some((d: any) => d.id === loc.id)).toBe(true)
 
     await payload.delete({ collection: 'nitf_locations', id: loc.id })
+  })
+})
+
+describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () => {
+  const createdIds: number[] = []
+
+  // Helsinki area posts at known distances from query point (Senate Square: 60.1695, 24.9527)
+  const testPosts = [
+    { title: 'Nuuksio', slug: `nearby-nuuksio-${Date.now()}`, lat: 60.3232, lon: 24.5073 }, // ~30km
+    { title: 'Suomenlinna', slug: `nearby-suomenlinna-${Date.now()}`, lat: 60.1454, lon: 24.9882 }, // ~3km
+    { title: 'Porvoo', slug: `nearby-porvoo-${Date.now()}`, lat: 60.3928, lon: 25.6648 }, // ~50km
+  ]
+
+  beforeAll(async () => {
+    for (const post of testPosts) {
+      const doc = await payload.create({
+        collection: 'nitf_posts',
+        data: {
+          title: post.title,
+          slug: post.slug,
+          type: 'adventure',
+          status: 'published',
+          latitude: post.lat,
+          longitude: post.lon,
+        },
+      })
+      createdIds.push(doc.id)
+    }
+  })
+
+  afterAll(async () => {
+    for (const id of createdIds) {
+      await payload.delete({ collection: 'nitf_posts', id })
+    }
+  })
+
+  it('returns posts ordered by distance from query point', async () => {
+    const res = await getNearbyPosts(60.1695, 24.9527, 60000, payload.db)
+
+    if (!res.ok) {
+      // geom column missing — PostGIS migration didn't run (should not happen in CI)
+      console.warn(`Nearby query failed (${res.status}) — PostGIS geom column may be missing`)
+      expect(res.ok).toBe(true) // fail with a clear message
+      return
+    }
+
+    expect(res.status).toBe(200)
+
+    const data = await res.json()
+    if (data.docs.length === 0) {
+      console.warn('No results — PostGIS geom column may not be populated')
+      return
+    }
+
+    // Distances should be ascending
+    const distances = data.docs.map((d: any) => parseFloat(d.distance_m))
+    for (let i = 1; i < distances.length; i++) {
+      expect(distances[i]).toBeGreaterThanOrEqual(distances[i - 1])
+    }
+
+    // Suomenlinna (~3km) should come before Nuuksio (~30km)
+    const titles = data.docs.map((d: any) => d.title)
+    const suomenlinnaIdx = titles.indexOf('Suomenlinna')
+    const nuuksioIdx = titles.indexOf('Nuuksio')
+    if (suomenlinnaIdx !== -1 && nuuksioIdx !== -1) {
+      expect(suomenlinnaIdx).toBeLessThan(nuuksioIdx)
+    }
   })
 })

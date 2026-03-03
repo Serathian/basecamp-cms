@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import editor from '../users/access/editor'
 
 export const NitfWaypoints: CollectionConfig = {
   slug: 'nitf_waypoints',
@@ -8,9 +9,9 @@ export const NitfWaypoints: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req }) => !!req.user,
-    update: ({ req }) => !!req.user,
-    delete: ({ req }) => !!req.user,
+    create: editor,
+    update: editor,
+    delete: editor,
   },
   fields: [
     { name: 'trail', type: 'relationship', relationTo: 'nitf_trails', required: true },

@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { anyone } from '../users/access/anyone'
+import user from '../users/access/user'
 
 export const NitfLocations: CollectionConfig = {
   slug: 'nitf_locations',
@@ -7,10 +9,10 @@ export const NitfLocations: CollectionConfig = {
     defaultColumns: ['name', 'place_type', 'marker_type', 'country'],
   },
   access: {
-    read: () => true,
-    create: ({ req }) => !!req.user,
-    update: ({ req }) => !!req.user,
-    delete: ({ req }) => !!req.user,
+    read: anyone,
+    create: user,
+    update: user,
+    delete: user,
   },
   fields: [
     { name: 'name', type: 'text', required: true },

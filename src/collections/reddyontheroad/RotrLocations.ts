@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import editor from '../users/access/editor'
 
 export const RotrLocations: CollectionConfig = {
   slug: 'rotr_locations',
@@ -8,9 +9,9 @@ export const RotrLocations: CollectionConfig = {
   },
   access: {
     read: () => true,
-    create: ({ req }) => !!req.user,
-    update: ({ req }) => !!req.user,
-    delete: ({ req }) => !!req.user,
+    create: editor,
+    update: editor,
+    delete: editor,
   },
   fields: [
     { name: 'name', type: 'text', required: true },
