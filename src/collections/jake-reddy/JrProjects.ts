@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import editor from '../users/access/editor'
-import { anyone } from '../users/access/anyone'
+import published from '../users/access/published'
 
 export const JrProjects: CollectionConfig = {
   slug: 'jr_projects',
@@ -9,11 +9,7 @@ export const JrProjects: CollectionConfig = {
     defaultColumns: ['title', 'status', 'project_status', 'featured'],
   },
   access: {
-    read: () => {
-      // Unauthenticated users should only see published posts — enforce via access control, not API routes
-      if (anyone()) return { status: { equals: 'published' } }
-      return true
-    },
+    read: published,
     create: editor,
     update: editor,
     delete: editor,

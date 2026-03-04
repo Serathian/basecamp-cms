@@ -35,6 +35,31 @@ describe('API — basic queries', () => {
   })
 })
 
+describe('Access control — authenticated users can read drafts', () => {
+  it('admin user can read draft jr_posts', async () => {
+    const draft = await payload.create({
+      collection: 'jr_posts',
+      data: { title: 'Admin draft visibility test', slug: `admin-draft-${Date.now()}`, status: 'draft' },
+    })
+
+    const adminUser = await payload.create({
+      collection: 'users',
+      data: { email: `admin-${Date.now()}@test.example`, password: 'testpassword', roles: ['admin'] },
+    })
+
+    const result = await payload.find({
+      collection: 'jr_posts',
+      overrideAccess: false,
+      user: adminUser,
+    })
+
+    expect(result.docs.some((d: any) => d.id === draft.id)).toBe(true)
+
+    await payload.delete({ collection: 'jr_posts', id: draft.id })
+    await payload.delete({ collection: 'users', id: adminUser.id })
+  })
+})
+
 describe('Access control — unauthenticated reads only see published', () => {
   // Collections that use the draft/published access pattern
   const publishedCollections = ['jr_posts', 'jr_projects', 'nitf_posts', 'rotr_posts'] as const
@@ -188,21 +213,11 @@ describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () 
 
   it('returns posts ordered by distance from query point', async () => {
     const res = await getNearbyPosts(60.1695, 24.9527, 60000, payload.db)
-
-    if (!res.ok) {
-      // geom column missing — PostGIS migration didn't run (should not happen in CI)
-      console.warn(`Nearby query failed (${res.status}) — PostGIS geom column may be missing`)
-      expect(res.ok).toBe(true) // fail with a clear message
-      return
-    }
-
+    expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
 
     const data = await res.json()
-    if (data.docs.length === 0) {
-      console.warn('No results — PostGIS geom column may not be populated')
-      return
-    }
+    expect(data.docs.length).toBeGreaterThan(0)
 
     // Distances should be ascending
     const distances = data.docs.map((d: any) => parseFloat(d.distance_m))
@@ -214,8 +229,8 @@ describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () 
     const titles = data.docs.map((d: any) => d.title)
     const suomenlinnaIdx = titles.indexOf('Suomenlinna')
     const nuuksioIdx = titles.indexOf('Nuuksio')
-    if (suomenlinnaIdx !== -1 && nuuksioIdx !== -1) {
-      expect(suomenlinnaIdx).toBeLessThan(nuuksioIdx)
-    }
+    expect(suomenlinnaIdx).toBeGreaterThanOrEqual(0)
+    expect(nuuksioIdx).toBeGreaterThanOrEqual(0)
+    expect(suomenlinnaIdx).toBeLessThan(nuuksioIdx)
   })
 })

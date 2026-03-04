@@ -1,7 +1,8 @@
 import type { CollectionConfig } from 'payload'
+import { sql } from 'drizzle-orm'
 import getNearbyPosts from '@/lib/nearby'
 import editor from '../users/access/editor'
-import { anyone } from '../users/access/anyone'
+import published from '../users/access/published'
 
 export const NitfPosts: CollectionConfig = {
   slug: 'nitf_posts',
@@ -10,14 +11,25 @@ export const NitfPosts: CollectionConfig = {
     defaultColumns: ['title', 'type', 'status', 'published_at'],
   },
   access: {
-    read: () => {
-      // Unauthenticated users should only see published posts — enforce via access control, not API routes
-      if (anyone()) return { status: { equals: 'published' } }
-      return true
-    },
+    read: published,
     create: editor,
     update: editor,
     delete: editor,
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc, req }: any) => {
+        if (doc.latitude != null && doc.longitude != null) {
+          const db = (req.payload.db as any).drizzle
+          await db.execute(sql`
+            UPDATE nitf_posts
+            SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude}, ${doc.latitude}), 4326)
+            WHERE id = ${doc.id}
+          `)
+        }
+        return doc
+      },
+    ],
   },
   fields: [
     {

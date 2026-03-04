@@ -1,6 +1,6 @@
 import type { CollectionConfig, CollectionAfterChangeHook } from 'payload'
 import editor from '../users/access/editor'
-import { anyone } from '../users/access/anyone'
+import published from '../users/access/published'
 
 interface GpxPoint {
   lat: number
@@ -111,11 +111,7 @@ export const NitfTrails: CollectionConfig = {
     defaultColumns: ['title', 'status', 'difficulty', 'distance_km'],
   },
   access: {
-    read: () => {
-      // Unauthenticated users should only see published posts — enforce via access control, not API routes
-      if (anyone()) return { status: { equals: 'published' } }
-      return true
-    },
+    read: published,
     create: editor,
     update: editor,
     delete: editor,
