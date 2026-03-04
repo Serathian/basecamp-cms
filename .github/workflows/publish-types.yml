@@ -33,6 +33,7 @@ jobs:
       - name: Generate types
         run: npx payload generate:types
         env:
+          PAYLOAD_CONFIG_PATH: src/payload.config.export-types.ts
           PAYLOAD_SECRET: build-secret-not-used-at-runtime
           DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
 
