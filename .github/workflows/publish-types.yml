@@ -4,7 +4,8 @@ on:
   push:
     branches: [master]
     paths:
-      - 'src/payload-types.ts'
+      - 'src/collections/**'
+      - 'src/payload.config.ts'
       - 'packages/types/**'
 
 jobs:
@@ -25,7 +26,16 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@serathian'
 
-      - name: Install dependencies
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Generate types
+        run: npx payload generate:types
+        env:
+          PAYLOAD_SECRET: build-secret-not-used-at-runtime
+          DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+
+      - name: Install package dependencies
         working-directory: packages/types
         run: npm install
 
