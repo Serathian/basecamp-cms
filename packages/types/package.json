@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "node -e \"require('fs').cpSync('../../src/payload-types.ts', './payload-types.ts')\"",
+    "prebuild": "node -e \"require('fs').cpSync('../../src/payload-types-export.ts', './payload-types.ts')\"",
     "build": "tsc",
     "postbuild": "node -e \"require('fs').rmSync('./payload-types.ts', {force: true})\"",
     "prepublishOnly": "npm run build"
