@@ -1,5 +1,5 @@
 {
-  "name": "@serathian/basecamp-cms-types",
+  "name": "@basecamp-cms/basecamp-cms-types",
   "version": "1.0.0",
   "description": "TypeScript types generated from basecamp-cms Payload CMS config",
   "type": "module",
@@ -21,7 +21,7 @@
     "prepublishOnly": "npm run build"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
+    "registry": "https://registry.npmjs.org",
     "access": "public"
   },
   "devDependencies": {
