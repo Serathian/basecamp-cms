@@ -1,0 +1,44 @@
+name: Publish Types Package
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/payload-types.ts'
+      - 'packages/types/**'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@serathian'
+
+      - name: Install dependencies
+        working-directory: packages/types
+        run: npm install
+
+      - name: Set version from run number
+        working-directory: packages/types
+        run: npm version 1.0.${{ github.run_number }} --no-git-tag-version
+
+      - name: Build
+        working-directory: packages/types
+        run: npm run build
+
+      - name: Publish
+        working-directory: packages/types
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
