@@ -1,13 +1,3 @@
-import { checkRole } from './checkrole'
-
-const admin = ({ req: { user } }: any) => {
-  if (user) {
-    if (checkRole(['admin'], user)) {
-      return true
-    }
-  }
-
-  return false
-}
+const admin = ({ req: { user } }: any) => Boolean(user)
 
 export default admin
