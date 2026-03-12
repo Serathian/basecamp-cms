@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import getNearbyPosts from '@/lib/nearby'
-import editor from '../users/access/editor'
-import { anyone } from '../users/access/anyone'
+import published from '../users/access/published'
+import admin from '../users/access/admin'
 
 export const NitfPosts: CollectionConfig = {
   slug: 'nitf_posts',
@@ -10,14 +10,10 @@ export const NitfPosts: CollectionConfig = {
     defaultColumns: ['title', 'type', 'status', 'published_at'],
   },
   access: {
-    read: () => {
-      // Unauthenticated users should only see published posts — enforce via access control, not API routes
-      if (anyone()) return { status: { equals: 'published' } }
-      return true
-    },
-    create: editor,
-    update: editor,
-    delete: editor,
+    read: published,
+    create: admin,
+    update: admin,
+    delete: admin,
   },
   fields: [
     {
