@@ -4,18 +4,82 @@ import { describe, it, beforeAll, afterAll, expect } from 'vitest'
 import getNearbyPosts from '@/lib/nearby'
 
 let payload: Payload
+let adminUser: any
 
 beforeAll(async () => {
   const payloadConfig = await config
   payload = await getPayload({ config: payloadConfig })
 
-  // Re-apply PostGIS migration as a safety net.
-  // With push: false in the adapter config, Payload no longer auto-syncs the
-  // Drizzle schema, so the geom column is preserved between test runs.
-  // We still call up() here (safe via IF NOT EXISTS) to handle fresh CI
-  // environments that need the PostGIS column applied before tests execute.
-  //const { up } = await import('@/migrations/20241201_add_postgis')
-  //await up({ db: (payload.db as any).drizzle } as any)
+  // Create admin user for authenticated tests
+  adminUser = await payload.create({
+    collection: 'users',
+    data: {
+      email: 'admin@test.com',
+      password: 'test123',
+      roles: 'admin',
+    },
+  })
+})
+
+afterAll(async () => {
+  if (adminUser?.id) {
+    await payload.delete({ collection: 'users', id: adminUser.id })
+  }
+})
+
+describe('Access control — authenticated admin sees drafts', () => {
+  const collections = ['jr_posts', 'nitf_posts', 'nitf_trails', 'rotr_posts'] as const
+
+  for (const slug of collections) {
+    it(`${slug}: admin user sees drafts, anon user sees published only`, async () => {
+      // Create draft
+      const draft = await payload.create({
+        collection: slug,
+        data: {
+          title: `Draft ${slug} admin test`,
+          slug: `draft-admin-${slug}-${Date.now()}`,
+          status: 'draft',
+          body: 'draft content',
+          ...(slug === 'nitf_posts' ? { type: 'general' } : {}),
+        },
+      })
+
+      // Create published
+      const published = await payload.create({
+        collection: slug,
+        data: {
+          title: `Published ${slug} admin test`,
+          slug: `published-admin-${slug}-${Date.now()}`,
+          status: 'published',
+          body: 'published content',
+          ...(slug === 'nitf_posts' ? { type: 'general' } : {}),
+        },
+      })
+
+      // Unauthenticated read (no user) - should NOT see draft
+      const anonResult = await payload.find({
+        collection: slug,
+        overrideAccess: false,
+      })
+      const anonIds = anonResult.docs.map((d: any) => d.id)
+      expect(anonIds.includes(draft.id)).toBe(false)
+      expect(anonIds.includes(published.id)).toBe(true)
+
+      // Authenticated read (with admin user) - SHOULD see draft
+      const adminResult = await payload.find({
+        collection: slug,
+        overrideAccess: false,
+        user: adminUser,
+      })
+      const adminIds = adminResult.docs.map((d: any) => d.id)
+      expect(adminIds.includes(draft.id)).toBe(true)
+      expect(adminIds.includes(published.id)).toBe(true)
+
+      // Cleanup
+      await payload.delete({ collection: slug, id: draft.id })
+      await payload.delete({ collection: slug, id: published.id })
+    })
+  }
 })
 
 describe('API — basic queries', () => {
