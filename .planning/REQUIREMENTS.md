@@ -9,10 +9,10 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### Access Control
 
-- [ ] **ACCESS-01**: Admin users can view draft content in admin panel (fix `anyone()` bug)
-- [ ] **ACCESS-02**: Published content visible to unauthenticated API requests
-- [ ] **ACCESS-03**: Draft content hidden from unauthenticated API requests
-- [ ] **ACCESS-04**: `published.ts` access helper replaces broken `anyone()` pattern
+- [x] **ACCESS-01**: Admin users can view draft content in admin panel (fix `anyone()` bug)
+- [x] **ACCESS-02**: Published content visible to unauthenticated API requests
+- [x] **ACCESS-03**: Draft content hidden from unauthenticated API requests
+- [x] **ACCESS-04**: `published.ts` access helper replaces broken `anyone()` pattern
 - [ ] **ACCESS-05**: Users collection simplified to admin-only role (remove editor/user)
 
 ### Schema Consolidation
@@ -113,17 +113,57 @@ Explicitly excluded. Documented to prevent scope creep.
 
 Which phases cover which requirements. Updated during roadmap creation.
 
-| Requirement                     | Phase | Status |
-| ------------------------------- | ----- | ------ |
-| (To be populated by roadmapper) |       |        |
+| Requirement | Phase               | Status  |
+| ----------- | ------------------- | ------- |
+| ACCESS-01   | 1                   | Complete |
+| ACCESS-02   | 1                   | Complete |
+| ACCESS-03   | 1                   | Complete |
+| ACCESS-04   | 1                   | Complete |
+| ACCESS-05   | 1                   | Pending |
+| SCHEMA-01   | 1                   | Pending |
+| SCHEMA-02   | 1                   | Pending |
+| SCHEMA-03   | 1                   | Pending |
+| SITESPEC-01 | 3                   | Pending |
+| SITESPEC-02 | 3                   | Pending |
+| SITESPEC-03 | 3                   | Pending |
+| SITESPEC-04 | 3                   | Pending |
+| SITESPEC-05 | 3                   | Pending |
+| JR-01       | 6                   | Pending |
+| JR-02       | 6                   | Pending |
+| JR-03       | 6                   | Pending |
+| JR-04       | 6                   | Pending |
+| NITF-01     | 5                   | Pending |
+| NITF-02     | 5                   | Pending |
+| NITF-03     | 5                   | Pending |
+| NITF-04     | 5                   | Pending |
+| NITF-05     | 5                   | Pending |
+| NITF-06     | 5                   | Pending |
+| NITF-07     | 5                   | Pending |
+| ROTR-01     | 4                   | Pending |
+| ROTR-02     | 4                   | Pending |
+| ROTR-03     | 4                   | Pending |
+| ROTR-04     | 4                   | Pending |
+| ROTR-05     | 4                   | Pending |
+| ROTR-06     | 4                   | Pending |
+| GEO-01      | 2                   | Pending |
+| GEO-02      | 2                   | Pending |
+| GEO-03      | 2                   | Pending |
+| GEO-04      | 2                   | Pending |
+| GEO-05      | 2                   | Pending |
+| GEO-06      | 2                   | Pending |
+| TEST-01     | 1, 7                | Pending |
+| TEST-02     | 3, 4, 5             | Pending |
+| TEST-03     | 2                   | Pending |
+| TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Pending |
+| TEST-05     | 2, 3, 4             | Pending |
 
 **Coverage:**
 
 - v1 requirements: 48 total
-- Mapped to phases: (pending)
-- Unmapped: (pending)
+- Mapped to phases: 48/48 ✓
+- Unmapped: 0
 
 ---
 
 _Requirements defined: 2026-03-11_
-_Last updated: 2026-03-11 after initial definition_
+_Last updated: 2026-03-11 after roadmap creation (traceability updated)_
