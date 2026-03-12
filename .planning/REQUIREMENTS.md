@@ -13,13 +13,13 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 - [x] **ACCESS-02**: Published content visible to unauthenticated API requests
 - [x] **ACCESS-03**: Draft content hidden from unauthenticated API requests
 - [x] **ACCESS-04**: `published.ts` access helper replaces broken `anyone()` pattern
-- [ ] **ACCESS-05**: Users collection simplified to admin-only role (remove editor/user)
+- [x] **ACCESS-05**: Users collection simplified to admin-only role (remove editor/user)
 
 ### Schema Consolidation
 
-- [ ] **SCHEMA-01**: `jr_posts` and `jr_projects` merged into single `jr_posts` collection
-- [ ] **SCHEMA-02**: Migration preserves all existing jr_posts and jr_projects data
-- [ ] **SCHEMA-03**: `jr_posts` supports both blog posts and project showcase content types
+- [x] **SCHEMA-01**: `jr_posts` and `jr_projects` merged into single `jr_posts` collection
+- [x] **SCHEMA-02**: Migration preserves all existing jr_posts and jr_projects data
+- [x] **SCHEMA-03**: `jr_posts` supports both blog posts and project showcase content types
 
 ### Site-Specific Resources
 
@@ -66,7 +66,7 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### Types & Testing
 
-- [ ] **TEST-01**: Integration tests verify access control changes (admin sees drafts, anon sees published only)
+- [x] **TEST-01**: Integration tests verify access control changes (admin sees drafts, anon sees published only)
 - [ ] **TEST-02**: Integration tests verify all bidirectional relationships
 - [ ] **TEST-03**: Integration tests verify PostGIS spatial queries on all geo collections
 - [ ] **TEST-04**: TypeScript types regenerated after each schema change
@@ -113,49 +113,49 @@ Explicitly excluded. Documented to prevent scope creep.
 
 Which phases cover which requirements. Updated during roadmap creation.
 
-| Requirement | Phase               | Status  |
-| ----------- | ------------------- | ------- |
+| Requirement | Phase               | Status   |
+| ----------- | ------------------- | -------- |
 | ACCESS-01   | 1                   | Complete |
 | ACCESS-02   | 1                   | Complete |
 | ACCESS-03   | 1                   | Complete |
 | ACCESS-04   | 1                   | Complete |
-| ACCESS-05   | 1                   | Pending |
-| SCHEMA-01   | 1                   | Pending |
-| SCHEMA-02   | 1                   | Pending |
-| SCHEMA-03   | 1                   | Pending |
-| SITESPEC-01 | 3                   | Pending |
-| SITESPEC-02 | 3                   | Pending |
-| SITESPEC-03 | 3                   | Pending |
-| SITESPEC-04 | 3                   | Pending |
-| SITESPEC-05 | 3                   | Pending |
-| JR-01       | 6                   | Pending |
-| JR-02       | 6                   | Pending |
-| JR-03       | 6                   | Pending |
-| JR-04       | 6                   | Pending |
-| NITF-01     | 5                   | Pending |
-| NITF-02     | 5                   | Pending |
-| NITF-03     | 5                   | Pending |
-| NITF-04     | 5                   | Pending |
-| NITF-05     | 5                   | Pending |
-| NITF-06     | 5                   | Pending |
-| NITF-07     | 5                   | Pending |
-| ROTR-01     | 4                   | Pending |
-| ROTR-02     | 4                   | Pending |
-| ROTR-03     | 4                   | Pending |
-| ROTR-04     | 4                   | Pending |
-| ROTR-05     | 4                   | Pending |
-| ROTR-06     | 4                   | Pending |
-| GEO-01      | 2                   | Pending |
-| GEO-02      | 2                   | Pending |
-| GEO-03      | 2                   | Pending |
-| GEO-04      | 2                   | Pending |
-| GEO-05      | 2                   | Pending |
-| GEO-06      | 2                   | Pending |
-| TEST-01     | 1, 7                | Pending |
-| TEST-02     | 3, 4, 5             | Pending |
-| TEST-03     | 2                   | Pending |
-| TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Pending |
-| TEST-05     | 2, 3, 4             | Pending |
+| ACCESS-05   | 1                   | Pending  |
+| SCHEMA-01   | 1                   | Pending  |
+| SCHEMA-02   | 1                   | Pending  |
+| SCHEMA-03   | 1                   | Pending  |
+| SITESPEC-01 | 3                   | Pending  |
+| SITESPEC-02 | 3                   | Pending  |
+| SITESPEC-03 | 3                   | Pending  |
+| SITESPEC-04 | 3                   | Pending  |
+| SITESPEC-05 | 3                   | Pending  |
+| JR-01       | 6                   | Pending  |
+| JR-02       | 6                   | Pending  |
+| JR-03       | 6                   | Pending  |
+| JR-04       | 6                   | Pending  |
+| NITF-01     | 5                   | Pending  |
+| NITF-02     | 5                   | Pending  |
+| NITF-03     | 5                   | Pending  |
+| NITF-04     | 5                   | Pending  |
+| NITF-05     | 5                   | Pending  |
+| NITF-06     | 5                   | Pending  |
+| NITF-07     | 5                   | Pending  |
+| ROTR-01     | 4                   | Pending  |
+| ROTR-02     | 4                   | Pending  |
+| ROTR-03     | 4                   | Pending  |
+| ROTR-04     | 4                   | Pending  |
+| ROTR-05     | 4                   | Pending  |
+| ROTR-06     | 4                   | Pending  |
+| GEO-01      | 2                   | Pending  |
+| GEO-02      | 2                   | Pending  |
+| GEO-03      | 2                   | Pending  |
+| GEO-04      | 2                   | Pending  |
+| GEO-05      | 2                   | Pending  |
+| GEO-06      | 2                   | Pending  |
+| TEST-01     | 1, 7                | Pending  |
+| TEST-02     | 3, 4, 5             | Pending  |
+| TEST-03     | 2                   | Pending  |
+| TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Pending  |
+| TEST-05     | 2, 3, 4             | Pending  |
 
 **Coverage:**
 

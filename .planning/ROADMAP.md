@@ -42,8 +42,8 @@ The CMS must align perfectly with how content is authored in Obsidian — every 
 
 Plans:
 
-- [ ] 01-01-PLAN.md — Fix access control bug (create published.ts and admin.ts helpers)
-- [ ] 01-02-PLAN.md — Update collection schemas (merge JrPosts, simplify Users, add tests)
+- [x] 01-01-PLAN.md — Fix access control bug (create published.ts and admin.ts helpers)
+- [x] 01-02-PLAN.md — Update collection schemas (merge JrPosts, simplify Users, add tests)
 - [ ] 01-03-PLAN.md — Create and apply migration (clean slate schema consolidation)
 
 ---
@@ -173,7 +173,7 @@ Plans:
 
 | Phase                                    | Plans Complete | Status      | Completed |
 | ---------------------------------------- | -------------- | ----------- | --------- |
-| 1. Access Control & Schema Consolidation | 0/3            | Planned     | -         |
+| 1. Access Control & Schema Consolidation | 2/3            | In progress | -         |
 | 2. PostGIS Extension & Auto-Population   | 0/TBD          | Not started | -         |
 | 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -         |
 | 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -         |
