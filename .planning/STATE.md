@@ -1,7 +1,7 @@
 # Project State: Basecamp CMS Refinement
 
-**Last updated:** 2026-03-11
-**Project phase:** Roadmap Complete - Ready for Planning
+**Last updated:** 2026-03-12
+**Project phase:** Phase 1 - In Progress
 
 ## Project Reference
 
@@ -13,12 +13,12 @@
 
 **Milestone**: v1 Refinement
 **Phase**: 1 - Access Control & Schema Consolidation
-**Plan**: Not started
-**Status**: Awaiting phase planning
+**Plan**: 01-01 (Access Control Bug Fix) - Complete
+**Status**: In Progress (1 of 3 plans complete)
 
-**Progress**: [░░░░░░░░░░░░░░░░░░░░] 0% (Phase 1 of 7)
+**Progress**: [██░░░░░░░░░░░░░░░░░░] 5% (Phase 1 of 7)
 
-**Blockers**: None - roadmap approved, ready to begin Phase 1 planning
+**Blockers**: None
 
 ## Performance Metrics
 
@@ -32,9 +32,10 @@
 ### Current Phase
 
 - **Phase**: 1 - Access Control & Schema Consolidation
-- **Plans**: Not yet created
-- **Plans complete**: 0/TBD
+- **Plans**: 3 total (01-01, 01-02, 01-03)
+- **Plans complete**: 1/3
 - **Requirements covered**: 10 (ACCESS-01 through ACCESS-05, SCHEMA-01 through SCHEMA-03, TEST-01, TEST-04)
+- **Requirements complete**: 4 (ACCESS-01, ACCESS-02, ACCESS-03, ACCESS-04)
 
 ### Velocity
 
@@ -46,12 +47,14 @@
 
 ### Key Decisions
 
-| Date       | Decision                                | Rationale                                                             | Impact            |
-| ---------- | --------------------------------------- | --------------------------------------------------------------------- | ----------------- |
-| 2026-03-11 | 7 phases for standard granularity       | Matches research recommendations, natural requirement groupings       | Roadmap structure |
-| 2026-03-11 | Fix access control first (Phase 1)      | Admin can't see drafts - blocking bug must be fixed before other work | Phase ordering    |
-| 2026-03-11 | PostGIS before content splits (Phase 2) | Geographic features depend on working spatial queries                 | Phase ordering    |
-| 2026-03-11 | ROTR before NITF (Phase 4 → 5)          | Week/day pattern simpler than trip structure, validates approach      | Phase ordering    |
+| Date       | Decision                                                                                                                                                                 | Rationale                                                                | Impact             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------ |
+| 2026-03-11 | 7 phases for standard granularity                                                                                                                                        | Matches research recommendations, natural requirement groupings          | Roadmap structure  |
+| 2026-03-11 | Fix access control first (Phase 1)                                                                                                                                       | Admin can't see drafts - blocking bug must be fixed before other work    | Phase ordering     |
+| 2026-03-11 | PostGIS before content splits (Phase 2)                                                                                                                                  | Geographic features depend on working spatial queries                    | Phase ordering     |
+| 2026-03-11 | ROTR before NITF (Phase 4 → 5)                                                                                                                                           | Week/day pattern simpler than trip structure, validates approach         | Phase ordering     |
+| 2026-03-12 | Use published.ts helper that checks user presence first, returning true for authenticated users (see all content) and status filter for anonymous users (published only) | Fixes broken anyone() pattern while maintaining correct access semantics | Phase 1 Plan 01-01 |
+| 2026-03-12 | Simplify admin.ts to use Boolean(user) instead of checkRole since only one admin role exists                                                                             | Reduces complexity without changing behavior                             | Phase 1 Plan 01-01 |
 
 ### Critical Information
 
@@ -81,17 +84,16 @@
 
 ### Session Continuity
 
-**Last action**: Roadmap creation completed
-**Next action**: Run `/gsd-plan-phase 1` to decompose Phase 1 into executable plans
+**Last action**: Completed Plan 01-01 (Access Control Bug Fix) - 2026-03-12
+**Next action**: Execute Plan 01-02 (JR Collection Merge) or Plan 01-03 (Users Collection Simplification)
 
 **Context for next session**:
 
-- Phase 1 targets ACCESS and SCHEMA requirements (10 total)
-- Must create `published.ts` access helper to fix broken draft visibility
-- Must write migration to merge `jr_posts` + `jr_projects` preserving all data
-- Must update relationship fields after collection merge
-- Must simplify Users collection to admin-only role
-- Research not needed (patterns documented in AGENTS.md)
+- Phase 1 Plan 01-01 complete: Fixed `anyone()` access bug, all 5 collections now use `published.ts` helper
+- Commits: 5b549a9 (published helper), f4b3947 (admin simplification), 69c42ed (collection updates), 793543a (metadata)
+- Requirements complete: ACCESS-01, ACCESS-02, ACCESS-03, ACCESS-04 ✓
+- Remaining Phase 1 work: Collection merge (01-02) + users simplification (01-03)
+- Test status: All integration tests passing (11/11)
 
 ## Open Questions
 
@@ -111,8 +113,10 @@
 
 ### Immediate (Next Session)
 
-- [ ] Run `/gsd-plan-phase 1` to create execution plans for access control + schema consolidation
-- [ ] Validate Phase 1 plans cover all 10 requirements
+- [x] ~~Run `/gsd-plan-phase 1` to create execution plans for access control + schema consolidation~~ ✓ Complete
+- [x] ~~Execute Plan 01-01 (Access Control Bug Fix)~~ ✓ Complete
+- [ ] Execute Plan 01-02 (JR Collection Merge)
+- [ ] Execute Plan 01-03 (Users Collection Simplification)
 
 ### Upcoming (Later Phases)
 
