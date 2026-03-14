@@ -59,12 +59,18 @@ Plans:
 **Success Criteria** (what must be TRUE):
 
 1. New nitf_post with latitude/longitude has geom column populated automatically
-2. Spatial query `/nearby?lat=X&lon=Y` returns results from nitf_destinations within specified radius
-3. nitf_poi spatial queries return results ordered by distance from query point
-4. rotr_days spatial queries work for map visualization
+2. Spatial query `/nearby?lat=X&lon=Y` returns results from all 6 geo collections
+3. Spatial queries return results ordered by distance from query point
+4. All 6 geo collections have geom columns with spatial indexes
 5. Migration down() successfully rolls back all PostGIS changes to all 6 tables
 
-**Plans**: TBD
+**Plans**: 3 plans in 3 waves
+
+Plans:
+
+- [ ] 02-01-PLAN.md — Extend PostGIS migration to 6 tables with test coverage
+- [ ] 02-02-PLAN.md — Add afterChange hooks to auto-populate geom columns
+- [ ] 02-03-PLAN.md — Strengthen spatial tests and regenerate types
 
 ---
 
@@ -171,15 +177,15 @@ Plans:
 
 ## Progress
 
-| Phase                                    | Plans Complete | Status      | Completed |
-| ---------------------------------------- | -------------- | ----------- | --------- |
-| 1. Access Control & Schema Consolidation | 3/3 | Complete   | 2026-03-14 |
-| 2. PostGIS Extension & Auto-Population   | 0/TBD          | Not started | -         |
-| 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -         |
-| 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -         |
-| 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -         |
-| 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -         |
-| 7. Production Refinement                 | 0/TBD          | Not started | -         |
+| Phase                                    | Plans Complete | Status      | Completed  |
+| ---------------------------------------- | -------------- | ----------- | ---------- |
+| 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
+| 2. PostGIS Extension & Auto-Population   | 0/3            | Planned     | -          |
+| 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -          |
+| 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -          |
+| 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
+| 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
+| 7. Production Refinement                 | 0/TBD          | Not started | -          |
 
 ## Dependencies
 
@@ -221,4 +227,4 @@ Phases with standard patterns (skip research):
 ---
 
 _Roadmap created: 2026-03-11_
-_Last updated: 2026-03-12_
+_Last updated: 2026-03-14_
