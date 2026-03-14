@@ -18,6 +18,41 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       geomCol: 'geom',
       indexName: 'idx_nitf_posts_geom',
     },
+    {
+      table: 'nitf_trails',
+      latCol: 'latitude_start',
+      lonCol: 'longitude_start',
+      geomCol: 'geom',
+      indexName: 'idx_nitf_trails_geom',
+    },
+    {
+      table: 'nitf_waypoints',
+      latCol: 'latitude',
+      lonCol: 'longitude',
+      geomCol: 'geom',
+      indexName: 'idx_nitf_waypoints_geom',
+    },
+    {
+      table: 'nitf_locations',
+      latCol: 'latitude',
+      lonCol: 'longitude',
+      geomCol: 'geom',
+      indexName: 'idx_nitf_locations_geom',
+    },
+    {
+      table: 'rotr_posts',
+      latCol: 'latitude',
+      lonCol: 'longitude',
+      geomCol: 'geom',
+      indexName: 'idx_rotr_posts_geom',
+    },
+    {
+      table: 'rotr_locations',
+      latCol: 'latitude',
+      lonCol: 'longitude',
+      geomCol: 'geom',
+      indexName: 'idx_rotr_locations_geom',
+    },
   ]
 
   for (const { table, latCol, lonCol, geomCol, indexName } of geoTables) {
