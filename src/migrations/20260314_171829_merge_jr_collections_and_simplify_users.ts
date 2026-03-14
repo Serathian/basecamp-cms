@@ -56,15 +56,18 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   `)
 
   // Create enums for jr_posts status and project fields
-  await db.execute(sql`
-    CREATE TYPE IF NOT EXISTS enum_jr_posts_status AS ENUM('draft', 'published', 'archived');
-  `)
-  await db.execute(sql`
-    CREATE TYPE IF NOT EXISTS enum_jr_posts_project_type AS ENUM('open-source', 'personal', 'home-lab', 'professional');
-  `)
-  await db.execute(sql`
-    CREATE TYPE IF NOT EXISTS enum_jr_posts_project_status AS ENUM('active', 'in-progress', 'completed', 'archived');
-  `)
+  await db.execute(sql`DROP TYPE IF EXISTS enum_jr_posts_status CASCADE`)
+  await db.execute(sql`CREATE TYPE enum_jr_posts_status AS ENUM('draft', 'published', 'archived')`)
+
+  await db.execute(sql`DROP TYPE IF EXISTS enum_jr_posts_project_type CASCADE`)
+  await db.execute(
+    sql`CREATE TYPE enum_jr_posts_project_type AS ENUM('open-source', 'personal', 'home-lab', 'professional')`,
+  )
+
+  await db.execute(sql`DROP TYPE IF EXISTS enum_jr_posts_project_status CASCADE`)
+  await db.execute(
+    sql`CREATE TYPE enum_jr_posts_project_status AS ENUM('active', 'in-progress', 'completed', 'archived')`,
+  )
 
   // Alter jr_posts to use enums
   await db.execute(sql`
