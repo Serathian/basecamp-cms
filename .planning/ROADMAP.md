@@ -11,7 +11,7 @@ The CMS must align perfectly with how content is authored in Obsidian — every 
 
 ## Phases
 
-- [ ] **Phase 1: Access Control & Schema Consolidation** - Fix admin draft visibility + merge jr collections
+- [x] **Phase 1: Access Control & Schema Consolidation** - Fix admin draft visibility + merge jr collections (completed 2026-03-14)
 - [ ] **Phase 2: PostGIS Extension & Auto-Population** - Extend spatial queries to all 6 geo tables
 - [ ] **Phase 3: Site-Specific Media & Tags** - Split shared collections into namespace-prefixed versions
 - [ ] **Phase 4: Reddy on the Road Week/Day Split** - Restructure rotr_posts into weeks + days with ordered relationships
@@ -173,7 +173,7 @@ Plans:
 
 | Phase                                    | Plans Complete | Status      | Completed |
 | ---------------------------------------- | -------------- | ----------- | --------- |
-| 1. Access Control & Schema Consolidation | 2/3            | In progress | -         |
+| 1. Access Control & Schema Consolidation | 3/3 | Complete   | 2026-03-14 |
 | 2. PostGIS Extension & Auto-Population   | 0/TBD          | Not started | -         |
 | 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -         |
 | 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -         |
