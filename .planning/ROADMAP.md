@@ -54,7 +54,7 @@ Plans:
 
 **Depends on**: Phase 1 (clean foundation before geographic extensions)
 
-**Requirements**: GEO-01, GEO-02, GEO-03, GEO-04, GEO-05, GEO-06, TEST-03, TEST-04, TEST-05
+**Requirements**: GEO-01, GEO-05, GEO-06, TEST-03, TEST-04, TEST-05
 
 **Success Criteria** (what must be TRUE):
 
@@ -100,7 +100,7 @@ Plans:
 
 **Depends on**: Phase 2 (rotr_days needs PostGIS geom), Phase 3 (needs rotr_media + rotr_tags)
 
-**Requirements**: ROTR-01, ROTR-02, ROTR-03, ROTR-04, ROTR-05, ROTR-06, TEST-02, TEST-04, TEST-05
+**Requirements**: ROTR-01, ROTR-02, ROTR-03, ROTR-04, ROTR-05, ROTR-06, GEO-04, TEST-02, TEST-04, TEST-05
 
 **Success Criteria** (what must be TRUE):
 
@@ -121,7 +121,7 @@ Plans:
 
 **Depends on**: Phase 2 (POIs need PostGIS), Phase 3 (needs nitf_media + nitf_tags), Phase 4 (validates ordered relationship pattern)
 
-**Requirements**: NITF-01, NITF-02, NITF-03, NITF-04, NITF-05, NITF-06, NITF-07, TEST-02, TEST-04
+**Requirements**: NITF-01, NITF-02, NITF-03, NITF-04, NITF-05, NITF-06, NITF-07, GEO-02, GEO-03, TEST-02, TEST-04
 
 **Success Criteria** (what must be TRUE):
 
