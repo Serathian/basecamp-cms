@@ -13,26 +13,20 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 
   // Simplify users role enum to admin-only
   // Delete non-admin users first (clean slate per user decision)
-  await db.execute(sql`DELETE FROM users WHERE roles != 'admin'`)
-
-  // Update enum (rename old, create new, alter column, drop old)
+  // Users without admin role in users_roles join table must be deleted
   await db.execute(sql`
-    ALTER TYPE enum_users_roles RENAME TO enum_users_roles_old;
-  `)
-  await db.execute(sql`
-    CREATE TYPE enum_users_roles AS ENUM('admin');
-  `)
-  await db.execute(sql`
-    ALTER TABLE users 
-    ALTER COLUMN roles TYPE enum_users_roles 
-    USING roles::text::enum_users_roles;
-  `)
-  await db.execute(sql`
-    DROP TYPE enum_users_roles_old CASCADE;
+    DELETE FROM users 
+    WHERE id NOT IN (
+      SELECT parent_id FROM users_roles WHERE value = 'admin'
+    )
   `)
 
-  // Drop users_roles join table if exists (from hasMany)
+  // Drop users_roles join table (switching from hasMany to select with single admin role)
   await db.execute(sql`DROP TABLE IF EXISTS users_roles CASCADE`)
+
+  // Update enum to admin-only
+  await db.execute(sql`DROP TYPE IF EXISTS enum_users_roles CASCADE`)
+  await db.execute(sql`CREATE TYPE enum_users_roles AS ENUM('admin')`)
 
   // Recreate jr_posts table with merged schema
   await db.execute(sql`
