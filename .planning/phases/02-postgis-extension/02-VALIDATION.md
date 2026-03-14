@@ -38,8 +38,12 @@ created: 2026-03-14
 
 | Task ID  | Plan | Wave | Requirement | Test Type   | Automated Command                                                | File Exists | Status     |
 | -------- | ---- | ---- | ----------- | ----------- | ---------------------------------------------------------------- | ----------- | ---------- |
-| 02-01-01 | 01   | 1    | GEO-06      | integration | `npx vitest run tests/int/migration.int.spec.ts`                 | ❌ W0       | ⬜ pending |
+| 02-00-01 | 00   | 0    | N/A         | scaffold    | `npx vitest run tests/int/migration.int.spec.ts`                 | 🔨 creates  | ⬜ pending |
+| 02-00-02 | 00   | 0    | N/A         | scaffold    | `npx vitest run tests/int/geom-hooks.int.spec.ts`                | 🔨 creates  | ⬜ pending |
+| 02-01-01 | 01   | 1    | GEO-06      | integration | `npx vitest run tests/int/migration.int.spec.ts`                 | ✅ W0       | ⬜ pending |
 | 02-01-02 | 01   | 1    | GEO-01      | integration | `npx vitest run tests/int/api.int.spec.ts -t "nitf_posts.*geom"` | ✅          | ⬜ pending |
+| 02-02-01 | 02   | 2    | GEO-01      | integration | `npx vitest run tests/int/geom-hooks.int.spec.ts`                | ✅ W0       | ⬜ pending |
+| 02-02-02 | 02   | 2    | GEO-01      | integration | `npx vitest run tests/int/geom-hooks.int.spec.ts`                | ✅ W0       | ⬜ pending |
 | 02-01-03 | 01   | 1    | GEO-05      | integration | `npx vitest run tests/int/api.int.spec.ts -t "spatial"`          | ✅          | ⬜ pending |
 
 _Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky_
@@ -48,7 +52,8 @@ _Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky_
 
 ## Wave 0 Requirements
 
-- [ ] `tests/int/migration.int.spec.ts` — stubs for GEO-06 (migration up/down rollback testing)
+- [x] `tests/int/migration.int.spec.ts` — scaffold created by Plan 02-00 Task 1
+- [x] `tests/int/geom-hooks.int.spec.ts` — scaffold created by Plan 02-00 Task 2
 
 ---
 
