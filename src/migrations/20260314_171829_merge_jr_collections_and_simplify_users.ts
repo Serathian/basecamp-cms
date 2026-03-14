@@ -69,16 +69,19 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     sql`CREATE TYPE enum_jr_posts_project_status AS ENUM('active', 'in-progress', 'completed', 'archived')`,
   )
 
-  // Alter jr_posts to use enums
-  await db.execute(sql`
-    ALTER TABLE jr_posts ALTER COLUMN status TYPE enum_jr_posts_status USING status::enum_jr_posts_status;
-  `)
-  await db.execute(sql`
-    ALTER TABLE jr_posts ALTER COLUMN project_type TYPE enum_jr_posts_project_type USING project_type::text::enum_jr_posts_project_type;
-  `)
-  await db.execute(sql`
-    ALTER TABLE jr_posts ALTER COLUMN project_status TYPE enum_jr_posts_project_status USING project_status::text::enum_jr_posts_project_status;
-  `)
+  // Alter jr_posts to use enums (drop defaults first to avoid cast errors)
+  await db.execute(sql`ALTER TABLE jr_posts ALTER COLUMN status DROP DEFAULT`)
+  await db.execute(
+    sql`ALTER TABLE jr_posts ALTER COLUMN status TYPE enum_jr_posts_status USING status::enum_jr_posts_status`,
+  )
+  await db.execute(sql`ALTER TABLE jr_posts ALTER COLUMN status SET DEFAULT 'draft'`)
+
+  await db.execute(
+    sql`ALTER TABLE jr_posts ALTER COLUMN project_type TYPE enum_jr_posts_project_type USING project_type::text::enum_jr_posts_project_type`,
+  )
+  await db.execute(
+    sql`ALTER TABLE jr_posts ALTER COLUMN project_status TYPE enum_jr_posts_project_status USING project_status::text::enum_jr_posts_project_status`,
+  )
 
   // Create jr_posts_rels table for relationships (tags, etc.)
   await db.execute(sql`
