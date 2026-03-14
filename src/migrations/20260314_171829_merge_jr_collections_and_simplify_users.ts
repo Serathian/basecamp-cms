@@ -28,6 +28,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`DROP TYPE IF EXISTS enum_users_roles CASCADE`)
   await db.execute(sql`CREATE TYPE enum_users_roles AS ENUM('admin')`)
 
+  // Add roles column to users table (migrating from hasMany join table to select field)
+  await db.execute(
+    sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS roles enum_users_roles DEFAULT 'admin'`,
+  )
+
   // Recreate jr_posts table with merged schema
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS jr_posts (
