@@ -87,13 +87,13 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS jr_posts_rels (
       id SERIAL PRIMARY KEY,
-      order INTEGER,
+      "order" INTEGER,
       parent_id INTEGER NOT NULL REFERENCES jr_posts(id) ON DELETE CASCADE,
       path VARCHAR(255) NOT NULL,
       tags_id INTEGER,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
-    );
+    )
   `)
 
   // Create indexes
