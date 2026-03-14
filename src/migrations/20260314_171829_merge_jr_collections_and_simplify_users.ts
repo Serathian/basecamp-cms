@@ -40,7 +40,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       status VARCHAR(255) NOT NULL DEFAULT 'draft',
       title VARCHAR(255) NOT NULL,
       slug VARCHAR(255) NOT NULL UNIQUE,
-      body TEXT NOT NULL,
+      body TEXT,
       excerpt TEXT,
       published_at TIMESTAMP WITH TIME ZONE,
       cover_image_id INTEGER,
@@ -57,7 +57,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       seo_description TEXT,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
-    );
+    )
   `)
 
   // Create enums for jr_posts status and project fields

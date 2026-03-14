@@ -101,7 +101,7 @@ describe('API — basic queries', () => {
 
 describe('Access control — unauthenticated reads only see published', () => {
   // Collections that use the draft/published access pattern
-  const publishedCollections = ['jr_posts', 'jr_projects', 'nitf_posts', 'rotr_posts'] as const
+  const publishedCollections = ['jr_posts', 'nitf_posts', 'rotr_posts'] as const
 
   for (const slug of publishedCollections) {
     it(`${slug}: unauthenticated read returns only published docs`, async () => {
