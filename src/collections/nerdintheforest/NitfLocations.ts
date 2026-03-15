@@ -19,7 +19,10 @@ export const NitfLocations: CollectionConfig = {
     afterChange: [
       async ({ doc, req }: any) => {
         if (doc.latitude != null && doc.longitude != null) {
-          const db = (req.payload.db as any).drizzle
+          const txID = req.transactionID
+          const db = txID
+            ? ((req.payload.db as any).sessions[await txID]?.db ?? (req.payload.db as any).drizzle)
+            : (req.payload.db as any).drizzle
           await db.execute(sql`
             UPDATE nitf_locations
             SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude}, ${doc.latitude}), 4326)
