@@ -93,7 +93,15 @@ Plans:
 4. Legacy tag records migrated to correct site-specific collection based on usage
 5. All relationship fields point to site-specific collections (no broken references)
 
-**Plans**: TBD
+**Plans**: 5 plans in 4 waves
+
+Plans:
+
+- [ ] 03-00-PLAN.md — Create Wave 0 test scaffold (Nyquist compliance)
+- [ ] 03-01-PLAN.md — Create 6 site-specific collection files and register in payload.config.ts
+- [ ] 03-02-PLAN.md — Update consumer post collections (cover_image + tags relationTo fields)
+- [ ] 03-03-PLAN.md — Write data migration (split media/tags tables, update _rels, tested down())
+- [ ] 03-04-PLAN.md — Regenerate TypeScript types and verify clean build
 
 ---
 
@@ -184,7 +192,7 @@ Plans:
 | ---------------------------------------- | -------------- | ----------- | ---------- |
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
-| 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -          |
+| 3. Site-Specific Media & Tags            | 0/5            | Not started | -          |
 | 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -          |
 | 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
 | 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
