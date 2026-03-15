@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { sql } from '@payloadcms/db-postgres'
 import { anyone } from '../users/access/anyone'
 import user from '../users/access/user'
 
@@ -13,6 +14,21 @@ export const NitfLocations: CollectionConfig = {
     create: user,
     update: user,
     delete: user,
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc, req }: any) => {
+        if (doc.latitude != null && doc.longitude != null) {
+          const db = (req.payload.db as any).drizzle
+          await db.execute(sql`
+            UPDATE nitf_locations
+            SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude}, ${doc.latitude}), 4326)
+            WHERE id = ${doc.id}
+          `)
+        }
+        return doc
+      },
+    ],
   },
   fields: [
     { name: 'name', type: 'text', required: true },

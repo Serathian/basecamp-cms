@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { sql } from '@payloadcms/db-postgres'
 import published from '../users/access/published'
 import admin from '../users/access/admin'
 
@@ -13,6 +14,21 @@ export const RotrPosts: CollectionConfig = {
     create: admin,
     update: admin,
     delete: admin,
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc, req }: any) => {
+        if (doc.latitude != null && doc.longitude != null) {
+          const db = (req.payload.db as any).drizzle
+          await db.execute(sql`
+            UPDATE rotr_posts
+            SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude}, ${doc.latitude}), 4326)
+            WHERE id = ${doc.id}
+          `)
+        }
+        return doc
+      },
+    ],
   },
   fields: [
     {

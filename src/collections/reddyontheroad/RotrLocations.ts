@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { sql } from '@payloadcms/db-postgres'
 import editor from '../users/access/editor'
 
 export const RotrLocations: CollectionConfig = {
@@ -12,6 +13,21 @@ export const RotrLocations: CollectionConfig = {
     create: editor,
     update: editor,
     delete: editor,
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc, req }: any) => {
+        if (doc.latitude != null && doc.longitude != null) {
+          const db = (req.payload.db as any).drizzle
+          await db.execute(sql`
+            UPDATE rotr_locations
+            SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude}, ${doc.latitude}), 4326)
+            WHERE id = ${doc.id}
+          `)
+        }
+        return doc
+      },
+    ],
   },
   fields: [
     { name: 'name', type: 'text', required: true },
