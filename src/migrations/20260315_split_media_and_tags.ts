@@ -1,0 +1,377 @@
+import { MigrateUpArgs, MigrateDownArgs } from '@payloadcms/db-postgres'
+import { sql } from 'drizzle-orm'
+
+export async function up({ db }: MigrateUpArgs): Promise<void> {
+  // ─── Step 1: Create 3 new tag tables ────────────────────────────────────────
+  await db.execute(sql`
+    CREATE TABLE jr_tags (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    )
+  `)
+
+  await db.execute(sql`
+    CREATE TABLE nitf_tags (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    )
+  `)
+
+  await db.execute(sql`
+    CREATE TABLE rotr_tags (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    )
+  `)
+
+  // ─── Step 2: Populate tag tables from existing tags table ───────────────────
+  await db.execute(sql`
+    INSERT INTO jr_tags (id, name, slug, updated_at, created_at)
+    SELECT id, name, slug, updated_at, created_at
+    FROM tags
+    WHERE site = 'jake-reddy'
+  `)
+
+  await db.execute(sql`
+    INSERT INTO nitf_tags (id, name, slug, updated_at, created_at)
+    SELECT id, name, slug, updated_at, created_at
+    FROM tags
+    WHERE site = 'nerdintheforest'
+  `)
+
+  await db.execute(sql`
+    INSERT INTO rotr_tags (id, name, slug, updated_at, created_at)
+    SELECT id, name, slug, updated_at, created_at
+    FROM tags
+    WHERE site = 'reddyontheroad'
+  `)
+
+  // Reset sequences to avoid PK conflicts on future inserts
+  await db.execute(sql`
+    SELECT setval('jr_tags_id_seq', COALESCE((SELECT MAX(id) FROM jr_tags), 0) + 1, false)
+  `)
+  await db.execute(sql`
+    SELECT setval('nitf_tags_id_seq', COALESCE((SELECT MAX(id) FROM nitf_tags), 0) + 1, false)
+  `)
+  await db.execute(sql`
+    SELECT setval('rotr_tags_id_seq', COALESCE((SELECT MAX(id) FROM rotr_tags), 0) + 1, false)
+  `)
+
+  // ─── Step 3: Create 3 new media tables ──────────────────────────────────────
+  // Mirror the original media table schema from migration 20260303_172001
+  // Columns: id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename,
+  //          mime_type, filesize (NUMERIC), width (NUMERIC), height (NUMERIC),
+  //          focal_x (NUMERIC), focal_y (NUMERIC)
+  await db.execute(sql`
+    CREATE TABLE jr_media (
+      id SERIAL PRIMARY KEY,
+      alt VARCHAR(255) NOT NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      url VARCHAR(255),
+      thumbnail_u_r_l VARCHAR(255),
+      filename VARCHAR(255),
+      mime_type VARCHAR(255),
+      filesize NUMERIC,
+      width NUMERIC,
+      height NUMERIC,
+      focal_x NUMERIC,
+      focal_y NUMERIC
+    )
+  `)
+
+  await db.execute(sql`
+    CREATE TABLE nitf_media (
+      id SERIAL PRIMARY KEY,
+      alt VARCHAR(255) NOT NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      url VARCHAR(255),
+      thumbnail_u_r_l VARCHAR(255),
+      filename VARCHAR(255),
+      mime_type VARCHAR(255),
+      filesize NUMERIC,
+      width NUMERIC,
+      height NUMERIC,
+      focal_x NUMERIC,
+      focal_y NUMERIC
+    )
+  `)
+
+  await db.execute(sql`
+    CREATE TABLE rotr_media (
+      id SERIAL PRIMARY KEY,
+      alt VARCHAR(255) NOT NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      url VARCHAR(255),
+      thumbnail_u_r_l VARCHAR(255),
+      filename VARCHAR(255),
+      mime_type VARCHAR(255),
+      filesize NUMERIC,
+      width NUMERIC,
+      height NUMERIC,
+      focal_x NUMERIC,
+      focal_y NUMERIC
+    )
+  `)
+
+  // ─── Step 4: Populate media tables with attribution ─────────────────────────
+  // jr_media: records referenced by jr_posts.cover_image_id
+  await db.execute(sql`
+    INSERT INTO jr_media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT m.id, m.alt, m.updated_at, m.created_at, m.url, m.thumbnail_u_r_l, m.filename, m.mime_type, m.filesize, m.width, m.height, m.focal_x, m.focal_y
+    FROM media m
+    INNER JOIN jr_posts p ON p.cover_image_id = m.id
+    ON CONFLICT (id) DO NOTHING
+  `)
+
+  // nitf_media: records referenced by nitf_posts.cover_image_id
+  await db.execute(sql`
+    INSERT INTO nitf_media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT m.id, m.alt, m.updated_at, m.created_at, m.url, m.thumbnail_u_r_l, m.filename, m.mime_type, m.filesize, m.width, m.height, m.focal_x, m.focal_y
+    FROM media m
+    INNER JOIN nitf_posts p ON p.cover_image_id = m.id
+    ON CONFLICT (id) DO NOTHING
+  `)
+
+  // Also include nitf_trails.gpx_file_id references in nitf_media
+  await db.execute(sql`
+    INSERT INTO nitf_media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT m.id, m.alt, m.updated_at, m.created_at, m.url, m.thumbnail_u_r_l, m.filename, m.mime_type, m.filesize, m.width, m.height, m.focal_x, m.focal_y
+    FROM media m
+    INNER JOIN nitf_trails t ON t.gpx_file_id = m.id
+    ON CONFLICT (id) DO NOTHING
+  `)
+
+  // rotr_media: records referenced by rotr_posts.cover_image_id
+  await db.execute(sql`
+    INSERT INTO rotr_media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT m.id, m.alt, m.updated_at, m.created_at, m.url, m.thumbnail_u_r_l, m.filename, m.mime_type, m.filesize, m.width, m.height, m.focal_x, m.focal_y
+    FROM media m
+    INNER JOIN rotr_posts p ON p.cover_image_id = m.id
+    ON CONFLICT (id) DO NOTHING
+  `)
+
+  // Orphans (not referenced by any site-specific post/trail): insert into jr_media as default
+  await db.execute(sql`
+    INSERT INTO jr_media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT m.id, m.alt, m.updated_at, m.created_at, m.url, m.thumbnail_u_r_l, m.filename, m.mime_type, m.filesize, m.width, m.height, m.focal_x, m.focal_y
+    FROM media m
+    WHERE NOT EXISTS (SELECT 1 FROM jr_media jm WHERE jm.id = m.id)
+      AND NOT EXISTS (SELECT 1 FROM nitf_media nm WHERE nm.id = m.id)
+      AND NOT EXISTS (SELECT 1 FROM rotr_media rm WHERE rm.id = m.id)
+  `)
+
+  // Reset media sequences
+  await db.execute(sql`
+    SELECT setval('jr_media_id_seq', COALESCE((SELECT MAX(id) FROM jr_media), 0) + 1, false)
+  `)
+  await db.execute(sql`
+    SELECT setval('nitf_media_id_seq', COALESCE((SELECT MAX(id) FROM nitf_media), 0) + 1, false)
+  `)
+  await db.execute(sql`
+    SELECT setval('rotr_media_id_seq', COALESCE((SELECT MAX(id) FROM rotr_media), 0) + 1, false)
+  `)
+
+  // ─── Step 5: Update _rels join tables with site-specific tag ID columns ──────
+
+  // jr_posts_rels: add jr_tags_id, populate from tags_id where site='jake-reddy', drop tags_id
+  await db.execute(sql`
+    ALTER TABLE jr_posts_rels ADD COLUMN IF NOT EXISTS jr_tags_id INTEGER
+  `)
+  await db.execute(sql`
+    UPDATE jr_posts_rels r
+    SET jr_tags_id = r.tags_id
+    WHERE r.path = 'tags'
+      AND r.tags_id IS NOT NULL
+      AND EXISTS (
+        SELECT 1 FROM tags t WHERE t.id = r.tags_id AND t.site = 'jake-reddy'
+      )
+  `)
+  await db.execute(sql`
+    ALTER TABLE jr_posts_rels DROP COLUMN IF EXISTS tags_id
+  `)
+
+  // nitf_posts_rels: add nitf_tags_id, populate from tags_id where site='nerdintheforest', drop tags_id
+  await db.execute(sql`
+    ALTER TABLE nitf_posts_rels ADD COLUMN IF NOT EXISTS nitf_tags_id INTEGER
+  `)
+  await db.execute(sql`
+    UPDATE nitf_posts_rels r
+    SET nitf_tags_id = r.tags_id
+    WHERE r.path = 'tags'
+      AND r.tags_id IS NOT NULL
+      AND EXISTS (
+        SELECT 1 FROM tags t WHERE t.id = r.tags_id AND t.site = 'nerdintheforest'
+      )
+  `)
+  await db.execute(sql`
+    ALTER TABLE nitf_posts_rels DROP COLUMN IF EXISTS tags_id
+  `)
+
+  // rotr_posts_rels: add rotr_tags_id, populate from tags_id where site='reddyontheroad', drop tags_id
+  await db.execute(sql`
+    ALTER TABLE rotr_posts_rels ADD COLUMN IF NOT EXISTS rotr_tags_id INTEGER
+  `)
+  await db.execute(sql`
+    UPDATE rotr_posts_rels r
+    SET rotr_tags_id = r.tags_id
+    WHERE r.path = 'tags'
+      AND r.tags_id IS NOT NULL
+      AND EXISTS (
+        SELECT 1 FROM tags t WHERE t.id = r.tags_id AND t.site = 'reddyontheroad'
+      )
+  `)
+  await db.execute(sql`
+    ALTER TABLE rotr_posts_rels DROP COLUMN IF EXISTS tags_id
+  `)
+
+  // ─── Step 6: Drop old shared tables ─────────────────────────────────────────
+  await db.execute(sql`DROP TABLE IF EXISTS media CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS tags CASCADE`)
+}
+
+export async function down({ db }: MigrateDownArgs): Promise<void> {
+  // ─── Step 1: Recreate media and tags tables with original schemas ─────────────
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS media (
+      id SERIAL PRIMARY KEY,
+      alt VARCHAR(255) NOT NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      url VARCHAR(255),
+      thumbnail_u_r_l VARCHAR(255),
+      filename VARCHAR(255),
+      mime_type VARCHAR(255),
+      filesize NUMERIC,
+      width NUMERIC,
+      height NUMERIC,
+      focal_x NUMERIC,
+      focal_y NUMERIC
+    )
+  `)
+
+  await db.execute(sql`DROP TYPE IF EXISTS enum_tags_site_restore CASCADE`)
+  await db.execute(sql`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'enum_tags_site') THEN
+        CREATE TYPE "public"."enum_tags_site" AS ENUM('jake-reddy', 'nerdintheforest', 'reddyontheroad');
+      END IF;
+    END$$
+  `)
+
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS tags (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      slug VARCHAR(255) NOT NULL UNIQUE,
+      site "enum_tags_site" NOT NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    )
+  `)
+
+  // ─── Step 2: Restore media rows from site-specific tables ────────────────────
+  await db.execute(sql`
+    INSERT INTO media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y
+    FROM jr_media
+    ON CONFLICT (id) DO NOTHING
+  `)
+  await db.execute(sql`
+    INSERT INTO media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y
+    FROM nitf_media
+    ON CONFLICT (id) DO NOTHING
+  `)
+  await db.execute(sql`
+    INSERT INTO media (id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y)
+    SELECT id, alt, updated_at, created_at, url, thumbnail_u_r_l, filename, mime_type, filesize, width, height, focal_x, focal_y
+    FROM rotr_media
+    ON CONFLICT (id) DO NOTHING
+  `)
+
+  // Reset media id sequence
+  await db.execute(sql`
+    SELECT setval('media_id_seq', COALESCE((SELECT MAX(id) FROM media), 0) + 1, false)
+  `)
+
+  // ─── Step 3: Restore tags rows from site-specific tables ─────────────────────
+  await db.execute(sql`
+    INSERT INTO tags (id, name, slug, site, updated_at, created_at)
+    SELECT id, name, slug, 'jake-reddy', updated_at, created_at
+    FROM jr_tags
+    ON CONFLICT (id) DO NOTHING
+  `)
+  await db.execute(sql`
+    INSERT INTO tags (id, name, slug, site, updated_at, created_at)
+    SELECT id, name, slug, 'nerdintheforest', updated_at, created_at
+    FROM nitf_tags
+    ON CONFLICT (id) DO NOTHING
+  `)
+  await db.execute(sql`
+    INSERT INTO tags (id, name, slug, site, updated_at, created_at)
+    SELECT id, name, slug, 'reddyontheroad', updated_at, created_at
+    FROM rotr_tags
+    ON CONFLICT (id) DO NOTHING
+  `)
+
+  // Reset tags id sequence
+  await db.execute(sql`
+    SELECT setval('tags_id_seq', COALESCE((SELECT MAX(id) FROM tags), 0) + 1, false)
+  `)
+
+  // ─── Step 4: Restore tags_id columns in _rels tables ─────────────────────────
+
+  // jr_posts_rels: add tags_id back, populate from jr_tags_id, drop jr_tags_id
+  await db.execute(sql`
+    ALTER TABLE jr_posts_rels ADD COLUMN IF NOT EXISTS tags_id INTEGER
+  `)
+  await db.execute(sql`
+    UPDATE jr_posts_rels SET tags_id = jr_tags_id WHERE jr_tags_id IS NOT NULL
+  `)
+  await db.execute(sql`
+    ALTER TABLE jr_posts_rels DROP COLUMN IF EXISTS jr_tags_id
+  `)
+
+  // nitf_posts_rels: add tags_id back, populate from nitf_tags_id, drop nitf_tags_id
+  await db.execute(sql`
+    ALTER TABLE nitf_posts_rels ADD COLUMN IF NOT EXISTS tags_id INTEGER
+  `)
+  await db.execute(sql`
+    UPDATE nitf_posts_rels SET tags_id = nitf_tags_id WHERE nitf_tags_id IS NOT NULL
+  `)
+  await db.execute(sql`
+    ALTER TABLE nitf_posts_rels DROP COLUMN IF EXISTS nitf_tags_id
+  `)
+
+  // rotr_posts_rels: add tags_id back, populate from rotr_tags_id, drop rotr_tags_id
+  await db.execute(sql`
+    ALTER TABLE rotr_posts_rels ADD COLUMN IF NOT EXISTS tags_id INTEGER
+  `)
+  await db.execute(sql`
+    UPDATE rotr_posts_rels SET tags_id = rotr_tags_id WHERE rotr_tags_id IS NOT NULL
+  `)
+  await db.execute(sql`
+    ALTER TABLE rotr_posts_rels DROP COLUMN IF EXISTS rotr_tags_id
+  `)
+
+  // ─── Step 5: Drop the 6 site-specific tables ─────────────────────────────────
+  await db.execute(sql`DROP TABLE IF EXISTS jr_media CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS nitf_media CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS rotr_media CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS jr_tags CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS nitf_tags CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS rotr_tags CASCADE`)
+}
