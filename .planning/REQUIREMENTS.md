@@ -62,7 +62,7 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 - [ ] **GEO-03**: `nitf_poi` has `geom` column with `afterChange` hook
 - [ ] **GEO-04**: `rotr_days` has `geom` column with `afterChange` hook
 - [x] **GEO-05**: PostGIS spatial queries work for all geo collections
-- [ ] **GEO-06**: Migration adds `geom` columns to remaining geo tables
+- [x] **GEO-06**: Migration adds `geom` columns to remaining geo tables
 
 ### Types & Testing
 
@@ -150,7 +150,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GEO-03      | 2                   | Pending  |
 | GEO-04      | 2                   | Pending  |
 | GEO-05      | 2                   | Complete |
-| GEO-06      | 2                   | Pending  |
+| GEO-06      | 2                   | Complete |
 | TEST-01     | 1, 7                | Pending  |
 | TEST-02     | 3, 4, 5             | Pending  |
 | TEST-03     | 2                   | Complete |
