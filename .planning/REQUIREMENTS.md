@@ -23,11 +23,11 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### Site-Specific Resources
 
-- [ ] **SITESPEC-01**: `media` collection split into `jr_media`, `nitf_media`, `rotr_media`
-- [ ] **SITESPEC-02**: `tags` collection split into `jr_tags`, `nitf_tags`, `rotr_tags`
-- [ ] **SITESPEC-03**: Media uploads filtered by site in admin UI
-- [ ] **SITESPEC-04**: Tags filtered by site in admin UI
-- [ ] **SITESPEC-05**: Migration migrates existing media/tags to site-specific collections
+- [x] **SITESPEC-01**: `media` collection split into `jr_media`, `nitf_media`, `rotr_media`
+- [x] **SITESPEC-02**: `tags` collection split into `jr_tags`, `nitf_tags`, `rotr_tags`
+- [x] **SITESPEC-03**: Media uploads filtered by site in admin UI
+- [x] **SITESPEC-04**: Tags filtered by site in admin UI
+- [x] **SITESPEC-05**: Migration migrates existing media/tags to site-specific collections
 
 ### Jake-Reddy Collections
 
@@ -67,10 +67,10 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 ### Types & Testing
 
 - [x] **TEST-01**: Integration tests verify access control changes (admin sees drafts, anon sees published only)
-- [ ] **TEST-02**: Integration tests verify all bidirectional relationships
+- [x] **TEST-02**: Integration tests verify all bidirectional relationships
 - [x] **TEST-03**: Integration tests verify PostGIS spatial queries on all geo collections
 - [x] **TEST-04**: TypeScript types regenerated after each schema change
-- [ ] **TEST-05**: All migrations have tested `down()` rollback functions
+- [x] **TEST-05**: All migrations have tested `down()` rollback functions
 
 ## v2 Requirements
 
@@ -123,11 +123,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SCHEMA-01   | 1                   | Pending  |
 | SCHEMA-02   | 1                   | Pending  |
 | SCHEMA-03   | 1                   | Pending  |
-| SITESPEC-01 | 3                   | Pending  |
-| SITESPEC-02 | 3                   | Pending  |
-| SITESPEC-03 | 3                   | Pending  |
-| SITESPEC-04 | 3                   | Pending  |
-| SITESPEC-05 | 3                   | Pending  |
+| SITESPEC-01 | 3                   | Complete |
+| SITESPEC-02 | 3                   | Complete |
+| SITESPEC-03 | 3                   | Complete |
+| SITESPEC-04 | 3                   | Complete |
+| SITESPEC-05 | 3                   | Complete |
 | JR-01       | 6                   | Pending  |
 | JR-02       | 6                   | Pending  |
 | JR-03       | 6                   | Pending  |
@@ -152,10 +152,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GEO-05      | 2                   | Complete |
 | GEO-06      | 2                   | Complete |
 | TEST-01     | 1, 7                | Pending  |
-| TEST-02     | 3, 4, 5             | Pending  |
+| TEST-02     | 3, 4, 5             | Complete |
 | TEST-03     | 2                   | Complete |
 | TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Complete |
-| TEST-05     | 2, 3, 4             | Pending  |
+| TEST-05     | 2, 3, 4             | Complete |
 
 **Coverage:**
 

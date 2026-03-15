@@ -3,33 +3,33 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T13:26:20.324Z"
+last_updated: "2026-03-15T18:55:32.183Z"
 progress:
   total_phases: 7
-  completed_phases: 2
-  total_plans: 8
-  completed_plans: 8
+  completed_phases: 1
+  total_plans: 14
+  completed_plans: 9
 ---
 
 # Project State: Basecamp CMS Refinement
 
 **Last updated:** 2026-03-15
-**Project phase:** Phase 2 - Complete
+**Project phase:** Phase 3 - In Progress
 
 ## Project Reference
 
 **Core Value**: The CMS must align perfectly with how content is authored in Obsidian — every collection, field, and relationship should reduce friction between vault structure and frontend needs, never add ceremony.
 
-**Current Focus**: Extending PostGIS spatial support to all 6 geographic collections with auto-population hooks for seamless spatial queries.
+**Current Focus**: Splitting shared media and tags collections into site-specific collections (jr_media, nitf_media, rotr_media, jr_tags, nitf_tags, rotr_tags).
 
 ## Current Position
 
 **Milestone**: v1 Refinement
-**Phase**: 2 - PostGIS Extension & Auto-Population
-**Plan**: Complete (4 of 4 plans complete)
-**Status**: Complete
+**Phase**: 3 - Site-Specific Media & Tags
+**Plan**: 1 of N plans complete (03-00 Wave 0 scaffold done)
+**Status**: In Progress
 
-**Progress**: [█████░░░░░░░░░░░░░░░] 28% (Phase 1 and 2 of 7 complete)
+**Progress**: [██████░░░░] 64% (9 of 14 plans complete)
 
 **Blockers**: None
 
@@ -77,6 +77,8 @@ progress:
 | 2026-03-15 | Use PostgreSQL BEFORE INSERT OR UPDATE triggers instead of Payload afterChange hooks for geom auto-population                                                            | Triggers provide better transaction visibility, no async timing issues, standard database pattern for computed columns | Phase 2 Plan 02-02 |
 | 2026-03-15 | Removed early-exit guards from spatial test to enforce PostGIS trigger reliability                                                                                       | Test should fail explicitly if geom is NULL or migration didn't run, no silent pass with warnings                      | Phase 2 Plan 02-03 |
 | 2026-03-15 | Fixed checkRole to handle single 'admin' role instead of role arrays                                                                                                     | Aligns with Phase 1 Users collection simplification (single admin role)                                                | Phase 2 Plan 02-03 |
+| 2026-03-15 | Use it.todo() instead of it.skip() for Wave 0 test stubs                                                                                                                 | todo stubs appear as pending in Vitest output, creating a visible inventory; skip would hide them from the summary      | Phase 3 Plan 03-00 |
+| Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 
 ### Critical Information
 
@@ -106,8 +108,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 02-03 (Verify Spatial Queries & Type Generation) - 2026-03-15
-**Next action**: Ready for Phase 3 planning (PostGIS extension complete)
+**Last action**: Completed Plan 03-00 (Wave 0 test scaffold - media-tags-split.int.spec.ts) - 2026-03-15
+**Next action**: Execute Plan 03-01 (create site-specific media tables and collections)
 
 **Context for next session**:
 
