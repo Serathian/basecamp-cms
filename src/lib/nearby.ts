@@ -23,7 +23,7 @@ export default async function getNearbyPosts(
           ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 4326)::geography,
           ${radius}
         )
-      ORDER BY geom <-> ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 4326)
+      ORDER BY distance_m ASC
     `)
     return Response.json({ docs: results.rows })
   } catch (err) {
