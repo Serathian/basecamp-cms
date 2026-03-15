@@ -8,5 +8,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/int/**/*.int.spec.ts'],
+    // Run test files sequentially — migration down()/up() tests require exclusive
+    // DB access and cannot run in parallel with other test files that share the DB.
+    fileParallelism: false,
   },
 })

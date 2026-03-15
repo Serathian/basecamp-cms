@@ -236,7 +236,35 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     ALTER TABLE rotr_posts_rels DROP COLUMN IF EXISTS tags_id
   `)
 
-  // ─── Step 6: Drop old shared tables ─────────────────────────────────────────
+  // ─── Step 6: Update payload_locked_documents_rels ───────────────────────────
+  // Payload expects site-specific FK columns instead of generic media_id / tags_id
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS jr_media_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS nitf_media_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS rotr_media_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS jr_tags_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS nitf_tags_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS rotr_tags_id INTEGER
+  `)
+  // Drop old generic columns (media_id and tags_id)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS media_id
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS tags_id
+  `)
+
+  // ─── Step 7: Drop old shared tables ─────────────────────────────────────────
   await db.execute(sql`DROP TABLE IF EXISTS media CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS tags CASCADE`)
 }
@@ -367,7 +395,33 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
     ALTER TABLE rotr_posts_rels DROP COLUMN IF EXISTS rotr_tags_id
   `)
 
-  // ─── Step 5: Drop the 6 site-specific tables ─────────────────────────────────
+  // ─── Step 5: Restore payload_locked_documents_rels columns ──────────────────
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS media_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS tags_id INTEGER
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS jr_media_id
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS nitf_media_id
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS rotr_media_id
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS jr_tags_id
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS nitf_tags_id
+  `)
+  await db.execute(sql`
+    ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS rotr_tags_id
+  `)
+
+  // ─── Step 6: Drop the 6 site-specific tables ─────────────────────────────────
   await db.execute(sql`DROP TABLE IF EXISTS jr_media CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS nitf_media CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS rotr_media CASCADE`)
