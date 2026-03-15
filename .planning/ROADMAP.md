@@ -64,14 +64,15 @@ Plans:
 4. All 6 geo collections have geom columns with spatial indexes
 5. Migration down() successfully rolls back all PostGIS changes to all 6 tables
 
-**Plans**: 4 plans in 4 waves
+**Plans**: 5 plans in 4 waves
 
 Plans:
 
-- [ ] 02-00-PLAN.md — Create test scaffolds (Wave 0 - Nyquist compliance)
-- [ ] 02-01-PLAN.md — Extend PostGIS migration to 6 tables with test coverage
-- [ ] 02-02-PLAN.md — Add afterChange hooks to auto-populate geom columns
-- [ ] 02-03-PLAN.md — Strengthen spatial tests and regenerate types
+- [x] 02-00-PLAN.md — Create test scaffolds (Wave 0 - Nyquist compliance)
+- [x] 02-01-PLAN.md — Extend PostGIS migration to 6 tables with test coverage
+- [x] 02-02-PLAN.md — Add PostgreSQL triggers for geom auto-population (replaced by 02-04)
+- [x] 02-03-PLAN.md — Strengthen spatial tests and regenerate types
+- [ ] 02-04-PLAN.md — Implement afterChange hooks for geom auto-population (gap closure)
 
 ---
 
@@ -181,7 +182,7 @@ Plans:
 | Phase                                    | Plans Complete | Status      | Completed  |
 | ---------------------------------------- | -------------- | ----------- | ---------- |
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
-| 2. PostGIS Extension & Auto-Population   | 1/4 | In Progress|  |
+| 2. PostGIS Extension & Auto-Population   | 4/5            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -          |
 | 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -          |
 | 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
