@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T19:09:11.614Z"
+last_updated: "2026-03-15T19:18:24.050Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 14
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 3 - Site-Specific Media & Tags
-**Plan**: 3 of N plans complete (03-00 Wave 0 scaffold done, 03-01 site-specific collections created, 03-02 consumer post collection fields updated)
+**Plan**: 4 of N plans complete (03-00 Wave 0 scaffold, 03-01 site-specific collections, 03-02 consumer post fields, 03-03 data migration)
 **Status**: In Progress
 
-**Progress**: [████████░░] 79% (11 of 14 plans complete)
+**Progress**: [█████████░] 86% (12 of 14 plans complete)
 
 **Blockers**: None
 
@@ -81,9 +81,13 @@ progress:
 | 2026-03-15 | Authors.avatar uses polymorphic relationTo array for all 3 site media collections                                                                                        | Authors is shared across all sites so avatar must accept uploads from any site's media collection                       | Phase 3 Plan 03-01 |
 | 2026-03-15 | Removed filterOptions: { site: ... } from post tag relationships — collection slug is the discriminator                                                                  | With site-specific tag collections, filtering by site field is redundant and the old site field won't exist             | Phase 3 Plan 03-01 |
 | 2026-03-15 | 03-02 consumer post field updates were completed as part of 03-01 payload.config.ts commit — no additional changes required                                               | Registering new collections and updating consumer references are tightly coupled; doing them together avoids broken intermediate state | Phase 3 Plan 03-02 |
+| 2026-03-15 | payload_locked_documents_rels must also be updated when renaming collection slugs | Payload generates queries referencing site-specific FK column names (jr_media_id, jr_tags_id, etc.) in this table | Phase 3 Plan 03-03 |
+| 2026-03-15 | vitest fileParallelism: false required when integration tests call migration down() | Shared DB state not safe for concurrent file execution when migration lifecycle tests are included | Phase 3 Plan 03-03 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
+| Phase 03-site-specific-media-tags P03 | 6min | 2 tasks | 4 files |
+| Phase 03-site-specific-media-tags P03 | 6 | 2 tasks | 4 files |
 
 ### Critical Information
 
@@ -113,8 +117,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 03-02 (consumer post collection fields verified — changes were applied as part of 03-01) - 2026-03-15
-**Next action**: Execute Plan 03-03 (database migration for media/tags split)
+**Last action**: Completed Plan 03-03 (data migration for media/tags split — migration applied, integration tests green) - 2026-03-15
+**Next action**: Execute Plan 03-04 if it exists (or proceed to Phase 4)
 
 **Context for next session**:
 
