@@ -15,7 +15,7 @@ describe('PostGIS Migration — up/down operations', () => {
   })
 
   afterAll(async () => {
-    if (payload) {
+    if (payload?.db?.destroy) {
       await payload.db.destroy()
     }
   })
@@ -97,7 +97,7 @@ describe('PostGIS Migration — up/down operations', () => {
 
     for (const expected of expectedIndexes) {
       const found = result.rows.find(
-        (row) => row.tablename === expected.tablename && row.indexname === expected.indexname,
+        (row: any) => row.tablename === expected.tablename && row.indexname === expected.indexname,
       )
       expect(found).toBeDefined()
     }

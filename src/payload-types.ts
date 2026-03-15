@@ -72,7 +72,6 @@ export interface Config {
     authors: Author;
     tags: Tag;
     jr_posts: JrPost;
-    jr_projects: JrProject;
     nitf_posts: NitfPost;
     nitf_trails: NitfTrail;
     nitf_waypoints: NitfWaypoint;
@@ -91,7 +90,6 @@ export interface Config {
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     jr_posts: JrPostsSelect<false> | JrPostsSelect<true>;
-    jr_projects: JrProjectsSelect<false> | JrProjectsSelect<true>;
     nitf_posts: NitfPostsSelect<false> | NitfPostsSelect<true>;
     nitf_trails: NitfTrailsSelect<false> | NitfTrailsSelect<true>;
     nitf_waypoints: NitfWaypointsSelect<false> | NitfWaypointsSelect<true>;
@@ -143,7 +141,7 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
-  roles?: ('admin' | 'editor' | 'user')[] | null;
+  roles?: 'admin' | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -217,28 +215,8 @@ export interface JrPost {
   status: 'draft' | 'published' | 'archived';
   title: string;
   slug: string;
-  excerpt?: string | null;
-  body?: string | null;
-  cover_image?: (number | null) | Media;
-  author?: (number | null) | Author;
-  tags?: (number | Tag)[] | null;
   published_at?: string | null;
-  reading_time_minutes?: number | null;
-  seo_title?: string | null;
-  seo_description?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_projects".
- */
-export interface JrProject {
-  id: number;
-  status: 'draft' | 'published' | 'archived';
-  title: string;
-  slug: string;
-  summary?: string | null;
+  excerpt?: string | null;
   body?: string | null;
   cover_image?: (number | null) | Media;
   project_type?: ('open-source' | 'personal' | 'home-lab' | 'professional') | null;
@@ -254,12 +232,13 @@ export interface JrProject {
     | null;
   github_url?: string | null;
   live_url?: string | null;
-  start_date?: string | null;
-  end_date?: string | null;
   featured?: boolean | null;
   sort?: number | null;
   author?: (number | null) | Author;
   tags?: (number | Tag)[] | null;
+  reading_time_minutes?: number | null;
+  seo_title?: string | null;
+  seo_description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -501,10 +480,6 @@ export interface PayloadLockedDocument {
         value: number | JrPost;
       } | null)
     | ({
-        relationTo: 'jr_projects';
-        value: number | JrProject;
-      } | null)
-    | ({
         relationTo: 'nitf_posts';
         value: number | NitfPost;
       } | null)
@@ -643,27 +618,8 @@ export interface JrPostsSelect<T extends boolean = true> {
   status?: T;
   title?: T;
   slug?: T;
-  excerpt?: T;
-  body?: T;
-  cover_image?: T;
-  author?: T;
-  tags?: T;
   published_at?: T;
-  reading_time_minutes?: T;
-  seo_title?: T;
-  seo_description?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_projects_select".
- */
-export interface JrProjectsSelect<T extends boolean = true> {
-  status?: T;
-  title?: T;
-  slug?: T;
-  summary?: T;
+  excerpt?: T;
   body?: T;
   cover_image?: T;
   project_type?: T;
@@ -671,12 +627,13 @@ export interface JrProjectsSelect<T extends boolean = true> {
   tech_stack?: T;
   github_url?: T;
   live_url?: T;
-  start_date?: T;
-  end_date?: T;
   featured?: T;
   sort?: T;
   author?: T;
   tags?: T;
+  reading_time_minutes?: T;
+  seo_title?: T;
+  seo_description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

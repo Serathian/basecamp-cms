@@ -31,5 +31,5 @@
     ".next/types/**/*.ts",
     "src/migrations/20241201_add_postgis.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "packages"]
 }

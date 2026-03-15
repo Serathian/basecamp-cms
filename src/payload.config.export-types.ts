@@ -19,7 +19,6 @@ import { Tags } from './collections/shared/Tags'
 
 // jake-reddy.com
 import { JrPosts } from './collections/jake-reddy/JrPosts'
-import { JrProjects } from './collections/jake-reddy/JrProjects'
 
 // nerdintheforest.com
 import { NitfPosts } from './collections/nerdintheforest/NitfPosts'
@@ -49,7 +48,6 @@ export default buildConfig({
     Tags,
     // jake-reddy.com
     JrPosts,
-    JrProjects,
     // nerdintheforest.com
     NitfPosts,
     NitfTrails,
