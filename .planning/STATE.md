@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T18:55:32.183Z"
+last_updated: "2026-03-15T19:05:27.586Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 14
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 3 - Site-Specific Media & Tags
-**Plan**: 1 of N plans complete (03-00 Wave 0 scaffold done)
+**Plan**: 2 of N plans complete (03-00 Wave 0 scaffold done, 03-01 site-specific collections created)
 **Status**: In Progress
 
-**Progress**: [██████░░░░] 64% (9 of 14 plans complete)
+**Progress**: [███████░░░] 71% (10 of 14 plans complete)
 
 **Blockers**: None
 
@@ -78,7 +78,10 @@ progress:
 | 2026-03-15 | Removed early-exit guards from spatial test to enforce PostGIS trigger reliability                                                                                       | Test should fail explicitly if geom is NULL or migration didn't run, no silent pass with warnings                      | Phase 2 Plan 02-03 |
 | 2026-03-15 | Fixed checkRole to handle single 'admin' role instead of role arrays                                                                                                     | Aligns with Phase 1 Users collection simplification (single admin role)                                                | Phase 2 Plan 02-03 |
 | 2026-03-15 | Use it.todo() instead of it.skip() for Wave 0 test stubs                                                                                                                 | todo stubs appear as pending in Vitest output, creating a visible inventory; skip would hide them from the summary      | Phase 3 Plan 03-00 |
+| 2026-03-15 | Authors.avatar uses polymorphic relationTo array for all 3 site media collections                                                                                        | Authors is shared across all sites so avatar must accept uploads from any site's media collection                       | Phase 3 Plan 03-01 |
+| 2026-03-15 | Removed filterOptions: { site: ... } from post tag relationships — collection slug is the discriminator                                                                  | With site-specific tag collections, filtering by site field is redundant and the old site field won't exist             | Phase 3 Plan 03-01 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
+| Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 
 ### Critical Information
 
@@ -108,8 +111,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 03-00 (Wave 0 test scaffold - media-tags-split.int.spec.ts) - 2026-03-15
-**Next action**: Execute Plan 03-01 (create site-specific media tables and collections)
+**Last action**: Completed Plan 03-01 (site-specific media and tag collections, payload.config.ts registration) - 2026-03-15
+**Next action**: Execute Plan 03-02 (consumer collection field updates) or 03-03 (migration)
 
 **Context for next session**:
 
