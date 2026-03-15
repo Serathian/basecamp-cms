@@ -64,7 +64,7 @@ Plans:
 4. All 6 geo collections have geom columns with spatial indexes
 5. Migration down() successfully rolls back all PostGIS changes to all 6 tables
 
-**Plans**: 5 plans in 4 waves
+**Plans**: 6 plans in 5 waves
 
 Plans:
 
@@ -72,7 +72,8 @@ Plans:
 - [x] 02-01-PLAN.md — Extend PostGIS migration to 6 tables with test coverage
 - [x] 02-02-PLAN.md — Add PostgreSQL triggers for geom auto-population (replaced by 02-04)
 - [x] 02-03-PLAN.md — Strengthen spatial tests and regenerate types
-- [ ] 02-04-PLAN.md — Implement afterChange hooks for geom auto-population (gap closure)
+- [x] 02-04-PLAN.md — Implement afterChange hooks for geom auto-population (gap closure)
+- [ ] 02-05-PLAN.md — Fix remaining 2 test failures (update hook timing, migration down test)
 
 ---
 
@@ -182,7 +183,7 @@ Plans:
 | Phase                                    | Plans Complete | Status      | Completed  |
 | ---------------------------------------- | -------------- | ----------- | ---------- |
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
-| 2. PostGIS Extension & Auto-Population   | 4/5            | Gap Closure |            |
+| 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 0/TBD          | Not started | -          |
 | 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -          |
 | 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
@@ -229,4 +230,4 @@ Phases with standard patterns (skip research):
 ---
 
 _Roadmap created: 2026-03-11_
-_Last updated: 2026-03-14_
+_Last updated: 2026-03-15_
