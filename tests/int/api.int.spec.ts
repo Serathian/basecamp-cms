@@ -253,20 +253,11 @@ describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () 
   it('returns posts ordered by distance from query point', async () => {
     const res = await getNearbyPosts(60.1695, 24.9527, 60000, payload.db)
 
-    if (!res.ok) {
-      // geom column missing — PostGIS migration didn't run (should not happen in CI)
-      console.warn(`Nearby query failed (${res.status}) — PostGIS geom column may be missing`)
-      expect(res.ok).toBe(true) // fail with a clear message
-      return
-    }
-
+    expect(res.ok).toBe(true)
     expect(res.status).toBe(200)
 
     const data = await res.json()
-    if (data.docs.length === 0) {
-      console.warn('No results — PostGIS geom column may not be populated')
-      return
-    }
+    expect(data.docs.length).toBeGreaterThan(0)
 
     // Distances should be ascending
     const distances = data.docs.map((d: any) => parseFloat(d.distance_m))
@@ -276,10 +267,10 @@ describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () 
 
     // Suomenlinna (~3km) should come before Nuuksio (~30km)
     const titles = data.docs.map((d: any) => d.title)
+    expect(titles).toContain('Suomenlinna')
+    expect(titles).toContain('Nuuksio')
     const suomenlinnaIdx = titles.indexOf('Suomenlinna')
     const nuuksioIdx = titles.indexOf('Nuuksio')
-    if (suomenlinnaIdx !== -1 && nuuksioIdx !== -1) {
-      expect(suomenlinnaIdx).toBeLessThan(nuuksioIdx)
-    }
+    expect(suomenlinnaIdx).toBeLessThan(nuuksioIdx)
   })
 })
