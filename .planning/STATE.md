@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T19:05:27.586Z"
+last_updated: "2026-03-15T19:09:11.614Z"
 progress:
   total_phases: 7
   completed_phases: 1
   total_plans: 14
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 3 - Site-Specific Media & Tags
-**Plan**: 2 of N plans complete (03-00 Wave 0 scaffold done, 03-01 site-specific collections created)
+**Plan**: 3 of N plans complete (03-00 Wave 0 scaffold done, 03-01 site-specific collections created, 03-02 consumer post collection fields updated)
 **Status**: In Progress
 
-**Progress**: [███████░░░] 71% (10 of 14 plans complete)
+**Progress**: [████████░░] 79% (11 of 14 plans complete)
 
 **Blockers**: None
 
@@ -80,8 +80,10 @@ progress:
 | 2026-03-15 | Use it.todo() instead of it.skip() for Wave 0 test stubs                                                                                                                 | todo stubs appear as pending in Vitest output, creating a visible inventory; skip would hide them from the summary      | Phase 3 Plan 03-00 |
 | 2026-03-15 | Authors.avatar uses polymorphic relationTo array for all 3 site media collections                                                                                        | Authors is shared across all sites so avatar must accept uploads from any site's media collection                       | Phase 3 Plan 03-01 |
 | 2026-03-15 | Removed filterOptions: { site: ... } from post tag relationships — collection slug is the discriminator                                                                  | With site-specific tag collections, filtering by site field is redundant and the old site field won't exist             | Phase 3 Plan 03-01 |
+| 2026-03-15 | 03-02 consumer post field updates were completed as part of 03-01 payload.config.ts commit — no additional changes required                                               | Registering new collections and updating consumer references are tightly coupled; doing them together avoids broken intermediate state | Phase 3 Plan 03-02 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
+| Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
 
 ### Critical Information
 
@@ -111,8 +113,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 03-01 (site-specific media and tag collections, payload.config.ts registration) - 2026-03-15
-**Next action**: Execute Plan 03-02 (consumer collection field updates) or 03-03 (migration)
+**Last action**: Completed Plan 03-02 (consumer post collection fields verified — changes were applied as part of 03-01) - 2026-03-15
+**Next action**: Execute Plan 03-03 (database migration for media/tags split)
 
 **Context for next session**:
 
