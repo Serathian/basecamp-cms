@@ -11,22 +11,24 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Users } from './collections/users/Users'
-import { Media } from './collections/Media'
-
-// Shared
 import { Authors } from './collections/shared/Authors'
-import { Tags } from './collections/shared/Tags'
 
 // jake-reddy.com
+import { JrMedia } from './collections/jake-reddy/JrMedia'
+import { JrTags } from './collections/jake-reddy/JrTags'
 import { JrPosts } from './collections/jake-reddy/JrPosts'
 
 // nerdintheforest.com
+import { NitfMedia } from './collections/nerdintheforest/NitfMedia'
+import { NitfTags } from './collections/nerdintheforest/NitfTags'
 import { NitfPosts } from './collections/nerdintheforest/NitfPosts'
 import { NitfTrails } from './collections/nerdintheforest/NitfTrails'
 import { NitfWaypoints } from './collections/nerdintheforest/NitfWaypoints'
 import { NitfLocations } from './collections/nerdintheforest/NitfLocations'
 
 // reddyontheroad.com
+import { RotrMedia } from './collections/reddyontheroad/RotrMedia'
+import { RotrTags } from './collections/reddyontheroad/RotrTags'
 import { RotrPosts } from './collections/reddyontheroad/RotrPosts'
 import { RotrLocations } from './collections/reddyontheroad/RotrLocations'
 
@@ -42,18 +44,21 @@ export default buildConfig({
   },
   collections: [
     Users,
-    Media,
-    // Shared
     Authors,
-    Tags,
     // jake-reddy.com
+    JrMedia,
+    JrTags,
     JrPosts,
     // nerdintheforest.com
+    NitfMedia,
+    NitfTags,
     NitfPosts,
     NitfTrails,
     NitfWaypoints,
     NitfLocations,
     // reddyontheroad.com
+    RotrMedia,
+    RotrTags,
     RotrPosts,
     RotrLocations,
   ],
