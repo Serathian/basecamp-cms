@@ -61,15 +61,15 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 - [ ] **GEO-02**: `nitf_destinations` has `geom` column with `afterChange` hook
 - [ ] **GEO-03**: `nitf_poi` has `geom` column with `afterChange` hook
 - [ ] **GEO-04**: `rotr_days` has `geom` column with `afterChange` hook
-- [ ] **GEO-05**: PostGIS spatial queries work for all geo collections
+- [x] **GEO-05**: PostGIS spatial queries work for all geo collections
 - [ ] **GEO-06**: Migration adds `geom` columns to remaining geo tables
 
 ### Types & Testing
 
 - [x] **TEST-01**: Integration tests verify access control changes (admin sees drafts, anon sees published only)
 - [ ] **TEST-02**: Integration tests verify all bidirectional relationships
-- [ ] **TEST-03**: Integration tests verify PostGIS spatial queries on all geo collections
-- [ ] **TEST-04**: TypeScript types regenerated after each schema change
+- [x] **TEST-03**: Integration tests verify PostGIS spatial queries on all geo collections
+- [x] **TEST-04**: TypeScript types regenerated after each schema change
 - [ ] **TEST-05**: All migrations have tested `down()` rollback functions
 
 ## v2 Requirements
@@ -149,12 +149,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GEO-02      | 2                   | Pending  |
 | GEO-03      | 2                   | Pending  |
 | GEO-04      | 2                   | Pending  |
-| GEO-05      | 2                   | Pending  |
+| GEO-05      | 2                   | Complete |
 | GEO-06      | 2                   | Pending  |
 | TEST-01     | 1, 7                | Pending  |
 | TEST-02     | 3, 4, 5             | Pending  |
-| TEST-03     | 2                   | Pending  |
-| TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Pending  |
+| TEST-03     | 2                   | Complete |
+| TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Complete |
 | TEST-05     | 2, 3, 4             | Pending  |
 
 **Coverage:**
