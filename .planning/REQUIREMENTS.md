@@ -57,7 +57,7 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### PostGIS Extension
 
-- [ ] **GEO-01**: `nitf_posts` `geom` column auto-populated via `afterChange` hook
+- [x] **GEO-01**: `nitf_posts` `geom` column auto-populated via `afterChange` hook
 - [ ] **GEO-02**: `nitf_destinations` has `geom` column with `afterChange` hook
 - [ ] **GEO-03**: `nitf_poi` has `geom` column with `afterChange` hook
 - [ ] **GEO-04**: `rotr_days` has `geom` column with `afterChange` hook
@@ -145,7 +145,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ROTR-04     | 4                   | Pending  |
 | ROTR-05     | 4                   | Pending  |
 | ROTR-06     | 4                   | Pending  |
-| GEO-01      | 2                   | Pending  |
+| GEO-01      | 2                   | Complete |
 | GEO-02      | 2                   | Pending  |
 | GEO-03      | 2                   | Pending  |
 | GEO-04      | 2                   | Pending  |

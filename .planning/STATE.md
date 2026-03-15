@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: '2026-03-14T17:35:49.112Z'
+last_updated: '2026-03-15T05:25:25.873Z'
 progress:
   total_phases: 7
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 7
+  completed_plans: 5
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,8 +26,8 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 2 - PostGIS Extension & Auto-Population
-**Plan**: 02-01 (Extend Migration) - Next
-**Status**: In Progress (1 of 4 plans complete)
+**Plan**: 02-02 (Geom Auto-Population) - Complete
+**Status**: In Progress (2 of 4 plans complete)
 
 **Progress**: [███░░░░░░░░░░░░░░░░░] 14% (Phase 1 of 7 complete, Phase 2 started)
 
@@ -61,19 +61,21 @@ progress:
 
 ### Key Decisions
 
-| Date       | Decision                                                                                                                                                                 | Rationale                                                                        | Impact             |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- | ------------------ |
-| 2026-03-11 | 7 phases for standard granularity                                                                                                                                        | Matches research recommendations, natural requirement groupings                  | Roadmap structure  |
-| 2026-03-11 | Fix access control first (Phase 1)                                                                                                                                       | Admin can't see drafts - blocking bug must be fixed before other work            | Phase ordering     |
-| 2026-03-11 | PostGIS before content splits (Phase 2)                                                                                                                                  | Geographic features depend on working spatial queries                            | Phase ordering     |
-| 2026-03-11 | ROTR before NITF (Phase 4 → 5)                                                                                                                                           | Week/day pattern simpler than trip structure, validates approach                 | Phase ordering     |
-| 2026-03-12 | Use published.ts helper that checks user presence first, returning true for authenticated users (see all content) and status filter for anonymous users (published only) | Fixes broken anyone() pattern while maintaining correct access semantics         | Phase 1 Plan 01-01 |
-| 2026-03-12 | Simplify admin.ts to use Boolean(user) instead of checkRole since only one admin role exists                                                                             | Reduces complexity without changing behavior                                     | Phase 1 Plan 01-01 |
-| 2026-03-12 | Merged jr_projects into jr_posts with 7 optional project fields (github_url, demo_url, tech_stack, highlights, challenges, outcomes, featured)                           | Simplifies admin UX and eliminates duplicate patterns                            | Phase 1 Plan 01-02 |
-| 2026-03-12 | Simplified Users collection to single admin role, removed hasMany and enum array (editor/user roles eliminated)                                                          | Single-user CMS doesn't need complex RBAC                                        | Phase 1 Plan 01-02 |
-| 2026-03-14 | Clean slate migration: DROP tables instead of complex ALTER statements                                                                                                   | Simpler, less error-prone, acceptable for dev environment                        | Phase 1 Plan 01-03 |
-| 2026-03-14 | body field nullable to match collection config (not required)                                                                                                            | Collection defines optional textarea, migration must match schema                | Phase 1 Plan 01-03 |
-| 2026-03-14 | Wave 0 test scaffolds with .todo() markers satisfy Nyquist Rule                                                                                                          | Test files exist before implementation plans run, preventing circular dependency | Phase 2 Plan 02-00 |
+| Date                           | Decision                                                                                                                                                                 | Rationale                                                                                                              | Impact             |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| 2026-03-11                     | 7 phases for standard granularity                                                                                                                                        | Matches research recommendations, natural requirement groupings                                                        | Roadmap structure  |
+| 2026-03-11                     | Fix access control first (Phase 1)                                                                                                                                       | Admin can't see drafts - blocking bug must be fixed before other work                                                  | Phase ordering     |
+| 2026-03-11                     | PostGIS before content splits (Phase 2)                                                                                                                                  | Geographic features depend on working spatial queries                                                                  | Phase ordering     |
+| 2026-03-11                     | ROTR before NITF (Phase 4 → 5)                                                                                                                                           | Week/day pattern simpler than trip structure, validates approach                                                       | Phase ordering     |
+| 2026-03-12                     | Use published.ts helper that checks user presence first, returning true for authenticated users (see all content) and status filter for anonymous users (published only) | Fixes broken anyone() pattern while maintaining correct access semantics                                               | Phase 1 Plan 01-01 |
+| 2026-03-12                     | Simplify admin.ts to use Boolean(user) instead of checkRole since only one admin role exists                                                                             | Reduces complexity without changing behavior                                                                           | Phase 1 Plan 01-01 |
+| 2026-03-12                     | Merged jr_projects into jr_posts with 7 optional project fields (github_url, demo_url, tech_stack, highlights, challenges, outcomes, featured)                           | Simplifies admin UX and eliminates duplicate patterns                                                                  | Phase 1 Plan 01-02 |
+| 2026-03-12                     | Simplified Users collection to single admin role, removed hasMany and enum array (editor/user roles eliminated)                                                          | Single-user CMS doesn't need complex RBAC                                                                              | Phase 1 Plan 01-02 |
+| 2026-03-14                     | Clean slate migration: DROP tables instead of complex ALTER statements                                                                                                   | Simpler, less error-prone, acceptable for dev environment                                                              | Phase 1 Plan 01-03 |
+| 2026-03-14                     | body field nullable to match collection config (not required)                                                                                                            | Collection defines optional textarea, migration must match schema                                                      | Phase 1 Plan 01-03 |
+| 2026-03-14                     | Wave 0 test scaffolds with .todo() markers satisfy Nyquist Rule                                                                                                          | Test files exist before implementation plans run, preventing circular dependency                                       | Phase 2 Plan 02-00 |
+| 2026-03-15                     | Use PostgreSQL BEFORE INSERT OR UPDATE triggers instead of Payload afterChange hooks for geom auto-population                                                            | Triggers provide better transaction visibility, no async timing issues, standard database pattern for computed columns | Phase 2 Plan 02-02 |
+| Phase 02-postgis-extension P01 | 1 min                                                                                                                                                                    | 2 tasks                                                                                                                | 2 files            |
 
 ### Critical Information
 
@@ -103,8 +105,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 02-00 (Test Infrastructure) - 2026-03-14
-**Next action**: Execute Plan 02-01 (Extend PostGIS Migration)
+**Last action**: Completed Plan 02-02 (Geom Auto-Population) - 2026-03-15
+**Next action**: Execute Plan 02-03 (Verify Spatial Queries)
 
 **Context for next session**:
 
@@ -112,10 +114,13 @@ progress:
 - Plan 01-01 commits: 5b549a9 (published helper), f4b3947 (admin simplification), 69c42ed (collection updates), 793543a (metadata)
 - Plan 01-02 commits: aaf4233 (JrPosts merge), 76c6c76 (Users simplification), eb4cb1a (JrProjects removal), 63c18e4 (auth tests)
 - Plan 01-03 commits: e2300b8 (migration), f585658/96604d7/1a3db92/e1b23b6 (SQL fixes), 72bbb0c (roles column), e4ead9e (schema fixes)
-- **Phase 2 STARTED**: Plan 02-00 (Wave 0 test scaffolds) complete
+- **Phase 2 IN PROGRESS**: 2 of 4 plans complete (50%)
 - Plan 02-00 commits: 5c63444 (migration test scaffold), e54288d (geom hooks test scaffold)
-- Test scaffolds created: tests/int/migration.int.spec.ts (4 todo), tests/int/geom-hooks.int.spec.ts (8 todo)
-- Ready for Plan 02-01: Extend PostGIS migration to 6 tables with test coverage
+- Plan 02-01 commits: 5f7bd6a (TDD RED - failing migration tests), c7bb61e (TDD GREEN - migration extends all 6 tables), 71d2bb9 (metadata)
+- Plan 02-02 commits: 5f7bd6a (TDD RED - failing geom tests, shared with 02-01), 21bad90 (PostgreSQL triggers for 6 tables)
+- **Key achievement**: PostgreSQL triggers auto-populate geom columns for all 6 geographic collections (nitf_posts, nitf_trails, nitf_waypoints, nitf_locations, rotr_posts, rotr_locations)
+- **Decision**: Used database triggers instead of application hooks (better transaction visibility, no async timing issues)
+- Ready for Plan 02-03: Verify spatial queries work end-to-end with trigger-populated geom data
 
 ## Open Questions
 
