@@ -78,7 +78,7 @@ const computeGpxStats: CollectionAfterChangeHook = async ({ doc, req }: any) => 
 
   try {
     const fileId = typeof doc.gpx_file === 'object' ? doc.gpx_file.id : doc.gpx_file
-    const file = await req.payload.findByID({ collection: 'media', id: fileId })
+    const file = await req.payload.findByID({ collection: 'nitf_media', id: fileId })
     if (!file?.url) return doc
 
     const baseUrl =
@@ -122,7 +122,10 @@ export const NitfTrails: CollectionConfig = {
       computeGpxStats,
       async ({ doc, req }: any) => {
         if (doc.latitude_start != null && doc.longitude_start != null) {
-          const db = (req.payload.db as any).drizzle
+          const txID = req.transactionID
+          const db = txID
+            ? ((req.payload.db as any).sessions[await txID]?.db ?? (req.payload.db as any).drizzle)
+            : (req.payload.db as any).drizzle
           await db.execute(sql`
             UPDATE nitf_trails
             SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude_start}, ${doc.latitude_start}), 4326)
@@ -145,7 +148,7 @@ export const NitfTrails: CollectionConfig = {
       ],
     },
     { name: 'title', type: 'text', required: true },
-    { name: 'gpx_file', type: 'upload', relationTo: 'media' },
+    { name: 'gpx_file', type: 'upload', relationTo: 'nitf_media' },
     { name: 'distance_km', type: 'number' },
     { name: 'elevation_gain_m', type: 'number' },
     { name: 'elevation_loss_m', type: 'number' },

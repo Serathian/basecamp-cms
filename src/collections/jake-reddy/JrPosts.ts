@@ -40,7 +40,7 @@ export const JrPosts: CollectionConfig = {
     { name: 'body', type: 'textarea' },
 
     // Media
-    { name: 'cover_image', type: 'upload', relationTo: 'media' },
+    { name: 'cover_image', type: 'upload', relationTo: 'jr_media' },
 
     // Project-specific fields (all optional)
     {
@@ -74,9 +74,8 @@ export const JrPosts: CollectionConfig = {
     {
       name: 'tags',
       type: 'relationship',
-      relationTo: 'tags',
+      relationTo: 'jr_tags',
       hasMany: true,
-      filterOptions: { site: { equals: 'jake-reddy' } },
     },
 
     // SEO

@@ -93,8 +93,8 @@ describe('API — basic queries', () => {
     expect(authors).toBeDefined()
   })
 
-  it('fetches tags', async () => {
-    const tags = await payload.find({ collection: 'tags' })
+  it('fetches jr_tags', async () => {
+    const tags = await payload.find({ collection: 'jr_tags' })
     expect(tags).toBeDefined()
   })
 })

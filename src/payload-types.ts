@@ -68,14 +68,18 @@ export interface Config {
   blocks: {};
   collections: {
     users: User;
-    media: Media;
     authors: Author;
-    tags: Tag;
+    jr_media: JrMedia;
+    jr_tags: JrTag;
     jr_posts: JrPost;
+    nitf_media: NitfMedia;
+    nitf_tags: NitfTag;
     nitf_posts: NitfPost;
     nitf_trails: NitfTrail;
     nitf_waypoints: NitfWaypoint;
     nitf_locations: NitfLocation;
+    rotr_media: RotrMedia;
+    rotr_tags: RotrTag;
     rotr_posts: RotrPost;
     rotr_locations: RotrLocation;
     'payload-kv': PayloadKv;
@@ -86,14 +90,18 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
-    tags: TagsSelect<false> | TagsSelect<true>;
+    jr_media: JrMediaSelect<false> | JrMediaSelect<true>;
+    jr_tags: JrTagsSelect<false> | JrTagsSelect<true>;
     jr_posts: JrPostsSelect<false> | JrPostsSelect<true>;
+    nitf_media: NitfMediaSelect<false> | NitfMediaSelect<true>;
+    nitf_tags: NitfTagsSelect<false> | NitfTagsSelect<true>;
     nitf_posts: NitfPostsSelect<false> | NitfPostsSelect<true>;
     nitf_trails: NitfTrailsSelect<false> | NitfTrailsSelect<true>;
     nitf_waypoints: NitfWaypointsSelect<false> | NitfWaypointsSelect<true>;
     nitf_locations: NitfLocationsSelect<false> | NitfLocationsSelect<true>;
+    rotr_media: RotrMediaSelect<false> | RotrMediaSelect<true>;
+    rotr_tags: RotrTagsSelect<false> | RotrTagsSelect<true>;
     rotr_posts: RotrPostsSelect<false> | RotrPostsSelect<true>;
     rotr_locations: RotrLocationsSelect<false> | RotrLocationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -163,9 +171,35 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "authors".
  */
-export interface Media {
+export interface Author {
+  id: number;
+  name: string;
+  slug: string;
+  bio?: string | null;
+  avatar?:
+    | ({
+        relationTo: 'jr_media';
+        value: number | JrMedia;
+      } | null)
+    | ({
+        relationTo: 'nitf_media';
+        value: number | NitfMedia;
+      } | null)
+    | ({
+        relationTo: 'rotr_media';
+        value: number | RotrMedia;
+      } | null);
+  sites?: ('jake-reddy' | 'nerdintheforest' | 'reddyontheroad')[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_media".
+ */
+export interface JrMedia {
   id: number;
   alt: string;
   updatedAt: string;
@@ -182,27 +216,50 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "authors".
+ * via the `definition` "nitf_media".
  */
-export interface Author {
+export interface NitfMedia {
   id: number;
-  name: string;
-  slug: string;
-  bio?: string | null;
-  avatar?: (number | null) | Media;
-  sites?: ('jake-reddy' | 'nerdintheforest' | 'reddyontheroad')[] | null;
+  alt: string;
   updatedAt: string;
   createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
+ * via the `definition` "rotr_media".
  */
-export interface Tag {
+export interface RotrMedia {
+  id: number;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_tags".
+ */
+export interface JrTag {
   id: number;
   name: string;
   slug: string;
-  site: 'jake-reddy' | 'nerdintheforest' | 'reddyontheroad';
   updatedAt: string;
   createdAt: string;
 }
@@ -218,7 +275,7 @@ export interface JrPost {
   published_at?: string | null;
   excerpt?: string | null;
   body?: string | null;
-  cover_image?: (number | null) | Media;
+  cover_image?: (number | null) | JrMedia;
   project_type?: ('open-source' | 'personal' | 'home-lab' | 'professional') | null;
   project_status?: ('active' | 'in-progress' | 'completed' | 'archived') | null;
   tech_stack?:
@@ -235,10 +292,21 @@ export interface JrPost {
   featured?: boolean | null;
   sort?: number | null;
   author?: (number | null) | Author;
-  tags?: (number | Tag)[] | null;
+  tags?: (number | JrTag)[] | null;
   reading_time_minutes?: number | null;
   seo_title?: string | null;
   seo_description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_tags".
+ */
+export interface NitfTag {
+  id: number;
+  name: string;
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -254,9 +322,9 @@ export interface NitfPost {
   type: 'adventure' | 'tips' | 'recipe' | 'review' | 'general';
   excerpt?: string | null;
   body?: string | null;
-  cover_image?: (number | null) | Media;
+  cover_image?: (number | null) | NitfMedia;
   author?: (number | null) | Author;
-  tags?: (number | Tag)[] | null;
+  tags?: (number | NitfTag)[] | null;
   published_at?: string | null;
   reading_time_minutes?: number | null;
   latitude?: number | null;
@@ -300,7 +368,7 @@ export interface NitfTrail {
   id: number;
   status: 'draft' | 'published';
   title: string;
-  gpx_file?: (number | null) | Media;
+  gpx_file?: (number | null) | NitfMedia;
   distance_km?: number | null;
   elevation_gain_m?: number | null;
   elevation_loss_m?: number | null;
@@ -370,6 +438,17 @@ export interface NitfWaypoint {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rotr_tags".
+ */
+export interface RotrTag {
+  id: number;
+  name: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "rotr_posts".
  */
 export interface RotrPost {
@@ -380,9 +459,9 @@ export interface RotrPost {
   type?: ('story' | 'guide' | 'tips' | 'listicle') | null;
   excerpt?: string | null;
   body?: string | null;
-  cover_image?: (number | null) | Media;
+  cover_image?: (number | null) | RotrMedia;
   author?: (number | null) | Author;
-  tags?: (number | Tag)[] | null;
+  tags?: (number | RotrTag)[] | null;
   latitude?: number | null;
   longitude?: number | null;
   locations?:
@@ -464,20 +543,28 @@ export interface PayloadLockedDocument {
         value: number | User;
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
         relationTo: 'authors';
         value: number | Author;
       } | null)
     | ({
-        relationTo: 'tags';
-        value: number | Tag;
+        relationTo: 'jr_media';
+        value: number | JrMedia;
+      } | null)
+    | ({
+        relationTo: 'jr_tags';
+        value: number | JrTag;
       } | null)
     | ({
         relationTo: 'jr_posts';
         value: number | JrPost;
+      } | null)
+    | ({
+        relationTo: 'nitf_media';
+        value: number | NitfMedia;
+      } | null)
+    | ({
+        relationTo: 'nitf_tags';
+        value: number | NitfTag;
       } | null)
     | ({
         relationTo: 'nitf_posts';
@@ -494,6 +581,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'nitf_locations';
         value: number | NitfLocation;
+      } | null)
+    | ({
+        relationTo: 'rotr_media';
+        value: number | RotrMedia;
+      } | null)
+    | ({
+        relationTo: 'rotr_tags';
+        value: number | RotrTag;
       } | null)
     | ({
         relationTo: 'rotr_posts';
@@ -570,9 +665,22 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
+ * via the `definition` "authors_select".
  */
-export interface MediaSelect<T extends boolean = true> {
+export interface AuthorsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  bio?: T;
+  avatar?: T;
+  sites?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_media_select".
+ */
+export interface JrMediaSelect<T extends boolean = true> {
   alt?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -588,25 +696,11 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "authors_select".
+ * via the `definition` "jr_tags_select".
  */
-export interface AuthorsSelect<T extends boolean = true> {
+export interface JrTagsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
-  bio?: T;
-  avatar?: T;
-  sites?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags_select".
- */
-export interface TagsSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  site?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -634,6 +728,34 @@ export interface JrPostsSelect<T extends boolean = true> {
   reading_time_minutes?: T;
   seo_title?: T;
   seo_description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_media_select".
+ */
+export interface NitfMediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_tags_select".
+ */
+export interface NitfTagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -722,6 +844,34 @@ export interface NitfLocationsSelect<T extends boolean = true> {
   latitude?: T;
   longitude?: T;
   country?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rotr_media_select".
+ */
+export interface RotrMediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rotr_tags_select".
+ */
+export interface RotrTagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

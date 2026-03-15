@@ -20,7 +20,10 @@ export const NitfPosts: CollectionConfig = {
     afterChange: [
       async ({ doc, req }: any) => {
         if (doc.latitude != null && doc.longitude != null) {
-          const db = (req.payload.db as any).drizzle
+          const txID = req.transactionID
+          const db = txID
+            ? ((req.payload.db as any).sessions[await txID]?.db ?? (req.payload.db as any).drizzle)
+            : (req.payload.db as any).drizzle
           await db.execute(sql`
             UPDATE nitf_posts
             SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude}, ${doc.latitude}), 4326)
@@ -59,14 +62,13 @@ export const NitfPosts: CollectionConfig = {
     },
     { name: 'excerpt', type: 'textarea' },
     { name: 'body', type: 'textarea' },
-    { name: 'cover_image', type: 'upload', relationTo: 'media' },
+    { name: 'cover_image', type: 'upload', relationTo: 'nitf_media' },
     { name: 'author', type: 'relationship', relationTo: 'authors' },
     {
       name: 'tags',
       type: 'relationship',
-      relationTo: 'tags',
+      relationTo: 'nitf_tags',
       hasMany: true,
-      filterOptions: { site: { equals: 'nerdintheforest' } },
     },
     {
       name: 'published_at',
