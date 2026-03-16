@@ -150,7 +150,15 @@ Plans:
 5. Spatial query returns nitf_destinations within radius of query point
 6. Map view can query all POIs within bounding box for trip route display
 
-**Plans**: TBD
+**Plans**: 5 plans in 4 waves
+
+Plans:
+
+- [ ] 05-00-PLAN.md — Wave 0 test scaffold (Nyquist compliance — stubs + update dropped collection references)
+- [ ] 05-01-PLAN.md — Create 5 new collection files (NitfPoiTypes, NitfDestinations, NitfPoi, NitfTrips, NitfPlaces)
+- [ ] 05-02-PLAN.md — Update NitfPosts schema + register new / deregister dropped collections in payload.config
+- [ ] 05-03-PLAN.md — Write migration (drop old tables, create new tables, PostGIS triggers, _rels tables)
+- [ ] 05-04-PLAN.md — Implement integration tests + regenerate TypeScript types
 
 ---
 
@@ -200,8 +208,8 @@ Plans:
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
-| 4. Reddy on the Road Week/Day Split      | 6/6 | Complete   | 2026-03-16 |
-| 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
+| 4. Reddy on the Road Week/Day Split      | 6/6            | Complete    | 2026-03-16 |
+| 5. Nerd in the Forest Trip Structure     | 0/5            | Not started | -          |
 | 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
 
@@ -239,6 +247,7 @@ Phases with standard patterns (skip research):
 - **Phase 2**: PostGIS extension follows existing `lib/nearby.ts` patterns
 - **Phase 3**: Standard data migration (copy + filter)
 - **Phase 4**: All patterns exist verbatim in the codebase (researched 2026-03-16)
+- **Phase 5**: All patterns established in Phases 2-4; researched 2026-03-16
 - **Phase 6**: Straightforward collection + relationship
 - **Phase 7**: Standard testing + deployment validation
 
