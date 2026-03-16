@@ -209,7 +209,7 @@ Plans:
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
 | 4. Reddy on the Road Week/Day Split      | 6/6            | Complete    | 2026-03-16 |
-| 5. Nerd in the Forest Trip Structure     | 2/5 | In Progress|  |
+| 5. Nerd in the Forest Trip Structure     | 3/5 | In Progress|  |
 | 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
 

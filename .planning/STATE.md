@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T16:49:46.992Z"
+last_updated: "2026-03-16T16:55:06.669Z"
 progress:
   total_phases: 7
   completed_phases: 3
   total_plans: 25
-  completed_plans: 21
+  completed_plans: 22
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 5 - NITF Trip Structure - IN PROGRESS
-**Plan**: 2 of N plans complete (05-01 Collection schemas)
-**Status**: Phase 5 Collection schemas complete — Ready for migration (05-02)
+**Plan**: 3 of N plans complete (05-02 Config registration + NitfPosts trim)
+**Status**: Phase 5 schema and config registration complete — Ready for migration (05-03)
 
-**Progress**: [████████░░] 84% (21 of 25 plans complete)
+**Progress**: [█████████░] 88% (22 of 25 plans complete)
 
 **Blockers**: None
 
@@ -95,6 +95,9 @@ progress:
 | 2026-03-16 | Wave 0 import of non-existent 20260316_nitf_trip_structure migration causes file-level skip in Vitest — expected and acceptable at Wave 0 (same pattern as Phase 4 Plan 04-00) | Migration file created in 05-02; stubs still reported as pending in Vitest summary | Phase 5 Plan 05-00 |
 | 2026-03-16 | NitfPoiTypes read access uses () => true (not published helper) since lookup data is always public | Lookup types are always public — no auth needed, no published import required | Phase 5 Plan 05-01 |
 | 2026-03-16 | published_at added to NitfTrips and NitfPlaces per Claude's discretion (05-CONTEXT.md grants this) | Consistent pattern across all content collections with date-gated publishing | Phase 5 Plan 05-01 |
+| 2026-03-16 | NitfPosts type field trimmed from 5 options to 3 (review/recipe/article); article replaces adventure/tips/general | Cleaner taxonomy matching trip-structure focus; general-purpose types consolidated into article | Phase 5 Plan 05-02 |
+| 2026-03-16 | 7 legacy NitfPosts fields dropped (reading_time_minutes, trail, locations, review_meta, recipe_meta, seo_title, seo_description) before migration | Schema trim before migration prevents dead columns; review_meta/recipe_meta moved to trip-structure model | Phase 5 Plan 05-02 |
+| 2026-03-16 | NitfLocations and NitfWaypoints deregistered from both payload configs; 5 new collections registered in both files atomically | Mirror config must stay synchronized; atomic change avoids broken intermediate state | Phase 5 Plan 05-02 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -110,6 +113,7 @@ progress:
 | Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
 | Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
 | Phase 05-nerd-in-the-forest-trip-structure P01 | 2 | 2 tasks | 5 files |
+| Phase 05-nerd-in-the-forest-trip-structure P02 | 2 | 2 tasks | 3 files |
 
 ### Critical Information
 
@@ -139,8 +143,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 05-01 (NITF collection schemas: NitfPoiTypes, NitfDestinations, NitfPoi, NitfTrips, NitfPlaces — 5 files, 2 tasks) - 2026-03-16
-**Next action**: Phase 5 Plan 05-02 (migration for NITF trip structure tables)
+**Last action**: Completed Plan 05-02 (NitfPosts schema trim + config registration: NitfTrips/Destinations/Poi/PoiTypes/Places registered, NitfLocations/Waypoints deregistered — 3 files, 2 tasks) - 2026-03-16
+**Next action**: Phase 5 Plan 05-03 (migration for NITF trip structure tables)
 
 **Context for next session**:
 
@@ -175,6 +179,7 @@ progress:
 - **Phase 4 COMPLETE**: rotr_days collection fully operational with PostGIS trigger, relationships, migration lifecycle, and types; requirements traceability accurate
 - **Phase 5 Wave 0 COMPLETE**: nitf-trip-structure.int.spec.ts created with 23 it.todo() stubs; geom-hooks and migration specs updated to reflect Phase 5 table changes
 - **Phase 5 Plan 05-01 COMPLETE**: 5 collection schemas created (NitfPoiTypes, NitfDestinations, NitfPoi, NitfTrips, NitfPlaces) — bidirectional trip-POI relationship, lat/lon for PostGIS, all access via published/admin helpers
+- **Phase 5 Plan 05-02 COMPLETE**: NitfPosts trimmed (type: 3 options, 7 legacy fields dropped); both payload configs now register 5 new NITF collections and deregister NitfLocations/NitfWaypoints
 
 ## Open Questions
 

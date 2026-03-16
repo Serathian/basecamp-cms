@@ -44,7 +44,7 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 - [x] **NITF-04**: `nitf_poi` collection: name, latitude, longitude, type (select: camp-fire/lean-to/etc), trips (relation array to nitf_trips)
 - [x] **NITF-05**: `nitf_trips` collection: title, slug, body (markdown), destination (relation to nitf_destinations), cover_image, date_range, tags (relation), pois (relation array to nitf_poi, ordered)
 - [x] **NITF-06**: `nitf_trips` ↔ `nitf_poi` bidirectional relationship (trips array on POI, pois array on trip)
-- [ ] **NITF-07**: `nitf_tags` collection: name, slug
+- [x] **NITF-07**: `nitf_tags` collection: name, slug
 
 ### ROTR Collections
 
@@ -138,7 +138,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NITF-04     | 5                   | Complete |
 | NITF-05     | 5                   | Complete |
 | NITF-06     | 5                   | Complete |
-| NITF-07     | 5                   | Pending  |
+| NITF-07     | 5                   | Complete |
 | ROTR-01     | 4                   | Complete |
 | ROTR-02     | 4                   | Complete |
 | ROTR-03     | 4                   | Complete |
