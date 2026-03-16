@@ -51,7 +51,7 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 - [ ] **ROTR-01**: `rotr_weeks` collection: title, summary (markdown), cover_photo (media), date_range, days (relation array to rotr_days, ordered), tags (relation)
 - [ ] **ROTR-02**: `rotr_days` collection: date, latitude, longitude, location_name, location_type (select), markdown_body, photos (media array), weather (text), mood (select), week (relation to rotr_weeks)
 - [ ] **ROTR-03**: `rotr_weeks` ↔ `rotr_days` bidirectional relationship (days array on week, week relation on day)
-- [ ] **ROTR-04**: `rotr_locations` collection removed (GPS on days sufficient)
+- [x] **ROTR-04**: `rotr_locations` collection removed (GPS on days sufficient)
 - [ ] **ROTR-05**: `rotr_tags` collection: name, slug
 - [ ] **ROTR-06**: Migration splits existing `rotr_posts` into weeks and days
 
@@ -60,7 +60,7 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 - [x] **GEO-01**: `nitf_posts` `geom` column auto-populated via `afterChange` hook
 - [ ] **GEO-02**: `nitf_destinations` has `geom` column with `afterChange` hook
 - [ ] **GEO-03**: `nitf_poi` has `geom` column with `afterChange` hook
-- [ ] **GEO-04**: `rotr_days` has `geom` column with `afterChange` hook
+- [x] **GEO-04**: `rotr_days` has `geom` column with `afterChange` hook
 - [x] **GEO-05**: PostGIS spatial queries work for all geo collections
 - [x] **GEO-06**: Migration adds `geom` columns to remaining geo tables
 
@@ -142,13 +142,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ROTR-01     | 4                   | Pending  |
 | ROTR-02     | 4                   | Pending  |
 | ROTR-03     | 4                   | Pending  |
-| ROTR-04     | 4                   | Pending  |
+| ROTR-04     | 4                   | Complete |
 | ROTR-05     | 4                   | Pending  |
 | ROTR-06     | 4                   | Pending  |
 | GEO-01      | 2                   | Complete |
 | GEO-02      | 2                   | Pending  |
 | GEO-03      | 2                   | Pending  |
-| GEO-04      | 2                   | Pending  |
+| GEO-04      | 2                   | Complete |
 | GEO-05      | 2                   | Complete |
 | GEO-06      | 2                   | Complete |
 | TEST-01     | 1, 7                | Pending  |

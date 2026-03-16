@@ -3,33 +3,33 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-15T19:26:10.772Z"
+last_updated: "2026-03-16T07:44:46.427Z"
 progress:
   total_phases: 7
   completed_phases: 2
-  total_plans: 14
-  completed_plans: 13
+  total_plans: 18
+  completed_plans: 14
 ---
 
 # Project State: Basecamp CMS Refinement
 
-**Last updated:** 2026-03-15
-**Project phase:** Phase 3 - Complete
+**Last updated:** 2026-03-16
+**Project phase:** Phase 4 - In Progress
 
 ## Project Reference
 
 **Core Value**: The CMS must align perfectly with how content is authored in Obsidian — every collection, field, and relationship should reduce friction between vault structure and frontend needs, never add ceremony.
 
-**Current Focus**: Splitting shared media and tags collections into site-specific collections (jr_media, nitf_media, rotr_media, jr_tags, nitf_tags, rotr_tags).
+**Current Focus**: Splitting rotr_posts into rotr_days collection (daily travel diary entries), removing rotr_posts and rotr_locations.
 
 ## Current Position
 
 **Milestone**: v1 Refinement
-**Phase**: 3 - Site-Specific Media & Tags
-**Plan**: 5 of 5 plans complete (03-00 Wave 0 scaffold, 03-01 site-specific collections, 03-02 consumer post fields, 03-03 data migration, 03-04 type regeneration + build verification)
-**Status**: Complete
+**Phase**: 4 - ROTR Week/Day Split
+**Plan**: 1 of 4 plans complete (04-00 Wave 0 scaffold done; 04-01 RotrDays collection, 04-02 migration, 04-03 test implementation remaining)
+**Status**: In Progress
 
-**Progress**: [█████████░] 93% (13 of 14 plans complete)
+**Progress**: [████████░░] 78% (14 of 18 plans complete)
 
 **Blockers**: None
 
@@ -83,12 +83,14 @@ progress:
 | 2026-03-15 | 03-02 consumer post field updates were completed as part of 03-01 payload.config.ts commit — no additional changes required                                               | Registering new collections and updating consumer references are tightly coupled; doing them together avoids broken intermediate state | Phase 3 Plan 03-02 |
 | 2026-03-15 | payload_locked_documents_rels must also be updated when renaming collection slugs | Payload generates queries referencing site-specific FK column names (jr_media_id, jr_tags_id, etc.) in this table | Phase 3 Plan 03-03 |
 | 2026-03-15 | vitest fileParallelism: false required when integration tests call migration down() | Shared DB state not safe for concurrent file execution when migration lifecycle tests are included | Phase 3 Plan 03-03 |
+| 2026-03-16 | Wave 0 scaffold import of 20260316_rotr_days_split (non-existent migration) causes file-level skip in Vitest — expected and acceptable at Wave 0 | Migration file created in 04-02; stubs still reported as pending in Vitest summary | Phase 4 Plan 04-00 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
 | Phase 03-site-specific-media-tags P03 | 6min | 2 tasks | 4 files |
 | Phase 03-site-specific-media-tags P03 | 6 | 2 tasks | 4 files |
 | Phase 03-site-specific-media-tags P04 | 1 | 1 tasks | 0 files |
+| Phase 04-reddy-on-the-road-week-day-split P00 | 1 | 1 tasks | 1 files |
 
 ### Critical Information
 
@@ -118,8 +120,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 03-04 (type regeneration verification — tsc clean, 27 tests green) - 2026-03-15
-**Next action**: Proceed to Phase 4 (ROTR Split: rotr_posts → rotr_weeks + rotr_days)
+**Last action**: Completed Plan 04-00 (Wave 0 test scaffold for rotr_days — 10 it.todo() stubs) - 2026-03-16
+**Next action**: Proceed to Phase 4 Plan 04-01 (RotrDays and RotrPlaceTypes collection implementation)
 
 **Context for next session**:
 
@@ -144,6 +146,8 @@ progress:
 - Plan 03-02 commits: no-op (completed as part of 03-01)
 - Plan 03-03 commits: b05e6b4 (migration up/down), ae6ea11 (tests + migration fix + fileParallelism)
 - Plan 03-04 commits: 517ea2c (type verification — types already current from 03-01)
+- **Phase 4 IN PROGRESS**: Wave 0 scaffold complete
+- Plan 04-00 commits: a71c5ab (Wave 0 test scaffold — 10 it.todo() stubs for rotr_days)
 
 ## Open Questions
 

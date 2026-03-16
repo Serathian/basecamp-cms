@@ -200,7 +200,7 @@ Plans:
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
-| 4. Reddy on the Road Week/Day Split      | 0/4            | Not started | -          |
+| 4. Reddy on the Road Week/Day Split      | 1/4 | In Progress|  |
 | 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
 | 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
