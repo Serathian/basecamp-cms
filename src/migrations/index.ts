@@ -4,6 +4,7 @@ import * as migration_20260303_214307_add_postgis from './20260303_214307_add_po
 import * as migration_20260314_171829_merge_jr_collections_and_simplify_users from './20260314_171829_merge_jr_collections_and_simplify_users'
 import * as migration_20260315_split_media_and_tags from './20260315_split_media_and_tags'
 import * as migration_20260316_rotr_days_split from './20260316_rotr_days_split'
+import * as migration_20260316_nitf_trip_structure from './20260316_nitf_trip_structure'
 export const migrations = [
   {
     up: migration_20260303_172001.up,
@@ -34,5 +35,10 @@ export const migrations = [
     up: migration_20260316_rotr_days_split.up,
     down: migration_20260316_rotr_days_split.down,
     name: '20260316_rotr_days_split',
+  },
+  {
+    up: migration_20260316_nitf_trip_structure.up,
+    down: migration_20260316_nitf_trip_structure.down,
+    name: '20260316_nitf_trip_structure',
   },
 ]
