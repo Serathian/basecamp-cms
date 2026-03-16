@@ -48,12 +48,12 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### ROTR Collections
 
-- [x] **ROTR-01**: `rotr_weeks` collection: title, summary (markdown), cover_photo (media), date_range, days (relation array to rotr_days, ordered), tags (relation)
-- [x] **ROTR-02**: `rotr_days` collection: date, latitude, longitude, location_name, location_type (select), markdown_body, photos (media array), weather (text), mood (select), week (relation to rotr_weeks)
-- [x] **ROTR-03**: `rotr_weeks` ↔ `rotr_days` bidirectional relationship (days array on week, week relation on day)
+- [x] **ROTR-01**: `rotr_days` standalone collection: status, title, date, latitude, longitude, location_name, location_type (relation to rotr_place_types), weather (text), temperature (number), summary (textarea), content (textarea), tags (relation to rotr_tags). Note: `rotr_weeks` collection was dropped by user decision (see 04-CONTEXT.md) — days stand alone without week hierarchy.
+- [x] **ROTR-02**: `rotr_days` collection implemented as described in ROTR-01 above. Original field spec (mood, photos, week) adjusted by user decision — see 04-CONTEXT.md for exact field decisions.
+- [x] **ROTR-03**: N/A — scope change. `rotr_weeks` hierarchy was dropped by user decision before implementation. `rotr_days` are standalone entries; no bidirectional week relationship exists. `rotr_place_types` lookup collection added instead (see 04-CONTEXT.md).
 - [x] **ROTR-04**: `rotr_locations` collection removed (GPS on days sufficient)
 - [x] **ROTR-05**: `rotr_tags` collection: name, slug
-- [ ] **ROTR-06**: Migration splits existing `rotr_posts` into weeks and days
+- [x] **ROTR-06**: Migration splits existing `rotr_posts` into weeks and days
 
 ### PostGIS Extension
 
@@ -144,7 +144,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ROTR-03     | 4                   | Complete |
 | ROTR-04     | 4                   | Complete |
 | ROTR-05     | 4                   | Complete |
-| ROTR-06     | 4                   | Pending  |
+| ROTR-06     | 4                   | Complete |
 | GEO-01      | 2                   | Complete |
 | GEO-02      | 2                   | Pending  |
 | GEO-03      | 2                   | Pending  |
