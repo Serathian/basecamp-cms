@@ -26,8 +26,8 @@ import { NitfLocations } from './collections/nerdintheforest/NitfLocations'
 // reddyontheroad.com
 import { RotrMedia } from './collections/reddyontheroad/RotrMedia'
 import { RotrTags } from './collections/reddyontheroad/RotrTags'
-import { RotrPosts } from './collections/reddyontheroad/RotrPosts'
-import { RotrLocations } from './collections/reddyontheroad/RotrLocations'
+import { RotrDays } from './collections/reddyontheroad/RotrDays'
+import { RotrPlaceTypes } from './collections/reddyontheroad/RotrPlaceTypes'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -57,8 +57,8 @@ export default buildConfig({
     // reddyontheroad.com
     RotrMedia,
     RotrTags,
-    RotrPosts,
-    RotrLocations,
+    RotrDays,
+    RotrPlaceTypes,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
