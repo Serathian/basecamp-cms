@@ -107,7 +107,7 @@ Plans:
 
 ### Phase 4: Reddy on the Road Week/Day Split
 
-**Goal**: ROTR content structured as compilations (weeks) containing ordered diary entries (days)
+**Goal**: rotr_days standalone diary collection replaces rotr_posts, with PostGIS geom and rotr_place_types lookup
 
 **Depends on**: Phase 2 (rotr_days needs PostGIS geom), Phase 3 (needs rotr_media + rotr_tags)
 
@@ -115,14 +115,21 @@ Plans:
 
 **Success Criteria** (what must be TRUE):
 
-1. Admin can create rotr_week with summary and cover photo
-2. Admin can create rotr_day with GPS coordinates, photos, weather, and mood
-3. Admin can reorder days within a week via drag-and-drop in admin UI
-4. Viewing rotr_day in admin shows which week it belongs to (bidirectional relationship visible)
-5. Legacy rotr_posts data split into weeks and days (no data loss)
-6. rotr_locations collection removed from schema
+1. Admin can create rotr_day with GPS coordinates, weather, temperature, and location_type
+2. rotr_days geom column auto-populated via BEFORE INSERT OR UPDATE trigger when lat/lon provided
+3. rotr_days.location_type relationship populates as rotr_place_type object at depth:1
+4. rotr_days.tags relationship populates as array at depth:1
+5. rotr_posts and rotr_locations tables dropped (clean slate migration)
+6. Migration down() fully reverses all changes
 
-**Plans**: TBD
+**Plans**: 4 plans in 4 waves
+
+Plans:
+
+- [ ] 04-00-PLAN.md — Create Wave 0 test scaffold (Nyquist compliance)
+- [ ] 04-01-PLAN.md — Create RotrDays + RotrPlaceTypes collections, update payload.config.ts
+- [ ] 04-02-PLAN.md — Write migration (drop old tables, create new tables, add geom trigger)
+- [ ] 04-03-PLAN.md — Implement integration tests and regenerate TypeScript types
 
 ---
 
@@ -192,8 +199,8 @@ Plans:
 | ---------------------------------------- | -------------- | ----------- | ---------- |
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
-| 3. Site-Specific Media & Tags            | 5/5 | Complete   | 2026-03-15 |
-| 4. Reddy on the Road Week/Day Split      | 0/TBD          | Not started | -          |
+| 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
+| 4. Reddy on the Road Week/Day Split      | 0/4            | Not started | -          |
 | 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
 | 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
@@ -224,7 +231,6 @@ Phase 7 (Production)
 
 Phases requiring deeper research during planning:
 
-- **Phase 4**: Analyze `rotr_posts` data to determine week/day split heuristics (date gaps, content patterns)
 - **Phase 5**: Validate trip data model (trip → destination cardinality, POI metadata boundaries)
 
 Phases with standard patterns (skip research):
@@ -232,10 +238,11 @@ Phases with standard patterns (skip research):
 - **Phase 1**: Access control patterns documented in AGENTS.md
 - **Phase 2**: PostGIS extension follows existing `lib/nearby.ts` patterns
 - **Phase 3**: Standard data migration (copy + filter)
+- **Phase 4**: All patterns exist verbatim in the codebase (researched 2026-03-16)
 - **Phase 6**: Straightforward collection + relationship
 - **Phase 7**: Standard testing + deployment validation
 
 ---
 
 _Roadmap created: 2026-03-11_
-_Last updated: 2026-03-15_
+_Last updated: 2026-03-16_
