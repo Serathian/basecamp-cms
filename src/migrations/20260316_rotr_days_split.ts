@@ -69,7 +69,23 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       EXECUTE FUNCTION trg_rotr_days_geom_fn();
   `))
 
-  // ─── Step 7: Update payload_locked_documents_rels ────────────────────────────────────────────────────────
+  // ─── Step 7: Create rotr_days_rels join table (Payload relationship tracking) ─────────────────────────────
+  // Payload requires a _rels table for every collection that has relationship fields.
+  // rotr_days has location_type (→ rotr_place_types) and tags (→ rotr_tags).
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS rotr_days_rels (
+      id SERIAL PRIMARY KEY,
+      "order" INTEGER,
+      parent_id INTEGER NOT NULL REFERENCES rotr_days(id) ON DELETE CASCADE,
+      path VARCHAR(255) NOT NULL,
+      rotr_place_types_id INTEGER REFERENCES rotr_place_types(id) ON DELETE SET NULL,
+      rotr_tags_id INTEGER REFERENCES rotr_tags(id) ON DELETE SET NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    )
+  `)
+
+  // ─── Step 8: Update payload_locked_documents_rels ────────────────────────────────────────────────────────
   await db.execute(sql`ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS rotr_days_id INTEGER`)
   await db.execute(sql`ALTER TABLE payload_locked_documents_rels ADD COLUMN IF NOT EXISTS rotr_place_types_id INTEGER`)
   await db.execute(sql`ALTER TABLE payload_locked_documents_rels DROP COLUMN IF EXISTS rotr_posts_id`)
@@ -82,6 +98,7 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql.raw(`DROP FUNCTION IF EXISTS trg_rotr_days_geom_fn();`))
 
   // ─── Step 2: Drop new tables (CASCADE handles their dependent _rels entries) ─────────────────────────────
+  await db.execute(sql`DROP TABLE IF EXISTS rotr_days_rels CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS rotr_days CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS rotr_place_types CASCADE`)
 
