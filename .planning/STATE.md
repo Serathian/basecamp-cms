@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T08:09:51.714Z"
+last_updated: "2026-03-16T10:48:56.511Z"
 progress:
   total_phases: 7
-  completed_phases: 3
-  total_plans: 18
-  completed_plans: 17
+  completed_phases: 2
+  total_plans: 20
+  completed_plans: 18
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 4 - ROTR Week/Day Split - COMPLETE
-**Plan**: 4 of 4 plans complete (04-00 Wave 0 scaffold, 04-01 RotrDays collection, 04-02 migration, 04-03 integration tests all done)
+**Plan**: 6 of 6 plans complete (04-00 Wave 0 scaffold, 04-01 RotrDays collection, 04-02 migration, 04-03 integration tests, 04-04 gap closure verification, 04-05 pending)
 **Status**: Phase 4 Complete — Ready for Phase 5
 
-**Progress**: [█████████░] 94% (17 of 18 plans complete)
+**Progress**: [█████████░] 90% (18 of 20 plans complete)
 
 **Blockers**: None
 
@@ -91,6 +91,7 @@ progress:
 | 2026-03-16 | rotr_days_rels join table was missing from Phase 4 migration — Payload requires _rels tables for collections with relationship fields (location_type, tags); added to migration up()/down() | Any collection with relationship fields needs a _rels table in the migration | Phase 4 Plan 04-03 |
 | 2026-03-16 | authors_rels join table was missing from Phase 3 migration — Authors.avatar polymorphic upload field requires it; created in DB and added to Phase 3 migration | Polymorphic upload fields are a special case requiring _rels table creation | Phase 4 Plan 04-03 |
 | 2026-03-16 | Phase 3 migration up() made idempotent (IF NOT EXISTS + conditional DO $$ blocks) — required for test down()+up() cycle reliability when called multiple times | Migration tests call up() twice (restore at end of test 1, restore at end of test 2) | Phase 4 Plan 04-03 |
+| 2026-03-16 | rotr_posts_rels was NOT dropped by DROP TABLE rotr_posts CASCADE — no FK from rotr_posts_rels.parent_id to rotr_posts existed (removed by Phase 3 migration); table survived Phase 4 as an orphaned join table with rotr_tags_id column intact | PostgreSQL CASCADE only follows FK dependencies; orphaned tables must be dropped explicitly | Phase 4 Plan 04-04 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -101,6 +102,7 @@ progress:
 | Phase 04-reddy-on-the-road-week-day-split P01 | 3 | 2 tasks | 5 files |
 | Phase 04-reddy-on-the-road-week-day-split P02 | 2 | 2 tasks | 2 files |
 | Phase 04-reddy-on-the-road-week-day-split P03 | 12 | 2 tasks | 6 files |
+| Phase 04-reddy-on-the-road-week-day-split P04 | 5 | 2 tasks | 0 files |
 
 ### Critical Information
 
@@ -130,8 +132,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 04-03 (integration tests for rotr_days: 11 tests, types regenerated, full 49-test suite green) - 2026-03-16
-**Next action**: Proceed to Phase 5 (NITF Trips structure)
+**Last action**: Completed Plan 04-04 (gap closure verification: confirmed rotr_posts_rels survived Phase 4 CASCADE, original test already passing, 49/49 tests green, no code changes) - 2026-03-16
+**Next action**: Execute Plan 04-05 (second gap closure plan, if needed), then Phase 5 (NITF Trips structure)
 
 **Context for next session**:
 
@@ -161,7 +163,8 @@ progress:
 - Plan 04-01 commits: 23b08b4 (create RotrDays and RotrPlaceTypes), 7a84440 (register, delete old, clean spec)
 - Plan 04-02 commits: 758f505 (migration 20260316_rotr_days_split), 1617e26 (register in index.ts)
 - Plan 04-03 commits: 56168af (integration tests + rotr_days_rels in migration), 5c6cbb2 (types regenerated + full suite fixes)
-- **Phase 4 COMPLETE**: rotr_days collection fully operational with PostGIS trigger, relationships, migration lifecycle, and types
+- Plan 04-04 commits: metadata only — confirmed test already passing (no code changes needed); rotr_posts_rels survived Phase 4 CASCADE
+- **Phase 4 COMPLETE**: rotr_days collection fully operational with PostGIS trigger, relationships, migration lifecycle, and types; gap closure confirmed all 49 tests passing
 
 ## Open Questions
 
