@@ -21,19 +21,19 @@ describe('PostGIS Migration — up/down operations', () => {
   })
 
   it('Migration up adds geom columns to all 6 tables', async () => {
+    // rotr_posts and rotr_locations were replaced by rotr_days in Phase 4
     const tables = [
       'nitf_posts',
       'nitf_trails',
       'nitf_waypoints',
       'nitf_locations',
-      'rotr_posts',
-      'rotr_locations',
+      'rotr_days',
     ]
 
     for (const tableName of tables) {
       const result = await db.execute(sql`
-        SELECT column_name 
-        FROM information_schema.columns 
+        SELECT column_name
+        FROM information_schema.columns
         WHERE table_name = ${tableName} AND column_name = 'geom'
       `)
 
@@ -75,25 +75,25 @@ describe('PostGIS Migration — up/down operations', () => {
     await payload.delete({ collection: 'nitf_posts', id: testPost.id })
   })
 
-  it('Spatial indexes exist on all 6 tables', async () => {
+  it('Spatial indexes exist on NITF geographic tables', async () => {
+    // Phase 2 migration created GIST indexes on the original 4 NITF geographic tables.
+    // rotr_posts and rotr_locations (dropped in Phase 4) had indexes; rotr_days does not yet have one.
     const expectedIndexes = [
       { tablename: 'nitf_posts', indexname: 'idx_nitf_posts_geom' },
       { tablename: 'nitf_trails', indexname: 'idx_nitf_trails_geom' },
       { tablename: 'nitf_waypoints', indexname: 'idx_nitf_waypoints_geom' },
       { tablename: 'nitf_locations', indexname: 'idx_nitf_locations_geom' },
-      { tablename: 'rotr_posts', indexname: 'idx_rotr_posts_geom' },
-      { tablename: 'rotr_locations', indexname: 'idx_rotr_locations_geom' },
     ]
 
     const result = await db.execute(sql`
-      SELECT tablename, indexname 
-      FROM pg_indexes 
-      WHERE tablename IN ('nitf_posts', 'nitf_trails', 'nitf_waypoints', 'nitf_locations', 'rotr_posts', 'rotr_locations')
+      SELECT tablename, indexname
+      FROM pg_indexes
+      WHERE tablename IN ('nitf_posts', 'nitf_trails', 'nitf_waypoints', 'nitf_locations')
         AND indexdef LIKE '%USING gist%'
       ORDER BY tablename
     `)
 
-    expect(result.rows).toHaveLength(6)
+    expect(result.rows).toHaveLength(expectedIndexes.length)
 
     for (const expected of expectedIndexes) {
       const found = result.rows.find(

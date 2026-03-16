@@ -80,8 +80,8 @@ export interface Config {
     nitf_locations: NitfLocation;
     rotr_media: RotrMedia;
     rotr_tags: RotrTag;
-    rotr_posts: RotrPost;
-    rotr_locations: RotrLocation;
+    rotr_days: RotrDay;
+    rotr_place_types: RotrPlaceType;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -102,8 +102,8 @@ export interface Config {
     nitf_locations: NitfLocationsSelect<false> | NitfLocationsSelect<true>;
     rotr_media: RotrMediaSelect<false> | RotrMediaSelect<true>;
     rotr_tags: RotrTagsSelect<false> | RotrTagsSelect<true>;
-    rotr_posts: RotrPostsSelect<false> | RotrPostsSelect<true>;
-    rotr_locations: RotrLocationsSelect<false> | RotrLocationsSelect<true>;
+    rotr_days: RotrDaysSelect<false> | RotrDaysSelect<true>;
+    rotr_place_types: RotrPlaceTypesSelect<false> | RotrPlaceTypesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -449,68 +449,33 @@ export interface RotrTag {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_posts".
+ * via the `definition` "rotr_days".
  */
-export interface RotrPost {
+export interface RotrDay {
   id: number;
-  status: 'draft' | 'published' | 'archived';
+  status: 'draft' | 'published';
   title: string;
-  slug: string;
-  type?: ('story' | 'guide' | 'tips' | 'listicle') | null;
-  excerpt?: string | null;
-  body?: string | null;
-  cover_image?: (number | null) | RotrMedia;
-  author?: (number | null) | Author;
-  tags?: (number | RotrTag)[] | null;
+  date?: string | null;
   latitude?: number | null;
   longitude?: number | null;
-  locations?:
-    | {
-        location: number | RotrLocation;
-        visit_date?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  published_at?: string | null;
-  seo_title?: string | null;
-  seo_description?: string | null;
-  wp_post_id?: number | null;
+  location_name?: string | null;
+  location_type?: (number | null) | RotrPlaceType;
+  weather?: string | null;
+  temperature?: number | null;
+  summary?: string | null;
+  content?: string | null;
+  tags?: (number | RotrTag)[] | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_locations".
+ * via the `definition` "rotr_place_types".
  */
-export interface RotrLocation {
+export interface RotrPlaceType {
   id: number;
   name: string;
-  description?: string | null;
-  place_type:
-    | 'city'
-    | 'town'
-    | 'village'
-    | 'beach'
-    | 'mountain'
-    | 'park'
-    | 'landmark'
-    | 'accommodation'
-    | 'restaurant'
-    | 'other';
-  marker_type:
-    | 'hotel'
-    | 'hostel'
-    | 'airbnb'
-    | 'camp'
-    | 'parking'
-    | 'city-stop'
-    | 'viewpoint'
-    | 'beach'
-    | 'restaurant'
-    | 'other';
-  latitude: number;
-  longitude: number;
-  country?: string | null;
+  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -591,12 +556,12 @@ export interface PayloadLockedDocument {
         value: number | RotrTag;
       } | null)
     | ({
-        relationTo: 'rotr_posts';
-        value: number | RotrPost;
+        relationTo: 'rotr_days';
+        value: number | RotrDay;
       } | null)
     | ({
-        relationTo: 'rotr_locations';
-        value: number | RotrLocation;
+        relationTo: 'rotr_place_types';
+        value: number | RotrPlaceType;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -877,46 +842,31 @@ export interface RotrTagsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_posts_select".
+ * via the `definition` "rotr_days_select".
  */
-export interface RotrPostsSelect<T extends boolean = true> {
+export interface RotrDaysSelect<T extends boolean = true> {
   status?: T;
   title?: T;
-  slug?: T;
-  type?: T;
-  excerpt?: T;
-  body?: T;
-  cover_image?: T;
-  author?: T;
-  tags?: T;
+  date?: T;
   latitude?: T;
   longitude?: T;
-  locations?:
-    | T
-    | {
-        location?: T;
-        visit_date?: T;
-        id?: T;
-      };
-  published_at?: T;
-  seo_title?: T;
-  seo_description?: T;
-  wp_post_id?: T;
+  location_name?: T;
+  location_type?: T;
+  weather?: T;
+  temperature?: T;
+  summary?: T;
+  content?: T;
+  tags?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_locations_select".
+ * via the `definition` "rotr_place_types_select".
  */
-export interface RotrLocationsSelect<T extends boolean = true> {
+export interface RotrPlaceTypesSelect<T extends boolean = true> {
   name?: T;
-  description?: T;
-  place_type?: T;
-  marker_type?: T;
-  latitude?: T;
-  longitude?: T;
-  country?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }
