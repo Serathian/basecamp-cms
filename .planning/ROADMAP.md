@@ -14,7 +14,7 @@ The CMS must align perfectly with how content is authored in Obsidian — every 
 - [x] **Phase 1: Access Control & Schema Consolidation** - Fix admin draft visibility + merge jr collections (completed 2026-03-14)
 - [ ] **Phase 2: PostGIS Extension & Auto-Population** - Extend spatial queries to all 6 geo tables
 - [x] **Phase 3: Site-Specific Media & Tags** - Split shared collections into namespace-prefixed versions (completed 2026-03-15)
-- [ ] **Phase 4: Reddy on the Road Week/Day Split** - Restructure rotr_posts into weeks + days with ordered relationships
+- [x] **Phase 4: Reddy on the Road Week/Day Split** - Restructure rotr_posts into weeks + days with ordered relationships (completed 2026-03-16)
 - [ ] **Phase 5: Nerd in the Forest Trip Structure** - Add trips, destinations, POIs with bidirectional relationships
 - [ ] **Phase 6: Jake Reddy Tech Stack Collection** - Extract tech stack to reusable collection with icons
 - [ ] **Phase 7: Production Refinement** - Final testing, type generation, deployment validation
@@ -200,7 +200,7 @@ Plans:
 | 1. Access Control & Schema Consolidation | 3/3            | Complete    | 2026-03-14 |
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
-| 4. Reddy on the Road Week/Day Split      | 3/4 | In Progress|  |
+| 4. Reddy on the Road Week/Day Split      | 4/4 | Complete   | 2026-03-16 |
 | 5. Nerd in the Forest Trip Structure     | 0/TBD          | Not started | -          |
 | 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
