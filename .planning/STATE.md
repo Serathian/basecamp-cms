@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T07:44:46.427Z"
+last_updated: "2026-03-16T07:50:32.066Z"
 progress:
   total_phases: 7
   completed_phases: 2
   total_plans: 18
-  completed_plans: 14
+  completed_plans: 15
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 4 - ROTR Week/Day Split
-**Plan**: 1 of 4 plans complete (04-00 Wave 0 scaffold done; 04-01 RotrDays collection, 04-02 migration, 04-03 test implementation remaining)
+**Plan**: 2 of 4 plans complete (04-00 Wave 0 scaffold done, 04-01 RotrDays collection done; 04-02 migration, 04-03 test implementation remaining)
 **Status**: In Progress
 
-**Progress**: [████████░░] 78% (14 of 18 plans complete)
+**Progress**: [████████░░] 83% (15 of 18 plans complete)
 
 **Blockers**: None
 
@@ -84,6 +84,9 @@ progress:
 | 2026-03-15 | payload_locked_documents_rels must also be updated when renaming collection slugs | Payload generates queries referencing site-specific FK column names (jr_media_id, jr_tags_id, etc.) in this table | Phase 3 Plan 03-03 |
 | 2026-03-15 | vitest fileParallelism: false required when integration tests call migration down() | Shared DB state not safe for concurrent file execution when migration lifecycle tests are included | Phase 3 Plan 03-03 |
 | 2026-03-16 | Wave 0 scaffold import of 20260316_rotr_days_split (non-existent migration) causes file-level skip in Vitest — expected and acceptable at Wave 0 | Migration file created in 04-02; stubs still reported as pending in Vitest summary | Phase 4 Plan 04-00 |
+| 2026-03-16 | defaultSort is a top-level CollectionConfig field in Payload v3, not inside admin object | Plan placed it in admin; TS error revealed correct location | Phase 4 Plan 04-01 |
+| 2026-03-16 | rotr_place_types relationTo cast as any until types regenerated in 04-02/04-03 | New collection slug not yet in CollectionSlug union; cast is temporary | Phase 4 Plan 04-01 |
+| 2026-03-16 | payload.config.export-types.ts must mirror payload.config.ts for consistent type generation | Mirror config was not in plan scope but broke TS compile when old imports remained | Phase 4 Plan 04-01 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -91,6 +94,7 @@ progress:
 | Phase 03-site-specific-media-tags P03 | 6 | 2 tasks | 4 files |
 | Phase 03-site-specific-media-tags P04 | 1 | 1 tasks | 0 files |
 | Phase 04-reddy-on-the-road-week-day-split P00 | 1 | 1 tasks | 1 files |
+| Phase 04-reddy-on-the-road-week-day-split P01 | 3 | 2 tasks | 5 files |
 
 ### Critical Information
 
@@ -120,8 +124,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 04-00 (Wave 0 test scaffold for rotr_days — 10 it.todo() stubs) - 2026-03-16
-**Next action**: Proceed to Phase 4 Plan 04-01 (RotrDays and RotrPlaceTypes collection implementation)
+**Last action**: Completed Plan 04-01 (RotrDays and RotrPlaceTypes collection schema, RotrPosts/RotrLocations removed) - 2026-03-16
+**Next action**: Proceed to Phase 4 Plan 04-02 (migration for rotr_days split)
 
 **Context for next session**:
 
@@ -146,8 +150,9 @@ progress:
 - Plan 03-02 commits: no-op (completed as part of 03-01)
 - Plan 03-03 commits: b05e6b4 (migration up/down), ae6ea11 (tests + migration fix + fileParallelism)
 - Plan 03-04 commits: 517ea2c (type verification — types already current from 03-01)
-- **Phase 4 IN PROGRESS**: Wave 0 scaffold complete
+- **Phase 4 IN PROGRESS**: Wave 0 scaffold and collection schema complete
 - Plan 04-00 commits: a71c5ab (Wave 0 test scaffold — 10 it.todo() stubs for rotr_days)
+- Plan 04-01 commits: 23b08b4 (create RotrDays and RotrPlaceTypes), 7a84440 (register, delete old, clean spec)
 
 ## Open Questions
 
