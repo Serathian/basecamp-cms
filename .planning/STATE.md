@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T07:50:32.066Z"
+last_updated: "2026-03-16T07:54:13.132Z"
 progress:
   total_phases: 7
   completed_phases: 2
   total_plans: 18
-  completed_plans: 15
+  completed_plans: 16
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 4 - ROTR Week/Day Split
-**Plan**: 2 of 4 plans complete (04-00 Wave 0 scaffold done, 04-01 RotrDays collection done; 04-02 migration, 04-03 test implementation remaining)
+**Plan**: 3 of 4 plans complete (04-00 Wave 0 scaffold done, 04-01 RotrDays collection done, 04-02 migration done; 04-03 test implementation remaining)
 **Status**: In Progress
 
-**Progress**: [████████░░] 83% (15 of 18 plans complete)
+**Progress**: [█████████░] 89% (16 of 18 plans complete)
 
 **Blockers**: None
 
@@ -87,6 +87,7 @@ progress:
 | 2026-03-16 | defaultSort is a top-level CollectionConfig field in Payload v3, not inside admin object | Plan placed it in admin; TS error revealed correct location | Phase 4 Plan 04-01 |
 | 2026-03-16 | rotr_place_types relationTo cast as any until types regenerated in 04-02/04-03 | New collection slug not yet in CollectionSlug union; cast is temporary | Phase 4 Plan 04-01 |
 | 2026-03-16 | payload.config.export-types.ts must mirror payload.config.ts for consistent type generation | Mirror config was not in plan scope but broke TS compile when old imports remained | Phase 4 Plan 04-01 |
+| 2026-03-16 | down() does not recreate rotr_posts or rotr_locations — clean-slate migration, no data to preserve; restoring payload_locked_documents_rels columns is sufficient for Payload test-cycle down() | Clean-slate is simpler and correct for dev environment | Phase 4 Plan 04-02 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -95,6 +96,7 @@ progress:
 | Phase 03-site-specific-media-tags P04 | 1 | 1 tasks | 0 files |
 | Phase 04-reddy-on-the-road-week-day-split P00 | 1 | 1 tasks | 1 files |
 | Phase 04-reddy-on-the-road-week-day-split P01 | 3 | 2 tasks | 5 files |
+| Phase 04-reddy-on-the-road-week-day-split P02 | 2 | 2 tasks | 2 files |
 
 ### Critical Information
 
@@ -124,8 +126,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 04-01 (RotrDays and RotrPlaceTypes collection schema, RotrPosts/RotrLocations removed) - 2026-03-16
-**Next action**: Proceed to Phase 4 Plan 04-02 (migration for rotr_days split)
+**Last action**: Completed Plan 04-02 (migration 20260316_rotr_days_split: drops rotr_posts/rotr_locations, creates rotr_days/rotr_place_types with PostGIS trigger) - 2026-03-16
+**Next action**: Proceed to Phase 4 Plan 04-03 (integration tests for rotr_days)
 
 **Context for next session**:
 
@@ -153,6 +155,7 @@ progress:
 - **Phase 4 IN PROGRESS**: Wave 0 scaffold and collection schema complete
 - Plan 04-00 commits: a71c5ab (Wave 0 test scaffold — 10 it.todo() stubs for rotr_days)
 - Plan 04-01 commits: 23b08b4 (create RotrDays and RotrPlaceTypes), 7a84440 (register, delete old, clean spec)
+- Plan 04-02 commits: 758f505 (migration 20260316_rotr_days_split), 1617e26 (register in index.ts)
 
 ## Open Questions
 
