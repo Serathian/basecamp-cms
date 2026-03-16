@@ -21,12 +21,13 @@ describe('PostGIS Migration — up/down operations', () => {
   })
 
   it('Migration up adds geom columns to all 6 tables', async () => {
-    // rotr_posts and rotr_locations were replaced by rotr_days in Phase 4
+    // rotr_posts and rotr_locations replaced by rotr_days in Phase 4;
+    // nitf_waypoints and nitf_locations replaced by nitf_destinations and nitf_poi in Phase 5
     const tables = [
       'nitf_posts',
       'nitf_trails',
-      'nitf_waypoints',
-      'nitf_locations',
+      'nitf_destinations',
+      'nitf_poi',
       'rotr_days',
     ]
 

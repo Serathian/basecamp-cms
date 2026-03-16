@@ -55,55 +55,9 @@ describe('Geom Auto-Population — afterChange hooks', () => {
     await payload.delete({ collection: 'nitf_trails', id: trail.id })
   })
 
-  it('nitf_waypoints: creating with lat/lon populates geom', async () => {
-    // Create a trail first (required relationship)
-    const trail = await payload.create({
-      collection: 'nitf_trails',
-      data: {
-        title: 'Waypoint Test Trail',
-        status: 'published',
-      },
-    })
-
-    const waypoint = await payload.create({
-      collection: 'nitf_waypoints',
-      data: {
-        name: 'Geom Test Waypoint',
-        type: 'camp',
-        trail: trail.id,
-        latitude: 61.0,
-        longitude: 26.0,
-      },
-      draft: false,
-    })
-
-    const db = (payload.db as any).drizzle
-    const result = await db.execute(sql`SELECT geom FROM nitf_waypoints WHERE id = ${waypoint.id}`)
-    expect(result.rows[0].geom).not.toBeNull()
-
-    await payload.delete({ collection: 'nitf_waypoints', id: waypoint.id })
-    await payload.delete({ collection: 'nitf_trails', id: trail.id })
-  })
-
-  it('nitf_locations: creating with lat/lon populates geom', async () => {
-    const location = await payload.create({
-      collection: 'nitf_locations',
-      data: {
-        name: 'Geom Test Location',
-        place_type: 'town',
-        marker_type: 'day-visit',
-        latitude: 62.0,
-        longitude: 27.0,
-      },
-      draft: false,
-    })
-
-    const db = (payload.db as any).drizzle
-    const result = await db.execute(sql`SELECT geom FROM nitf_locations WHERE id = ${location.id}`)
-    expect(result.rows[0].geom).not.toBeNull()
-
-    await payload.delete({ collection: 'nitf_locations', id: location.id })
-  })
+  // nitf_waypoints and nitf_locations dropped in Phase 5 migration — replaced by stubs in nitf-trip-structure.int.spec.ts
+  it.todo('nitf_destinations: creating with lat/lon populates geom via trigger')
+  it.todo('nitf_poi: creating with lat/lon populates geom via trigger')
 
   it('Edge case: creating without coordinates does not error', async () => {
     const post = await payload.create({
