@@ -38,12 +38,12 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### NITF Collections
 
-- [ ] **NITF-01**: `nitf_posts` collection: title, slug, body (markdown), type (review/place/recipe), tags (relation), featured_image, publish_date
-- [ ] **NITF-02**: `nitf_posts` place type has optional latitude/longitude fields
-- [ ] **NITF-03**: `nitf_destinations` collection: name, description (markdown), latitude, longitude, featured_image, links (array), difficulty (select), season_info (textarea)
-- [ ] **NITF-04**: `nitf_poi` collection: name, latitude, longitude, type (select: camp-fire/lean-to/etc), trips (relation array to nitf_trips)
-- [ ] **NITF-05**: `nitf_trips` collection: title, slug, body (markdown), destination (relation to nitf_destinations), cover_image, date_range, tags (relation), pois (relation array to nitf_poi, ordered)
-- [ ] **NITF-06**: `nitf_trips` ↔ `nitf_poi` bidirectional relationship (trips array on POI, pois array on trip)
+- [x] **NITF-01**: `nitf_posts` collection: title, slug, body (markdown), type (review/place/recipe), tags (relation), featured_image, publish_date
+- [x] **NITF-02**: `nitf_posts` place type has optional latitude/longitude fields
+- [x] **NITF-03**: `nitf_destinations` collection: name, description (markdown), latitude, longitude, featured_image, links (array), difficulty (select), season_info (textarea)
+- [x] **NITF-04**: `nitf_poi` collection: name, latitude, longitude, type (select: camp-fire/lean-to/etc), trips (relation array to nitf_trips)
+- [x] **NITF-05**: `nitf_trips` collection: title, slug, body (markdown), destination (relation to nitf_destinations), cover_image, date_range, tags (relation), pois (relation array to nitf_poi, ordered)
+- [x] **NITF-06**: `nitf_trips` ↔ `nitf_poi` bidirectional relationship (trips array on POI, pois array on trip)
 - [ ] **NITF-07**: `nitf_tags` collection: name, slug
 
 ### ROTR Collections
@@ -58,8 +58,8 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 ### PostGIS Extension
 
 - [x] **GEO-01**: `nitf_posts` `geom` column auto-populated via `afterChange` hook
-- [ ] **GEO-02**: `nitf_destinations` has `geom` column with `afterChange` hook
-- [ ] **GEO-03**: `nitf_poi` has `geom` column with `afterChange` hook
+- [x] **GEO-02**: `nitf_destinations` has `geom` column with `afterChange` hook
+- [x] **GEO-03**: `nitf_poi` has `geom` column with `afterChange` hook
 - [x] **GEO-04**: `rotr_days` has `geom` column with `afterChange` hook
 - [x] **GEO-05**: PostGIS spatial queries work for all geo collections
 - [x] **GEO-06**: Migration adds `geom` columns to remaining geo tables
@@ -132,12 +132,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | JR-02       | 6                   | Pending  |
 | JR-03       | 6                   | Pending  |
 | JR-04       | 6                   | Pending  |
-| NITF-01     | 5                   | Pending  |
-| NITF-02     | 5                   | Pending  |
-| NITF-03     | 5                   | Pending  |
-| NITF-04     | 5                   | Pending  |
-| NITF-05     | 5                   | Pending  |
-| NITF-06     | 5                   | Pending  |
+| NITF-01     | 5                   | Complete |
+| NITF-02     | 5                   | Complete |
+| NITF-03     | 5                   | Complete |
+| NITF-04     | 5                   | Complete |
+| NITF-05     | 5                   | Complete |
+| NITF-06     | 5                   | Complete |
 | NITF-07     | 5                   | Pending  |
 | ROTR-01     | 4                   | Complete |
 | ROTR-02     | 4                   | Complete |
@@ -146,8 +146,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ROTR-05     | 4                   | Complete |
 | ROTR-06     | 4                   | Complete |
 | GEO-01      | 2                   | Complete |
-| GEO-02      | 2                   | Pending  |
-| GEO-03      | 2                   | Pending  |
+| GEO-02      | 2                   | Complete |
+| GEO-03      | 2                   | Complete |
 | GEO-04      | 2                   | Complete |
 | GEO-05      | 2                   | Complete |
 | GEO-06      | 2                   | Complete |

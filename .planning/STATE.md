@@ -3,33 +3,33 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T10:56:13.619Z"
+last_updated: "2026-03-16T16:44:45.749Z"
 progress:
   total_phases: 7
   completed_phases: 3
-  total_plans: 20
-  completed_plans: 19
+  total_plans: 25
+  completed_plans: 20
 ---
 
 # Project State: Basecamp CMS Refinement
 
 **Last updated:** 2026-03-16
-**Project phase:** Phase 4 - Complete
+**Project phase:** Phase 5 - In Progress
 
 ## Project Reference
 
 **Core Value**: The CMS must align perfectly with how content is authored in Obsidian — every collection, field, and relationship should reduce friction between vault structure and frontend needs, never add ceremony.
 
-**Current Focus**: Splitting rotr_posts into rotr_days collection (daily travel diary entries), removing rotr_posts and rotr_locations.
+**Current Focus**: NITF trip structure — adding nitf_destinations, nitf_poi, nitf_trips collections; dropping nitf_locations and nitf_waypoints.
 
 ## Current Position
 
 **Milestone**: v1 Refinement
-**Phase**: 4 - ROTR Week/Day Split - COMPLETE
-**Plan**: 6 of 6 plans complete (04-00 Wave 0 scaffold, 04-01 RotrDays collection, 04-02 migration, 04-03 integration tests, 04-04 gap closure verification, 04-05 requirements accuracy)
-**Status**: Phase 4 Complete — Ready for Phase 5
+**Phase**: 5 - NITF Trip Structure - IN PROGRESS
+**Plan**: 1 of N plans complete (05-00 Wave 0 scaffold)
+**Status**: Phase 5 Wave 0 Complete — Ready for implementation plans
 
-**Progress**: [██████████] 95% (19 of 20 plans complete)
+**Progress**: [████████░░] 80% (20 of 25 plans complete)
 
 **Blockers**: None
 
@@ -92,6 +92,7 @@ progress:
 | 2026-03-16 | authors_rels join table was missing from Phase 3 migration — Authors.avatar polymorphic upload field requires it; created in DB and added to Phase 3 migration | Polymorphic upload fields are a special case requiring _rels table creation | Phase 4 Plan 04-03 |
 | 2026-03-16 | Phase 3 migration up() made idempotent (IF NOT EXISTS + conditional DO $$ blocks) — required for test down()+up() cycle reliability when called multiple times | Migration tests call up() twice (restore at end of test 1, restore at end of test 2) | Phase 4 Plan 04-03 |
 | 2026-03-16 | rotr_posts_rels was NOT dropped by DROP TABLE rotr_posts CASCADE — no FK from rotr_posts_rels.parent_id to rotr_posts existed (removed by Phase 3 migration); table survived Phase 4 as an orphaned join table with rotr_tags_id column intact | PostgreSQL CASCADE only follows FK dependencies; orphaned tables must be dropped explicitly | Phase 4 Plan 04-04 |
+| 2026-03-16 | Wave 0 import of non-existent 20260316_nitf_trip_structure migration causes file-level skip in Vitest — expected and acceptable at Wave 0 (same pattern as Phase 4 Plan 04-00) | Migration file created in 05-02; stubs still reported as pending in Vitest summary | Phase 5 Plan 05-00 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -104,6 +105,8 @@ progress:
 | Phase 04-reddy-on-the-road-week-day-split P03 | 12 | 2 tasks | 6 files |
 | Phase 04-reddy-on-the-road-week-day-split P04 | 5 | 2 tasks | 0 files |
 | Phase 04-reddy-on-the-road-week-day-split P05 | 1 | 1 tasks | 1 files |
+| Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
+| Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
 
 ### Critical Information
 
@@ -133,8 +136,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 04-05 (requirements accuracy: corrected ROTR-01/02/03 to reflect actual rotr_days standalone collection; rotr_weeks scope change documented inline) - 2026-03-16
-**Next action**: Phase 5 (NITF Trips structure)
+**Last action**: Completed Plan 05-00 (Wave 0 test scaffold: nitf-trip-structure.int.spec.ts with 23 it.todo() stubs; geom-hooks and migration specs updated for dropped tables) - 2026-03-16
+**Next action**: Phase 5 implementation plans (05-01 and beyond)
 
 **Context for next session**:
 
@@ -167,6 +170,7 @@ progress:
 - Plan 04-04 commits: metadata only — confirmed test already passing (no code changes needed); rotr_posts_rels survived Phase 4 CASCADE
 - Plan 04-05 commits: 5ab527a (ROTR-01/02/03 requirements corrected to match actual implementation)
 - **Phase 4 COMPLETE**: rotr_days collection fully operational with PostGIS trigger, relationships, migration lifecycle, and types; requirements traceability accurate
+- **Phase 5 Wave 0 COMPLETE**: nitf-trip-structure.int.spec.ts created with 23 it.todo() stubs; geom-hooks and migration specs updated to reflect Phase 5 table changes
 
 ## Open Questions
 
