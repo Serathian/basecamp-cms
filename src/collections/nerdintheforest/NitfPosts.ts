@@ -53,11 +53,9 @@ export const NitfPosts: CollectionConfig = {
       type: 'select',
       required: true,
       options: [
-        { label: 'Adventure', value: 'adventure' },
-        { label: 'Tips', value: 'tips' },
-        { label: 'Recipe', value: 'recipe' },
         { label: 'Review', value: 'review' },
-        { label: 'General', value: 'general' },
+        { label: 'Recipe', value: 'recipe' },
+        { label: 'Article', value: 'article' },
       ],
     },
     { name: 'excerpt', type: 'textarea' },
@@ -75,33 +73,9 @@ export const NitfPosts: CollectionConfig = {
       type: 'date',
       admin: { date: { pickerAppearance: 'dayAndTime' } },
     },
-    { name: 'reading_time_minutes', type: 'number' },
     // Geo fields
     { name: 'latitude', type: 'number' },
     { name: 'longitude', type: 'number' },
-    { name: 'trail', type: 'relationship', relationTo: 'nitf_trails' },
-    // Junction: ordered GPS stops per diary entry
-    {
-      name: 'locations',
-      type: 'array',
-      fields: [
-        { name: 'location', type: 'relationship', relationTo: 'nitf_locations', required: true },
-        { name: 'visit_date', type: 'date' },
-      ],
-    },
-    // Type-specific meta (conditionally shown)
-    {
-      name: 'review_meta',
-      type: 'json',
-      admin: { condition: (data: any) => data.type === 'review' },
-    },
-    {
-      name: 'recipe_meta',
-      type: 'json',
-      admin: { condition: (data: any) => data.type === 'recipe' },
-    },
-    { name: 'seo_title', type: 'text' },
-    { name: 'seo_description', type: 'textarea' },
   ],
   endpoints: [
     {
