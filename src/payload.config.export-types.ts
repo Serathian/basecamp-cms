@@ -23,8 +23,11 @@ import { NitfMedia } from './collections/nerdintheforest/NitfMedia'
 import { NitfTags } from './collections/nerdintheforest/NitfTags'
 import { NitfPosts } from './collections/nerdintheforest/NitfPosts'
 import { NitfTrails } from './collections/nerdintheforest/NitfTrails'
-import { NitfWaypoints } from './collections/nerdintheforest/NitfWaypoints'
-import { NitfLocations } from './collections/nerdintheforest/NitfLocations'
+import { NitfTrips } from './collections/nerdintheforest/NitfTrips'
+import { NitfDestinations } from './collections/nerdintheforest/NitfDestinations'
+import { NitfPoi } from './collections/nerdintheforest/NitfPoi'
+import { NitfPoiTypes } from './collections/nerdintheforest/NitfPoiTypes'
+import { NitfPlaces } from './collections/nerdintheforest/NitfPlaces'
 
 // reddyontheroad.com
 import { RotrMedia } from './collections/reddyontheroad/RotrMedia'
@@ -54,8 +57,11 @@ export default buildConfig({
     NitfTags,
     NitfPosts,
     NitfTrails,
-    NitfWaypoints,
-    NitfLocations,
+    NitfTrips,
+    NitfDestinations,
+    NitfPoi,
+    NitfPoiTypes,
+    NitfPlaces,
     // reddyontheroad.com
     RotrMedia,
     RotrTags,
