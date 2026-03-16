@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T16:44:45.749Z"
+last_updated: "2026-03-16T16:49:46.992Z"
 progress:
   total_phases: 7
   completed_phases: 3
   total_plans: 25
-  completed_plans: 20
+  completed_plans: 21
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 5 - NITF Trip Structure - IN PROGRESS
-**Plan**: 1 of N plans complete (05-00 Wave 0 scaffold)
-**Status**: Phase 5 Wave 0 Complete — Ready for implementation plans
+**Plan**: 2 of N plans complete (05-01 Collection schemas)
+**Status**: Phase 5 Collection schemas complete — Ready for migration (05-02)
 
-**Progress**: [████████░░] 80% (20 of 25 plans complete)
+**Progress**: [████████░░] 84% (21 of 25 plans complete)
 
 **Blockers**: None
 
@@ -93,6 +93,8 @@ progress:
 | 2026-03-16 | Phase 3 migration up() made idempotent (IF NOT EXISTS + conditional DO $$ blocks) — required for test down()+up() cycle reliability when called multiple times | Migration tests call up() twice (restore at end of test 1, restore at end of test 2) | Phase 4 Plan 04-03 |
 | 2026-03-16 | rotr_posts_rels was NOT dropped by DROP TABLE rotr_posts CASCADE — no FK from rotr_posts_rels.parent_id to rotr_posts existed (removed by Phase 3 migration); table survived Phase 4 as an orphaned join table with rotr_tags_id column intact | PostgreSQL CASCADE only follows FK dependencies; orphaned tables must be dropped explicitly | Phase 4 Plan 04-04 |
 | 2026-03-16 | Wave 0 import of non-existent 20260316_nitf_trip_structure migration causes file-level skip in Vitest — expected and acceptable at Wave 0 (same pattern as Phase 4 Plan 04-00) | Migration file created in 05-02; stubs still reported as pending in Vitest summary | Phase 5 Plan 05-00 |
+| 2026-03-16 | NitfPoiTypes read access uses () => true (not published helper) since lookup data is always public | Lookup types are always public — no auth needed, no published import required | Phase 5 Plan 05-01 |
+| 2026-03-16 | published_at added to NitfTrips and NitfPlaces per Claude's discretion (05-CONTEXT.md grants this) | Consistent pattern across all content collections with date-gated publishing | Phase 5 Plan 05-01 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -107,6 +109,7 @@ progress:
 | Phase 04-reddy-on-the-road-week-day-split P05 | 1 | 1 tasks | 1 files |
 | Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
 | Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
+| Phase 05-nerd-in-the-forest-trip-structure P01 | 2 | 2 tasks | 5 files |
 
 ### Critical Information
 
@@ -136,8 +139,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 05-00 (Wave 0 test scaffold: nitf-trip-structure.int.spec.ts with 23 it.todo() stubs; geom-hooks and migration specs updated for dropped tables) - 2026-03-16
-**Next action**: Phase 5 implementation plans (05-01 and beyond)
+**Last action**: Completed Plan 05-01 (NITF collection schemas: NitfPoiTypes, NitfDestinations, NitfPoi, NitfTrips, NitfPlaces — 5 files, 2 tasks) - 2026-03-16
+**Next action**: Phase 5 Plan 05-02 (migration for NITF trip structure tables)
 
 **Context for next session**:
 
@@ -171,6 +174,7 @@ progress:
 - Plan 04-05 commits: 5ab527a (ROTR-01/02/03 requirements corrected to match actual implementation)
 - **Phase 4 COMPLETE**: rotr_days collection fully operational with PostGIS trigger, relationships, migration lifecycle, and types; requirements traceability accurate
 - **Phase 5 Wave 0 COMPLETE**: nitf-trip-structure.int.spec.ts created with 23 it.todo() stubs; geom-hooks and migration specs updated to reflect Phase 5 table changes
+- **Phase 5 Plan 05-01 COMPLETE**: 5 collection schemas created (NitfPoiTypes, NitfDestinations, NitfPoi, NitfTrips, NitfPlaces) — bidirectional trip-POI relationship, lat/lon for PostGIS, all access via published/admin helpers
 
 ## Open Questions
 
