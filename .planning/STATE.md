@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T16:55:06.669Z"
+last_updated: "2026-03-16T17:00:25.671Z"
 progress:
   total_phases: 7
   completed_phases: 3
   total_plans: 25
-  completed_plans: 22
+  completed_plans: 23
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 5 - NITF Trip Structure - IN PROGRESS
-**Plan**: 3 of N plans complete (05-02 Config registration + NitfPosts trim)
-**Status**: Phase 5 schema and config registration complete — Ready for migration (05-03)
+**Plan**: 4 of N plans complete (05-03 Phase 5 migration)
+**Status**: Phase 5 migration complete — Ready for integration tests (05-04)
 
-**Progress**: [█████████░] 88% (22 of 25 plans complete)
+**Progress**: [█████████░] 92% (23 of 25 plans complete)
 
 **Blockers**: None
 
@@ -98,6 +98,9 @@ progress:
 | 2026-03-16 | NitfPosts type field trimmed from 5 options to 3 (review/recipe/article); article replaces adventure/tips/general | Cleaner taxonomy matching trip-structure focus; general-purpose types consolidated into article | Phase 5 Plan 05-02 |
 | 2026-03-16 | 7 legacy NitfPosts fields dropped (reading_time_minutes, trail, locations, review_meta, recipe_meta, seo_title, seo_description) before migration | Schema trim before migration prevents dead columns; review_meta/recipe_meta moved to trip-structure model | Phase 5 Plan 05-02 |
 | 2026-03-16 | NitfLocations and NitfWaypoints deregistered from both payload configs; 5 new collections registered in both files atomically | Mirror config must stay synchronized; atomic change avoids broken intermediate state | Phase 5 Plan 05-02 |
+| 2026-03-16 | down() does not recreate nitf_locations or nitf_waypoints — clean-slate migration, no data to preserve; restoring payload_locked_documents_rels columns sufficient for test down()/up() cycle | Same pattern as Phase 4 rotr_days_split migration | Phase 5 Plan 05-03 |
+| 2026-03-16 | nitf_posts_rels.nitf_poi_id added in up() to support locations field now pointing to nitf_poi; nitf_locations_id and nitf_trails_id dropped | Schema must align with NitfPosts.ts field changes from 05-02 | Phase 5 Plan 05-03 |
+| 2026-03-16 | nitf_poi_types has no _rels table — only name+slug fields, no relationship fields (same as rotr_place_types pattern) | _rels tables only needed when collection has relationship fields | Phase 5 Plan 05-03 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -114,6 +117,7 @@ progress:
 | Phase 05-nerd-in-the-forest-trip-structure P00 | 1 | 2 tasks | 3 files |
 | Phase 05-nerd-in-the-forest-trip-structure P01 | 2 | 2 tasks | 5 files |
 | Phase 05-nerd-in-the-forest-trip-structure P02 | 2 | 2 tasks | 3 files |
+| Phase 05-nerd-in-the-forest-trip-structure P03 | 2 | 2 tasks | 2 files |
 
 ### Critical Information
 
@@ -143,8 +147,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 05-02 (NitfPosts schema trim + config registration: NitfTrips/Destinations/Poi/PoiTypes/Places registered, NitfLocations/Waypoints deregistered — 3 files, 2 tasks) - 2026-03-16
-**Next action**: Phase 5 Plan 05-03 (migration for NITF trip structure tables)
+**Last action**: Completed Plan 05-03 (Phase 5 migration: 9 tables, 4 _rels tables, 2 PostGIS triggers, drops nitf_locations/nitf_waypoints — 2 files, 2 tasks) - 2026-03-16
+**Next action**: Phase 5 Plan 05-04 (integration tests for NITF trip structure)
 
 **Context for next session**:
 
@@ -180,6 +184,8 @@ progress:
 - **Phase 5 Wave 0 COMPLETE**: nitf-trip-structure.int.spec.ts created with 23 it.todo() stubs; geom-hooks and migration specs updated to reflect Phase 5 table changes
 - **Phase 5 Plan 05-01 COMPLETE**: 5 collection schemas created (NitfPoiTypes, NitfDestinations, NitfPoi, NitfTrips, NitfPlaces) — bidirectional trip-POI relationship, lat/lon for PostGIS, all access via published/admin helpers
 - **Phase 5 Plan 05-02 COMPLETE**: NitfPosts trimmed (type: 3 options, 7 legacy fields dropped); both payload configs now register 5 new NITF collections and deregister NitfLocations/NitfWaypoints
+- **Phase 5 Plan 05-03 COMPLETE**: Database migration created and registered — 9 tables (5 main + 4 _rels), 2 PostGIS BEFORE triggers, drops nitf_locations/nitf_waypoints, trims nitf_posts columns, updates payload_locked_documents_rels
+- Plan 05-03 commits: ac57a9b (migration file), beee692 (register in index.ts)
 
 ## Open Questions
 
