@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-17T07:35:31.959Z"
+last_updated: "2026-03-17T07:41:08.553Z"
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 29
-  completed_plans: 26
+  completed_plans: 27
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 6 - Jake Reddy Tech Stack Collection - IN PROGRESS
-**Plan**: 2 of 4 plans complete (06-00 Wave 0 scaffold, 06-01 JrTechnologies collection)
-**Status**: Phase 6 Plan 01 complete — JrTechnologies collection created, JrPosts.tech_stack converted to relationship, both configs updated
+**Plan**: 3 of 4 plans complete (06-00 Wave 0 scaffold, 06-01 JrTechnologies collection, 06-02 Database migration)
+**Status**: Phase 6 Plan 02 complete — jr_technologies table created in DB migration, jr_posts.tech_stack dropped, jr_technologies_id added to _rels tables, migration registered
 
-**Progress**: [█████████░] 90% (26 of 29 plans complete)
+**Progress**: [█████████░] 93% (27 of 29 plans complete)
 
 **Blockers**: None
 
@@ -109,6 +109,7 @@ progress:
 | 2026-03-17 | Wave 0 import of non-existent 20260317_jr_technologies migration causes file-level skip in Vitest — expected and acceptable at Wave 0 (same pattern as Phase 4 Plan 04-00 and Phase 5 Plan 05-00) | Migration file created in 06-02; stubs still reported as pending in Vitest summary | Phase 6 Plan 06-00 |
 | 2026-03-17 | jr_technologies category select options chosen: language, framework, database, infrastructure, tool, library | Covers primary tech taxonomy for project showcases; RESEARCH.md delegated choice to Claude | Phase 6 Plan 06-01 |
 | 2026-03-17 | jr_technologies slug cast as any in JrPosts.ts tech_stack relationTo until types regenerated in 06-03 | New collection slug not yet in CollectionSlug union; same temporary cast pattern as Phase 4 Plan 04-01 | Phase 6 Plan 06-01 |
+| 2026-03-17 | No jr_technologies_rels table — icon field is type: upload (single), stored as icon_id INTEGER directly on jr_technologies main table | Per Phase 5 Plan 05-04 discovery: single (non-hasMany) relationship fields are direct FK columns, not _rels tables | Phase 6 Plan 06-02 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -129,6 +130,7 @@ progress:
 | Phase 05-nerd-in-the-forest-trip-structure P04 | 19 | 2 tasks | 10 files |
 | Phase 06-jake-reddy-tech-stack-collection P00 | 1 | 1 tasks | 1 files |
 | Phase 06-jake-reddy-tech-stack-collection P01 | 3 | 2 tasks | 4 files |
+| Phase 06-jake-reddy-tech-stack-collection P02 | 2 | 2 tasks | 2 files |
 
 ### Critical Information
 
@@ -158,8 +160,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 06-01 (JrTechnologies collection + JrPosts tech_stack relationship + both payload configs updated — 4 files, 2 tasks) - 2026-03-17
-**Next action**: Phase 6 Plan 06-02 (database migration: create jr_technologies table, update jr_posts_rels)
+**Last action**: Completed Plan 06-02 (database migration: jr_technologies table, dropped jr_posts.tech_stack, added jr_technologies_id to _rels tables — 2 files, 2 tasks) - 2026-03-17
+**Next action**: Phase 6 Plan 06-03 (type regeneration: npx payload generate:types)
 
 **Context for next session**:
 
@@ -205,6 +207,8 @@ progress:
 - **Phase 6 Plan 06-01 COMPLETE**: JrTechnologies collection created, JrPosts.tech_stack converted from json to hasMany relationship, both payload configs updated atomically
 - Plan 06-01 commits: d3d2351 (JrTechnologies.ts collection), f567e1f (JrPosts update + both config registrations)
 - jr_technologies slug cast as any in JrPosts.ts until types regenerated in 06-03 (same pattern as Phase 4 Plan 04-01)
+- **Phase 6 Plan 06-02 COMPLETE**: Database migration created and registered — jr_technologies table (icon_id direct FK), jr_posts.tech_stack JSONB dropped, jr_technologies_id added to jr_posts_rels and payload_locked_documents_rels
+- Plan 06-02 commits: 220c69b (migration file), 93775ae (register in index.ts)
 
 ## Open Questions
 
