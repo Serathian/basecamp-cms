@@ -5,6 +5,7 @@ import * as migration_20260314_171829_merge_jr_collections_and_simplify_users fr
 import * as migration_20260315_split_media_and_tags from './20260315_split_media_and_tags'
 import * as migration_20260316_rotr_days_split from './20260316_rotr_days_split'
 import * as migration_20260316_nitf_trip_structure from './20260316_nitf_trip_structure'
+import * as migration_20260317_jr_technologies from './20260317_jr_technologies'
 export const migrations = [
   {
     up: migration_20260303_172001.up,
@@ -40,5 +41,10 @@ export const migrations = [
     up: migration_20260316_nitf_trip_structure.up,
     down: migration_20260316_nitf_trip_structure.down,
     name: '20260316_nitf_trip_structure',
+  },
+  {
+    up: migration_20260317_jr_technologies.up,
+    down: migration_20260317_jr_technologies.down,
+    name: '20260317_jr_technologies',
   },
 ]
