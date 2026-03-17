@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-17T07:27:51.974Z"
+last_updated: "2026-03-17T07:35:31.959Z"
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 29
-  completed_plans: 25
+  completed_plans: 26
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 6 - Jake Reddy Tech Stack Collection - IN PROGRESS
-**Plan**: 1 of 4 plans complete (06-00 Wave 0 scaffold)
-**Status**: Phase 6 Wave 0 complete — 15 it.todo() stubs for jr_technologies, Nyquist Rule satisfied
+**Plan**: 2 of 4 plans complete (06-00 Wave 0 scaffold, 06-01 JrTechnologies collection)
+**Status**: Phase 6 Plan 01 complete — JrTechnologies collection created, JrPosts.tech_stack converted to relationship, both configs updated
 
-**Progress**: [█████████░] 86% (25 of 29 plans complete)
+**Progress**: [█████████░] 90% (26 of 29 plans complete)
 
 **Blockers**: None
 
@@ -107,6 +107,8 @@ progress:
 | 2026-03-17 | nitf_poi.trips is an explicitly maintained relationship — Payload does not auto-populate reverse relationships when creating a trip with pois: [poi.id] | Must explicitly update poi.trips after creating trip to maintain bidirectional state | Phase 5 Plan 05-04 |
 | 2026-03-17 | PostgreSQL enum recreation requires DROP TYPE IF EXISTS before CREATE to make migration idempotent across multiple down()/up() test cycles | Added to both up() and down() enum steps | Phase 5 Plan 05-04 |
 | 2026-03-17 | Wave 0 import of non-existent 20260317_jr_technologies migration causes file-level skip in Vitest — expected and acceptable at Wave 0 (same pattern as Phase 4 Plan 04-00 and Phase 5 Plan 05-00) | Migration file created in 06-02; stubs still reported as pending in Vitest summary | Phase 6 Plan 06-00 |
+| 2026-03-17 | jr_technologies category select options chosen: language, framework, database, infrastructure, tool, library | Covers primary tech taxonomy for project showcases; RESEARCH.md delegated choice to Claude | Phase 6 Plan 06-01 |
+| 2026-03-17 | jr_technologies slug cast as any in JrPosts.ts tech_stack relationTo until types regenerated in 06-03 | New collection slug not yet in CollectionSlug union; same temporary cast pattern as Phase 4 Plan 04-01 | Phase 6 Plan 06-01 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -126,6 +128,7 @@ progress:
 | Phase 05-nerd-in-the-forest-trip-structure P03 | 2 | 2 tasks | 2 files |
 | Phase 05-nerd-in-the-forest-trip-structure P04 | 19 | 2 tasks | 10 files |
 | Phase 06-jake-reddy-tech-stack-collection P00 | 1 | 1 tasks | 1 files |
+| Phase 06-jake-reddy-tech-stack-collection P01 | 3 | 2 tasks | 4 files |
 
 ### Critical Information
 
@@ -155,8 +158,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 06-00 (Phase 6 Wave 0 scaffold: 15 it.todo() stubs for jr_technologies, file-level skip expected — 1 file, 1 task) - 2026-03-17
-**Next action**: Phase 6 Plan 06-01 (jr_technologies collection schema)
+**Last action**: Completed Plan 06-01 (JrTechnologies collection + JrPosts tech_stack relationship + both payload configs updated — 4 files, 2 tasks) - 2026-03-17
+**Next action**: Phase 6 Plan 06-02 (database migration: create jr_technologies table, update jr_posts_rels)
 
 **Context for next session**:
 
@@ -199,6 +202,9 @@ progress:
 - **PHASE 5 COMPLETE**: All 4 plans executed, 71 tests green, TypeScript clean
 - **Phase 6 Plan 06-00 COMPLETE**: Wave 0 scaffold for jr_technologies — 15 it.todo() stubs, file-level skip expected at Wave 0 (same pattern as Phase 4/5)
 - Plan 06-00 commits: 3be6e72 (Wave 0 test scaffold — 15 it.todo() stubs for jr_technologies)
+- **Phase 6 Plan 06-01 COMPLETE**: JrTechnologies collection created, JrPosts.tech_stack converted from json to hasMany relationship, both payload configs updated atomically
+- Plan 06-01 commits: d3d2351 (JrTechnologies.ts collection), f567e1f (JrPosts update + both config registrations)
+- jr_technologies slug cast as any in JrPosts.ts until types regenerated in 06-03 (same pattern as Phase 4 Plan 04-01)
 
 ## Open Questions
 
