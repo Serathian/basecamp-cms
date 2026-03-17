@@ -1,0 +1,55 @@
+import { getPayload, Payload } from 'payload'
+import config from '@/payload.config'
+import { sql } from '@payloadcms/db-postgres'
+import { describe, it, beforeAll, afterAll, expect } from 'vitest'
+import { up, down } from '@/migrations/20260317_jr_technologies'
+
+let payload: Payload
+let db: any
+
+describe('Phase 6: Jake Reddy Tech Stack Collection', () => {
+  beforeAll(async () => {
+    const payloadConfig = await config
+    payload = await getPayload({ config: payloadConfig })
+    db = (payload.db as any).drizzle
+  })
+
+  afterAll(async () => {
+    if (payload?.db) {
+      await payload.db.destroy!()
+    }
+  })
+
+  describe('JR-03: jr_technologies collection', () => {
+    it.todo('jr_technologies table exists after migration up()')
+    it.todo('can create jr_technology with name, category, and description')
+    it.todo('jr_technologies.icon_id column exists (direct FK, not _rels table)')
+    it.todo('can create jr_technology with icon upload reference')
+  })
+
+  describe('JR-02: jr_posts.tech_stack relationship', () => {
+    it.todo('jr_posts.tech_stack JSON column dropped after migration up()')
+    it.todo('jr_posts_rels.jr_technologies_id column exists after migration up()')
+    it.todo('can link jr_technology to jr_post via tech_stack field')
+    it.todo('jr_post depth:1 returns populated tech_stack array with technology objects')
+  })
+
+  describe('JR-01: jr_posts existing fields', () => {
+    it.todo('jr_posts has title, slug, body, cover_image, published_at, tags fields')
+  })
+
+  describe('JR-04: jr_tags collection', () => {
+    it.todo('jr_tags has name and slug fields')
+  })
+
+  describe('TEST-04: TypeScript types', () => {
+    it.todo('tsc --noEmit passes after JrTechnologies registered and types regenerated')
+  })
+
+  describe('Migration lifecycle', () => {
+    it.todo('migration down() drops jr_technologies table')
+    it.todo('migration down() removes jr_technologies_id from jr_posts_rels')
+    it.todo('migration down() restores tech_stack JSONB column on jr_posts')
+    it.todo('migration up() is idempotent (IF NOT EXISTS guards)')
+  })
+})
