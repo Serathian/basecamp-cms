@@ -13,6 +13,7 @@ import { Authors } from './collections/shared/Authors'
 // jake-reddy.com
 import { JrMedia } from './collections/jake-reddy/JrMedia'
 import { JrTags } from './collections/jake-reddy/JrTags'
+import { JrTechnologies } from './collections/jake-reddy/JrTechnologies'
 import { JrPosts } from './collections/jake-reddy/JrPosts'
 
 // nerdintheforest.com
@@ -49,6 +50,7 @@ export default buildConfig({
     // jake-reddy.com
     JrMedia,
     JrTags,
+    JrTechnologies,
     JrPosts,
     // nerdintheforest.com
     NitfMedia,

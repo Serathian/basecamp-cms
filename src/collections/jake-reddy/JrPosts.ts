@@ -63,7 +63,12 @@ export const JrPosts: CollectionConfig = {
         { label: 'Archived', value: 'archived' },
       ],
     },
-    { name: 'tech_stack', type: 'json' },
+    {
+      name: 'tech_stack',
+      type: 'relationship',
+      relationTo: 'jr_technologies' as any, // cast until types regenerated in 06-02
+      hasMany: true,
+    },
     { name: 'github_url', type: 'text' },
     { name: 'live_url', type: 'text' },
     { name: 'featured', type: 'checkbox', defaultValue: false },
