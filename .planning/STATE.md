@@ -3,33 +3,33 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-16T17:00:25.671Z"
+last_updated: "2026-03-17T06:00:47.348Z"
 progress:
   total_phases: 7
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 25
-  completed_plans: 23
+  completed_plans: 24
 ---
 
 # Project State: Basecamp CMS Refinement
 
-**Last updated:** 2026-03-16
-**Project phase:** Phase 5 - In Progress
+**Last updated:** 2026-03-17
+**Project phase:** Phase 5 - COMPLETE
 
 ## Project Reference
 
 **Core Value**: The CMS must align perfectly with how content is authored in Obsidian — every collection, field, and relationship should reduce friction between vault structure and frontend needs, never add ceremony.
 
-**Current Focus**: NITF trip structure — adding nitf_destinations, nitf_poi, nitf_trips collections; dropping nitf_locations and nitf_waypoints.
+**Current Focus**: Phase 6 - jr_technologies collection
 
 ## Current Position
 
 **Milestone**: v1 Refinement
-**Phase**: 5 - NITF Trip Structure - IN PROGRESS
-**Plan**: 4 of N plans complete (05-03 Phase 5 migration)
-**Status**: Phase 5 migration complete — Ready for integration tests (05-04)
+**Phase**: 5 - NITF Trip Structure - COMPLETE
+**Plan**: 4 of 4 plans complete (05-04 integration tests)
+**Status**: Phase 5 complete — All 71 integration tests pass, types clean, migration lifecycle verified
 
-**Progress**: [█████████░] 92% (23 of 25 plans complete)
+**Progress**: [██████████] 96% (24 of 25 plans complete)
 
 **Blockers**: None
 
@@ -101,6 +101,11 @@ progress:
 | 2026-03-16 | down() does not recreate nitf_locations or nitf_waypoints — clean-slate migration, no data to preserve; restoring payload_locked_documents_rels columns sufficient for test down()/up() cycle | Same pattern as Phase 4 rotr_days_split migration | Phase 5 Plan 05-03 |
 | 2026-03-16 | nitf_posts_rels.nitf_poi_id added in up() to support locations field now pointing to nitf_poi; nitf_locations_id and nitf_trails_id dropped | Schema must align with NitfPosts.ts field changes from 05-02 | Phase 5 Plan 05-03 |
 | 2026-03-16 | nitf_poi_types has no _rels table — only name+slug fields, no relationship fields (same as rotr_place_types pattern) | _rels tables only needed when collection has relationship fields | Phase 5 Plan 05-03 |
+| 2026-03-17 | Payload v3 single (non-hasMany) relationship fields stored as direct FK columns on main table (type_id, place_id, featured_image_id, destination_id, cover_image_id, poi_id) — not in _rels tables | Empirically discovered via query errors; _rels tables are only for hasMany relationships | Phase 5 Plan 05-04 |
+| 2026-03-17 | Payload group field flattening uses single underscore: date_range_start_date, not date_range__start_date | Plan comment said double-underscore was Payload v3 convention — this was wrong; single underscore confirmed from actual insert queries | Phase 5 Plan 05-04 |
+| 2026-03-17 | Payload array fields (type: array) stored as separate child tables with _order/_parent_id columns (not order/parent_id) | Verified against existing nitf_posts_locations table pattern | Phase 5 Plan 05-04 |
+| 2026-03-17 | nitf_poi.trips is an explicitly maintained relationship — Payload does not auto-populate reverse relationships when creating a trip with pois: [poi.id] | Must explicitly update poi.trips after creating trip to maintain bidirectional state | Phase 5 Plan 05-04 |
+| 2026-03-17 | PostgreSQL enum recreation requires DROP TYPE IF EXISTS before CREATE to make migration idempotent across multiple down()/up() test cycles | Added to both up() and down() enum steps | Phase 5 Plan 05-04 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -118,6 +123,7 @@ progress:
 | Phase 05-nerd-in-the-forest-trip-structure P01 | 2 | 2 tasks | 5 files |
 | Phase 05-nerd-in-the-forest-trip-structure P02 | 2 | 2 tasks | 3 files |
 | Phase 05-nerd-in-the-forest-trip-structure P03 | 2 | 2 tasks | 2 files |
+| Phase 05-nerd-in-the-forest-trip-structure P04 | 19 | 2 tasks | 10 files |
 
 ### Critical Information
 
@@ -147,8 +153,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 05-03 (Phase 5 migration: 9 tables, 4 _rels tables, 2 PostGIS triggers, drops nitf_locations/nitf_waypoints — 2 files, 2 tasks) - 2026-03-16
-**Next action**: Phase 5 Plan 05-04 (integration tests for NITF trip structure)
+**Last action**: Completed Plan 05-04 (Phase 5 integration tests: 71 tests pass, 8 migration fixes, geom-hooks stubs, as-any casts removed — 10 files, 2 tasks) - 2026-03-17
+**Next action**: Phase 6 (jr_technologies collection)
 
 **Context for next session**:
 
@@ -186,6 +192,9 @@ progress:
 - **Phase 5 Plan 05-02 COMPLETE**: NitfPosts trimmed (type: 3 options, 7 legacy fields dropped); both payload configs now register 5 new NITF collections and deregister NitfLocations/NitfWaypoints
 - **Phase 5 Plan 05-03 COMPLETE**: Database migration created and registered — 9 tables (5 main + 4 _rels), 2 PostGIS BEFORE triggers, drops nitf_locations/nitf_waypoints, trims nitf_posts columns, updates payload_locked_documents_rels
 - Plan 05-03 commits: ac57a9b (migration file), beee692 (register in index.ts)
+- **Phase 5 Plan 05-04 COMPLETE**: 71 integration tests pass; 8 migration schema bugs fixed (direct FK columns, date_range naming, links child table, enum recreation, lat/lon nullability); geom-hooks stubs implemented; as-any casts removed; tsc clean
+- Plan 05-04 commits: d30fd92 (tests + migration fixes), 100e6d7 (geom-hooks + types)
+- **PHASE 5 COMPLETE**: All 4 plans executed, 71 tests green, TypeScript clean
 
 ## Open Questions
 
