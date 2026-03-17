@@ -71,6 +71,7 @@ export interface Config {
     authors: Author;
     jr_media: JrMedia;
     jr_tags: JrTag;
+    jr_technologies: JrTechnology;
     jr_posts: JrPost;
     nitf_media: NitfMedia;
     nitf_tags: NitfTag;
@@ -96,6 +97,7 @@ export interface Config {
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     jr_media: JrMediaSelect<false> | JrMediaSelect<true>;
     jr_tags: JrTagsSelect<false> | JrTagsSelect<true>;
+    jr_technologies: JrTechnologiesSelect<false> | JrTechnologiesSelect<true>;
     jr_posts: JrPostsSelect<false> | JrPostsSelect<true>;
     nitf_media: NitfMediaSelect<false> | NitfMediaSelect<true>;
     nitf_tags: NitfTagsSelect<false> | NitfTagsSelect<true>;
@@ -271,6 +273,19 @@ export interface JrTag {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_technologies".
+ */
+export interface JrTechnology {
+  id: number;
+  name: string;
+  icon?: (number | null) | JrMedia;
+  category?: ('language' | 'framework' | 'database' | 'infrastructure' | 'tool' | 'library') | null;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "jr_posts".
  */
 export interface JrPost {
@@ -284,15 +299,7 @@ export interface JrPost {
   cover_image?: (number | null) | JrMedia;
   project_type?: ('open-source' | 'personal' | 'home-lab' | 'professional') | null;
   project_status?: ('active' | 'in-progress' | 'completed' | 'archived') | null;
-  tech_stack?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  tech_stack?: (number | JrTechnology)[] | null;
   github_url?: string | null;
   live_url?: string | null;
   featured?: boolean | null;
@@ -545,6 +552,10 @@ export interface PayloadLockedDocument {
         value: number | JrTag;
       } | null)
     | ({
+        relationTo: 'jr_technologies';
+        value: number | JrTechnology;
+      } | null)
+    | ({
         relationTo: 'jr_posts';
         value: number | JrPost;
       } | null)
@@ -703,6 +714,18 @@ export interface JrMediaSelect<T extends boolean = true> {
 export interface JrTagsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_technologies_select".
+ */
+export interface JrTechnologiesSelect<T extends boolean = true> {
+  name?: T;
+  icon?: T;
+  category?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }

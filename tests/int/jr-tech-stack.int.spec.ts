@@ -160,7 +160,7 @@ describe('Phase 6: Jake Reddy Tech Stack Collection', () => {
 
   describe('Migration lifecycle', () => {
     it('migration down() drops jr_technologies table', async () => {
-      await down({ db })
+      await down({ db, payload } as any)
       const result = await db.execute(sql`
         SELECT table_name FROM information_schema.tables
         WHERE table_name = ${'jr_technologies'} AND table_schema = 'public'
@@ -185,12 +185,12 @@ describe('Phase 6: Jake Reddy Tech Stack Collection', () => {
       `)
       expect(result.rows).toHaveLength(1)
       // Restore for subsequent tests
-      await up({ db })
+      await up({ db, payload } as any)
     })
 
     it('migration up() is idempotent (IF NOT EXISTS guards)', async () => {
       // up() was restored at the end of the previous test; call it again to verify idempotency
-      await expect(up({ db })).resolves.not.toThrow()
+      await expect(up({ db, payload } as any)).resolves.not.toThrow()
     })
   })
 })
