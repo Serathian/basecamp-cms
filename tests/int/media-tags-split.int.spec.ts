@@ -238,7 +238,7 @@ describe('Phase 3: Site-Specific Media & Tags', () => {
           title: 'NITF Tag Relationship Test',
           slug: `nitf-tag-rel-test-${Date.now()}`,
           status: 'draft',
-          type: 'general',
+          type: 'article',
           tags: [tag.id],
         },
       })

@@ -41,7 +41,7 @@ describe('Access control — authenticated admin sees drafts', () => {
           ...(isRotrDays ? {} : { slug: `draft-admin-${slug}-${Date.now()}` }),
           status: 'draft',
           ...(isRotrDays ? {} : { body: 'draft content' }),
-          ...(slug === 'nitf_posts' ? { type: 'general' } : {}),
+          ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
         },
       })
 
@@ -53,7 +53,7 @@ describe('Access control — authenticated admin sees drafts', () => {
           ...(isRotrDays ? {} : { slug: `published-admin-${slug}-${Date.now()}` }),
           status: 'published',
           ...(isRotrDays ? {} : { body: 'published content' }),
-          ...(slug === 'nitf_posts' ? { type: 'general' } : {}),
+          ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
         },
       })
 
@@ -114,7 +114,7 @@ describe('Access control — unauthenticated reads only see published', () => {
           title: `Draft ${slug} test`,
           ...(isRotrDays ? {} : { slug: `draft-${slug}-${Date.now()}` }),
           status: 'draft',
-          ...(slug === 'nitf_posts' ? { type: 'general' } : {}),
+          ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
         },
       })
       expect(draft.id).toBeDefined()
@@ -126,7 +126,7 @@ describe('Access control — unauthenticated reads only see published', () => {
           title: `Published ${slug} test`,
           ...(isRotrDays ? {} : { slug: `published-${slug}-${Date.now()}` }),
           status: 'published',
-          ...(slug === 'nitf_posts' ? { type: 'general' } : {}),
+          ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
         },
       })
       expect(published.id).toBeDefined()
@@ -195,27 +195,7 @@ describe('Access control — public collections are fully readable', () => {
     await payload.delete({ collection: 'rotr_place_types', id: placeType.id })
   })
 
-  it('nitf_locations: unauthenticated read works', async () => {
-    const loc = await payload.create({
-      collection: 'nitf_locations',
-      data: {
-        name: 'Test Forest Spot',
-        place_type: 'forest',
-        marker_type: 'camp',
-        latitude: 61.5,
-        longitude: 24.0,
-      },
-    })
-
-    const result = await payload.find({
-      collection: 'nitf_locations',
-      overrideAccess: false,
-    })
-
-    expect(result.docs.some((d: any) => d.id === loc.id)).toBe(true)
-
-    await payload.delete({ collection: 'nitf_locations', id: loc.id })
-  })
+  // nitf_locations was dropped in Phase 5 migration — replaced by nitf_poi and nitf_destinations
 })
 
 describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () => {
@@ -235,7 +215,7 @@ describe('Nearby endpoint — spatial queries (requires PostGIS migration)', () 
         data: {
           title: post.title,
           slug: post.slug,
-          type: 'adventure',
+          type: 'article',
           status: 'published',
           latitude: post.lat,
           longitude: post.lon,

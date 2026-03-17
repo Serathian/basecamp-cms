@@ -17,6 +17,14 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`ALTER TABLE nitf_posts DROP COLUMN IF EXISTS seo_description`)
   await db.execute(sql`ALTER TABLE nitf_posts DROP COLUMN IF EXISTS reading_time_minutes`)
 
+  // ─── Step 3b: Update enum_nitf_posts_type to match trimmed type options (review/recipe/article) ──
+  // PostgreSQL cannot remove enum values directly — recreate the enum with only the 3 valid options.
+  await db.execute(sql.raw(`DROP TYPE IF EXISTS enum_nitf_posts_type_new`))
+  await db.execute(sql.raw(`CREATE TYPE enum_nitf_posts_type_new AS ENUM ('review', 'recipe', 'article')`))
+  await db.execute(sql.raw(`ALTER TABLE nitf_posts ALTER COLUMN type TYPE enum_nitf_posts_type_new USING CASE type::text WHEN 'review' THEN 'review'::enum_nitf_posts_type_new WHEN 'recipe' THEN 'recipe'::enum_nitf_posts_type_new ELSE 'article'::enum_nitf_posts_type_new END`))
+  await db.execute(sql.raw(`DROP TYPE IF EXISTS enum_nitf_posts_type`))
+  await db.execute(sql.raw(`ALTER TYPE enum_nitf_posts_type_new RENAME TO enum_nitf_posts_type`))
+
   // ─── Step 4: Update nitf_posts_rels for changed relationships ────────────────────────────────────
   // Drop nitf_locations_id (locations field now points to nitf_poi via nitf_posts_rels)
   await db.execute(sql`ALTER TABLE nitf_posts_rels DROP COLUMN IF EXISTS nitf_locations_id`)
@@ -37,7 +45,8 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   `)
 
   // ─── Step 6: Create nitf_destinations table ──────────────────────────────────────────────────────
-  // featured_image and links relationships live in nitf_destinations_rels
+  // Single relationship (featured_image upload) stored as direct FK column.
+  // links array field stored in nitf_destinations_links table.
   await db.execute(sql`
     CREATE TABLE nitf_destinations (
       id SERIAL PRIMARY KEY,
@@ -47,6 +56,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       description TEXT,
       latitude NUMERIC,
       longitude NUMERIC,
+      featured_image_id INTEGER,
       difficulty VARCHAR(255),
       season_info TEXT,
       published_at TIMESTAMP WITH TIME ZONE,
@@ -56,20 +66,24 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   `)
 
   // ─── Step 7: Create nitf_poi table ───────────────────────────────────────────────────────────────
-  // type, trips, place relationships live in nitf_poi_rels
+  // Single relationships (type, place) stored as direct FK columns.
+  // hasMany trips relationship lives in nitf_poi_rels.
   await db.execute(sql`
     CREATE TABLE nitf_poi (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
-      latitude NUMERIC NOT NULL,
-      longitude NUMERIC NOT NULL,
+      latitude NUMERIC,
+      longitude NUMERIC,
+      type_id INTEGER,
+      place_id INTEGER,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
     )
   `)
 
   // ─── Step 8: Create nitf_trips table ─────────────────────────────────────────────────────────────
-  // destination, cover_image, tags, pois relationships live in nitf_trips_rels
+  // Single relationships (destination, cover_image) stored as direct FK columns.
+  // hasMany relationships (pois, tags) live in nitf_trips_rels.
   // date_range group field flattens to date_range__start_date / date_range__end_date (Payload v3 convention)
   await db.execute(sql`
     CREATE TABLE nitf_trips (
@@ -78,8 +92,10 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       title VARCHAR(255) NOT NULL,
       slug VARCHAR(255) NOT NULL UNIQUE,
       body TEXT,
-      date_range__start_date TIMESTAMP WITH TIME ZONE,
-      date_range__end_date TIMESTAMP WITH TIME ZONE,
+      destination_id INTEGER,
+      cover_image_id INTEGER,
+      date_range_start_date TIMESTAMP WITH TIME ZONE,
+      date_range_end_date TIMESTAMP WITH TIME ZONE,
       published_at TIMESTAMP WITH TIME ZONE,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
@@ -87,7 +103,8 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
   `)
 
   // ─── Step 9: Create nitf_places table ────────────────────────────────────────────────────────────
-  // cover_image, tags, poi relationships live in nitf_places_rels
+  // Single relationships (cover_image, poi) stored as direct FK columns.
+  // hasMany relationships (tags) live in nitf_places_rels.
   await db.execute(sql`
     CREATE TABLE nitf_places (
       id SERIAL PRIMARY KEY,
@@ -95,9 +112,24 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       title VARCHAR(255) NOT NULL,
       slug VARCHAR(255) NOT NULL UNIQUE,
       body TEXT,
+      cover_image_id INTEGER,
+      poi_id INTEGER,
       published_at TIMESTAMP WITH TIME ZONE,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    )
+  `)
+
+  // ─── Step 9b: Create nitf_destinations_links table (Payload array field storage) ───────────────
+  // The links array field on NitfDestinations is stored as a separate child table.
+  // Payload v3 array child tables use _order and _parent_id (underscore-prefixed) columns.
+  await db.execute(sql`
+    CREATE TABLE nitf_destinations_links (
+      id SERIAL PRIMARY KEY,
+      _order INTEGER NOT NULL,
+      _parent_id INTEGER NOT NULL REFERENCES nitf_destinations(id) ON DELETE CASCADE,
+      url TEXT,
+      label VARCHAR(255)
     )
   `)
 
@@ -230,10 +262,11 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql.raw(`DROP TRIGGER IF EXISTS trg_nitf_poi_geom ON nitf_poi;`))
   await db.execute(sql.raw(`DROP FUNCTION IF EXISTS trg_nitf_poi_geom_fn();`))
 
-  // ─── Step 2: Drop _rels tables ───────────────────────────────────────────────────────────────────
+  // ─── Step 2: Drop _rels and array child tables ───────────────────────────────────────────────────
   await db.execute(sql`DROP TABLE IF EXISTS nitf_places_rels CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS nitf_poi_rels CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS nitf_destinations_rels CASCADE`)
+  await db.execute(sql`DROP TABLE IF EXISTS nitf_destinations_links CASCADE`)
   await db.execute(sql`DROP TABLE IF EXISTS nitf_trips_rels CASCADE`)
 
   // ─── Step 3: Drop main tables ────────────────────────────────────────────────────────────────────
@@ -249,6 +282,13 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`ALTER TABLE nitf_posts ADD COLUMN IF NOT EXISTS seo_title VARCHAR(255)`)
   await db.execute(sql`ALTER TABLE nitf_posts ADD COLUMN IF NOT EXISTS seo_description TEXT`)
   await db.execute(sql`ALTER TABLE nitf_posts ADD COLUMN IF NOT EXISTS reading_time_minutes INTEGER`)
+
+  // ─── Step 4b: Restore enum_nitf_posts_type to original 5 options ──────────────────────────────
+  await db.execute(sql.raw(`DROP TYPE IF EXISTS enum_nitf_posts_type_old`))
+  await db.execute(sql.raw(`CREATE TYPE enum_nitf_posts_type_old AS ENUM ('adventure', 'tips', 'recipe', 'review', 'general')`))
+  await db.execute(sql.raw(`ALTER TABLE nitf_posts ALTER COLUMN type TYPE enum_nitf_posts_type_old USING CASE type::text WHEN 'review' THEN 'review'::enum_nitf_posts_type_old WHEN 'recipe' THEN 'recipe'::enum_nitf_posts_type_old ELSE 'general'::enum_nitf_posts_type_old END`))
+  await db.execute(sql.raw(`DROP TYPE IF EXISTS enum_nitf_posts_type`))
+  await db.execute(sql.raw(`ALTER TYPE enum_nitf_posts_type_old RENAME TO enum_nitf_posts_type`))
 
   // ─── Step 5: Restore nitf_posts_rels columns ─────────────────────────────────────────────────────
   await db.execute(sql`ALTER TABLE nitf_posts_rels ADD COLUMN IF NOT EXISTS nitf_locations_id INTEGER`)

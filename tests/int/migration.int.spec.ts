@@ -20,7 +20,7 @@ describe('PostGIS Migration — up/down operations', () => {
     }
   })
 
-  it('Migration up adds geom columns to all 6 tables', async () => {
+  it('Migration up adds geom columns to all active geographic tables', async () => {
     // rotr_posts and rotr_locations replaced by rotr_days in Phase 4;
     // nitf_waypoints and nitf_locations replaced by nitf_destinations and nitf_poi in Phase 5
     const tables = [
@@ -51,7 +51,7 @@ describe('PostGIS Migration — up/down operations', () => {
         title: 'Test geom population',
         slug: `test-geom-${Date.now()}`,
         status: 'published',
-        type: 'general',
+        type: 'article',
         latitude: 43.0,
         longitude: -75.0,
       },
@@ -76,20 +76,19 @@ describe('PostGIS Migration — up/down operations', () => {
     await payload.delete({ collection: 'nitf_posts', id: testPost.id })
   })
 
-  it('Spatial indexes exist on NITF geographic tables', async () => {
+  it('Spatial indexes exist on active NITF geographic tables', async () => {
     // Phase 2 migration created GIST indexes on the original 4 NITF geographic tables.
-    // rotr_posts and rotr_locations (dropped in Phase 4) had indexes; rotr_days does not yet have one.
+    // nitf_waypoints and nitf_locations were dropped in Phase 5 migration — indexes no longer exist.
+    // Verify that the surviving tables (nitf_posts and nitf_trails) still have their indexes.
     const expectedIndexes = [
       { tablename: 'nitf_posts', indexname: 'idx_nitf_posts_geom' },
       { tablename: 'nitf_trails', indexname: 'idx_nitf_trails_geom' },
-      { tablename: 'nitf_waypoints', indexname: 'idx_nitf_waypoints_geom' },
-      { tablename: 'nitf_locations', indexname: 'idx_nitf_locations_geom' },
     ]
 
     const result = await db.execute(sql`
       SELECT tablename, indexname
       FROM pg_indexes
-      WHERE tablename IN ('nitf_posts', 'nitf_trails', 'nitf_waypoints', 'nitf_locations')
+      WHERE tablename IN ('nitf_posts', 'nitf_trails')
         AND indexdef LIKE '%USING gist%'
       ORDER BY tablename
     `)
