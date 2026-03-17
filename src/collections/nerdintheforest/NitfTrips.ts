@@ -33,7 +33,7 @@ export const NitfTrips: CollectionConfig = {
     {
       name: 'destination',
       type: 'relationship',
-      relationTo: 'nitf_destinations' as any,
+      relationTo: 'nitf_destinations',
     },
     {
       name: 'cover_image',
@@ -57,7 +57,7 @@ export const NitfTrips: CollectionConfig = {
     {
       name: 'pois',
       type: 'relationship',
-      relationTo: 'nitf_poi' as any,
+      relationTo: 'nitf_poi',
       hasMany: true,
     },
     {

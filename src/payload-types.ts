@@ -76,8 +76,11 @@ export interface Config {
     nitf_tags: NitfTag;
     nitf_posts: NitfPost;
     nitf_trails: NitfTrail;
-    nitf_waypoints: NitfWaypoint;
-    nitf_locations: NitfLocation;
+    nitf_trips: NitfTrip;
+    nitf_destinations: NitfDestination;
+    nitf_poi: NitfPoi;
+    nitf_poi_types: NitfPoiType;
+    nitf_places: NitfPlace;
     rotr_media: RotrMedia;
     rotr_tags: RotrTag;
     rotr_days: RotrDay;
@@ -98,8 +101,11 @@ export interface Config {
     nitf_tags: NitfTagsSelect<false> | NitfTagsSelect<true>;
     nitf_posts: NitfPostsSelect<false> | NitfPostsSelect<true>;
     nitf_trails: NitfTrailsSelect<false> | NitfTrailsSelect<true>;
-    nitf_waypoints: NitfWaypointsSelect<false> | NitfWaypointsSelect<true>;
-    nitf_locations: NitfLocationsSelect<false> | NitfLocationsSelect<true>;
+    nitf_trips: NitfTripsSelect<false> | NitfTripsSelect<true>;
+    nitf_destinations: NitfDestinationsSelect<false> | NitfDestinationsSelect<true>;
+    nitf_poi: NitfPoiSelect<false> | NitfPoiSelect<true>;
+    nitf_poi_types: NitfPoiTypesSelect<false> | NitfPoiTypesSelect<true>;
+    nitf_places: NitfPlacesSelect<false> | NitfPlacesSelect<true>;
     rotr_media: RotrMediaSelect<false> | RotrMediaSelect<true>;
     rotr_tags: RotrTagsSelect<false> | RotrTagsSelect<true>;
     rotr_days: RotrDaysSelect<false> | RotrDaysSelect<true>;
@@ -319,44 +325,15 @@ export interface NitfPost {
   status: 'draft' | 'published' | 'archived';
   title: string;
   slug: string;
-  type: 'adventure' | 'tips' | 'recipe' | 'review' | 'general';
+  type: 'review' | 'recipe' | 'article';
   excerpt?: string | null;
   body?: string | null;
   cover_image?: (number | null) | NitfMedia;
   author?: (number | null) | Author;
   tags?: (number | NitfTag)[] | null;
   published_at?: string | null;
-  reading_time_minutes?: number | null;
   latitude?: number | null;
   longitude?: number | null;
-  trail?: (number | null) | NitfTrail;
-  locations?:
-    | {
-        location: number | NitfLocation;
-        visit_date?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  review_meta?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  recipe_meta?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  seo_title?: string | null;
-  seo_description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -395,44 +372,92 @@ export interface NitfTrail {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_locations".
+ * via the `definition` "nitf_trips".
  */
-export interface NitfLocation {
+export interface NitfTrip {
   id: number;
-  name: string;
-  description?: string | null;
-  place_type: 'forest' | 'lake' | 'park' | 'viewpoint' | 'summit' | 'town' | 'beach' | 'island' | 'valley' | 'other';
-  marker_type:
-    | 'camp'
-    | 'cabin'
-    | 'cabin-paid'
-    | 'camp-paid'
-    | 'laavu'
-    | 'motorhome'
-    | 'day-visit'
-    | 'trailhead'
-    | 'viewpoint'
-    | 'other';
-  latitude: number;
-  longitude: number;
-  country?: string | null;
+  status: 'draft' | 'published';
+  title: string;
+  slug: string;
+  body?: string | null;
+  destination?: (number | null) | NitfDestination;
+  cover_image?: (number | null) | NitfMedia;
+  date_range?: {
+    start_date?: string | null;
+    end_date?: string | null;
+  };
+  tags?: (number | NitfTag)[] | null;
+  pois?: (number | NitfPoi)[] | null;
+  published_at?: string | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_waypoints".
+ * via the `definition` "nitf_destinations".
  */
-export interface NitfWaypoint {
+export interface NitfDestination {
   id: number;
-  trail: number | NitfTrail;
+  status: 'draft' | 'published';
   name: string;
+  slug: string;
   description?: string | null;
-  type: 'viewpoint' | 'summit' | 'water' | 'hazard' | 'camp' | 'junction' | 'trailhead' | 'other';
+  latitude?: number | null;
+  longitude?: number | null;
+  featured_image?: (number | null) | NitfMedia;
+  links?:
+    | {
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  difficulty?: ('easy' | 'moderate' | 'hard' | 'expert') | null;
+  season_info?: string | null;
+  published_at?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_poi".
+ */
+export interface NitfPoi {
+  id: number;
+  name: string;
   latitude: number;
   longitude: number;
-  altitude_m?: number | null;
-  sort?: number | null;
+  type?: (number | null) | NitfPoiType;
+  trips?: (number | NitfTrip)[] | null;
+  place?: (number | null) | NitfPlace;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_poi_types".
+ */
+export interface NitfPoiType {
+  id: number;
+  name: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_places".
+ */
+export interface NitfPlace {
+  id: number;
+  status: 'draft' | 'published';
+  title: string;
+  slug: string;
+  body?: string | null;
+  cover_image?: (number | null) | NitfMedia;
+  tags?: (number | NitfTag)[] | null;
+  poi?: (number | null) | NitfPoi;
+  published_at?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -540,12 +565,24 @@ export interface PayloadLockedDocument {
         value: number | NitfTrail;
       } | null)
     | ({
-        relationTo: 'nitf_waypoints';
-        value: number | NitfWaypoint;
+        relationTo: 'nitf_trips';
+        value: number | NitfTrip;
       } | null)
     | ({
-        relationTo: 'nitf_locations';
-        value: number | NitfLocation;
+        relationTo: 'nitf_destinations';
+        value: number | NitfDestination;
+      } | null)
+    | ({
+        relationTo: 'nitf_poi';
+        value: number | NitfPoi;
+      } | null)
+    | ({
+        relationTo: 'nitf_poi_types';
+        value: number | NitfPoiType;
+      } | null)
+    | ({
+        relationTo: 'nitf_places';
+        value: number | NitfPlace;
       } | null)
     | ({
         relationTo: 'rotr_media';
@@ -739,21 +776,8 @@ export interface NitfPostsSelect<T extends boolean = true> {
   author?: T;
   tags?: T;
   published_at?: T;
-  reading_time_minutes?: T;
   latitude?: T;
   longitude?: T;
-  trail?: T;
-  locations?:
-    | T
-    | {
-        location?: T;
-        visit_date?: T;
-        id?: T;
-      };
-  review_meta?: T;
-  recipe_meta?: T;
-  seo_title?: T;
-  seo_description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -783,32 +807,89 @@ export interface NitfTrailsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_waypoints_select".
+ * via the `definition` "nitf_trips_select".
  */
-export interface NitfWaypointsSelect<T extends boolean = true> {
-  trail?: T;
-  name?: T;
-  description?: T;
-  type?: T;
-  latitude?: T;
-  longitude?: T;
-  altitude_m?: T;
-  sort?: T;
+export interface NitfTripsSelect<T extends boolean = true> {
+  status?: T;
+  title?: T;
+  slug?: T;
+  body?: T;
+  destination?: T;
+  cover_image?: T;
+  date_range?:
+    | T
+    | {
+        start_date?: T;
+        end_date?: T;
+      };
+  tags?: T;
+  pois?: T;
+  published_at?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_locations_select".
+ * via the `definition` "nitf_destinations_select".
  */
-export interface NitfLocationsSelect<T extends boolean = true> {
+export interface NitfDestinationsSelect<T extends boolean = true> {
+  status?: T;
   name?: T;
+  slug?: T;
   description?: T;
-  place_type?: T;
-  marker_type?: T;
   latitude?: T;
   longitude?: T;
-  country?: T;
+  featured_image?: T;
+  links?:
+    | T
+    | {
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  difficulty?: T;
+  season_info?: T;
+  published_at?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_poi_select".
+ */
+export interface NitfPoiSelect<T extends boolean = true> {
+  name?: T;
+  latitude?: T;
+  longitude?: T;
+  type?: T;
+  trips?: T;
+  place?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_poi_types_select".
+ */
+export interface NitfPoiTypesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_places_select".
+ */
+export interface NitfPlacesSelect<T extends boolean = true> {
+  status?: T;
+  title?: T;
+  slug?: T;
+  body?: T;
+  cover_image?: T;
+  tags?: T;
+  poi?: T;
+  published_at?: T;
   updatedAt?: T;
   createdAt?: T;
 }

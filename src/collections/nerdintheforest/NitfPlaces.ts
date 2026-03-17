@@ -45,7 +45,7 @@ export const NitfPlaces: CollectionConfig = {
     {
       name: 'poi',
       type: 'relationship',
-      relationTo: 'nitf_poi' as any,
+      relationTo: 'nitf_poi',
     },
     {
       name: 'published_at',

@@ -24,18 +24,18 @@ export const NitfPoi: CollectionConfig = {
     {
       name: 'type',
       type: 'relationship',
-      relationTo: 'nitf_poi_types' as any,
+      relationTo: 'nitf_poi_types',
     },
     {
       name: 'trips',
       type: 'relationship',
-      relationTo: 'nitf_trips' as any,
+      relationTo: 'nitf_trips',
       hasMany: true,
     },
     {
       name: 'place',
       type: 'relationship',
-      relationTo: 'nitf_places' as any,
+      relationTo: 'nitf_places',
     },
   ],
 }
