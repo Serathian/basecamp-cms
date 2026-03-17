@@ -177,7 +177,14 @@ Plans:
 3. Technology icons display in admin UI when viewing project posts
 4. API response for jr_post includes populated technologies array with icon URLs
 
-**Plans**: TBD
+**Plans**: 4 plans in 4 waves
+
+Plans:
+
+- [ ] 06-00-PLAN.md — Wave 0 test scaffold (Nyquist compliance — it.todo() stubs for JR-01/02/03/04/TEST-04)
+- [ ] 06-01-PLAN.md — Create JrTechnologies.ts collection + update JrPosts tech_stack + register in both configs
+- [ ] 06-02-PLAN.md — Write migration (create jr_technologies, drop tech_stack JSON, add jr_technologies_id to _rels)
+- [ ] 06-03-PLAN.md — Implement integration tests + regenerate TypeScript types
 
 ---
 
@@ -209,8 +216,8 @@ Plans:
 | 2. PostGIS Extension & Auto-Population   | 4/6            | Gap Closure |            |
 | 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
 | 4. Reddy on the Road Week/Day Split      | 6/6            | Complete    | 2026-03-16 |
-| 5. Nerd in the Forest Trip Structure     | 5/5 | Complete   | 2026-03-17 |
-| 6. Jake Reddy Tech Stack Collection      | 0/TBD          | Not started | -          |
+| 5. Nerd in the Forest Trip Structure     | 5/5            | Complete    | 2026-03-17 |
+| 6. Jake Reddy Tech Stack Collection      | 0/4            | Not started | -          |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
 
 ## Dependencies
@@ -254,4 +261,4 @@ Phases with standard patterns (skip research):
 ---
 
 _Roadmap created: 2026-03-11_
-_Last updated: 2026-03-16_
+_Last updated: 2026-03-17_
