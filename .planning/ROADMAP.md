@@ -217,7 +217,7 @@ Plans:
 | 3. Site-Specific Media & Tags            | 5/5            | Complete    | 2026-03-15 |
 | 4. Reddy on the Road Week/Day Split      | 6/6            | Complete    | 2026-03-16 |
 | 5. Nerd in the Forest Trip Structure     | 5/5            | Complete    | 2026-03-17 |
-| 6. Jake Reddy Tech Stack Collection      | 0/4            | Not started | -          |
+| 6. Jake Reddy Tech Stack Collection      | 1/4 | In Progress|  |
 | 7. Production Refinement                 | 0/TBD          | Not started | -          |
 
 ## Dependencies

@@ -31,10 +31,10 @@ Requirements for CMS refinement. Each maps to roadmap phases.
 
 ### Jake-Reddy Collections
 
-- [ ] **JR-01**: `jr_posts` has fields: title, slug, body (markdown), featured_image, publish_date, tags (relation to jr_tags)
-- [ ] **JR-02**: `jr_posts` has project fields: github_url, demo_url, tech_stack (relation to jr_technologies)
-- [ ] **JR-03**: `jr_technologies` collection: name, icon (media), category (select), description (textarea)
-- [ ] **JR-04**: `jr_tags` collection: name, slug
+- [x] **JR-01**: `jr_posts` has fields: title, slug, body (markdown), featured_image, publish_date, tags (relation to jr_tags)
+- [x] **JR-02**: `jr_posts` has project fields: github_url, demo_url, tech_stack (relation to jr_technologies)
+- [x] **JR-03**: `jr_technologies` collection: name, icon (media), category (select), description (textarea)
+- [x] **JR-04**: `jr_tags` collection: name, slug
 
 ### NITF Collections
 
@@ -128,10 +128,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SITESPEC-03 | 3                   | Complete |
 | SITESPEC-04 | 3                   | Complete |
 | SITESPEC-05 | 3                   | Complete |
-| JR-01       | 6                   | Pending  |
-| JR-02       | 6                   | Pending  |
-| JR-03       | 6                   | Pending  |
-| JR-04       | 6                   | Pending  |
+| JR-01       | 6                   | Complete |
+| JR-02       | 6                   | Complete |
+| JR-03       | 6                   | Complete |
+| JR-04       | 6                   | Complete |
 | NITF-01     | 5                   | Complete |
 | NITF-02     | 5                   | Complete |
 | NITF-03     | 5                   | Complete |
