@@ -28,19 +28,25 @@ afterAll(async () => {
 })
 
 describe('Access control — authenticated admin sees drafts', () => {
-  const collections = ['jr_posts', 'nitf_posts', 'nitf_trails', 'rotr_days'] as const
+  const collections = [
+    'jr_posts', 'nitf_posts', 'nitf_trails', 'rotr_days',
+    'nitf_trips', 'nitf_destinations', 'nitf_places',
+  ] as const
 
   for (const slug of collections) {
     it(`${slug}: admin user sees drafts, anon user sees published only`, async () => {
       const isRotrDays = slug === 'rotr_days'
+      const isNitfDestinations = slug === 'nitf_destinations'
       // Create draft
       const draft = await payload.create({
         collection: slug,
         data: {
-          title: `Draft ${slug} admin test`,
+          ...(isNitfDestinations
+            ? { name: `Draft ${slug} admin test` }
+            : { title: `Draft ${slug} admin test` }),
           ...(isRotrDays ? {} : { slug: `draft-admin-${slug}-${Date.now()}` }),
           status: 'draft',
-          ...(isRotrDays ? {} : { body: 'draft content' }),
+          ...(isRotrDays || isNitfDestinations ? {} : { body: 'draft content' }),
           ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
         },
       })
@@ -49,10 +55,12 @@ describe('Access control — authenticated admin sees drafts', () => {
       const published = await payload.create({
         collection: slug,
         data: {
-          title: `Published ${slug} admin test`,
+          ...(isNitfDestinations
+            ? { name: `Published ${slug} admin test` }
+            : { title: `Published ${slug} admin test` }),
           ...(isRotrDays ? {} : { slug: `published-admin-${slug}-${Date.now()}` }),
           status: 'published',
-          ...(isRotrDays ? {} : { body: 'published content' }),
+          ...(isRotrDays || isNitfDestinations ? {} : { body: 'published content' }),
           ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
         },
       })
@@ -102,16 +110,22 @@ describe('API — basic queries', () => {
 
 describe('Access control — unauthenticated reads only see published', () => {
   // Collections that use the draft/published access pattern
-  const publishedCollections = ['jr_posts', 'nitf_posts', 'rotr_days'] as const
+  const publishedCollections = [
+    'jr_posts', 'nitf_posts', 'rotr_days',
+    'nitf_trips', 'nitf_destinations', 'nitf_places',
+  ] as const
 
   for (const slug of publishedCollections) {
     it(`${slug}: unauthenticated read returns only published docs`, async () => {
       const isRotrDays = slug === 'rotr_days'
+      const isNitfDestinations = slug === 'nitf_destinations'
       // Create a draft doc
       const draft = await payload.create({
         collection: slug,
         data: {
-          title: `Draft ${slug} test`,
+          ...(isNitfDestinations
+            ? { name: `Draft ${slug} test` }
+            : { title: `Draft ${slug} test` }),
           ...(isRotrDays ? {} : { slug: `draft-${slug}-${Date.now()}` }),
           status: 'draft',
           ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
@@ -123,7 +137,9 @@ describe('Access control — unauthenticated reads only see published', () => {
       const published = await payload.create({
         collection: slug,
         data: {
-          title: `Published ${slug} test`,
+          ...(isNitfDestinations
+            ? { name: `Published ${slug} test` }
+            : { title: `Published ${slug} test` }),
           ...(isRotrDays ? {} : { slug: `published-${slug}-${Date.now()}` }),
           status: 'published',
           ...(slug === 'nitf_posts' ? { type: 'article' } : {}),
