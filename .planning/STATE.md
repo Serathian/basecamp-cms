@@ -3,33 +3,33 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-18T11:31:39.841Z"
+last_updated: "2026-03-18T11:34:04.074Z"
 progress:
   total_phases: 7
   completed_phases: 5
   total_plans: 32
-  completed_plans: 29
+  completed_plans: 30
 ---
 
 # Project State: Basecamp CMS Refinement
 
-**Last updated:** 2026-03-17
-**Project phase:** Phase 6 - IN PROGRESS
+**Last updated:** 2026-03-18
+**Project phase:** Phase 7 - IN PROGRESS
 
 ## Project Reference
 
 **Core Value**: The CMS must align perfectly with how content is authored in Obsidian — every collection, field, and relationship should reduce friction between vault structure and frontend needs, never add ceremony.
 
-**Current Focus**: Phase 6 - jr_technologies collection
+**Current Focus**: Phase 7 - Production Refinement
 
 ## Current Position
 
 **Milestone**: v1 Refinement
-**Phase**: 6 - Jake Reddy Tech Stack Collection - COMPLETE
-**Plan**: 4 of 4 plans complete (06-00 Wave 0 scaffold, 06-01 JrTechnologies collection, 06-02 Database migration, 06-03 Integration tests + type regeneration)
-**Status**: Phase 6 complete — 14 integration tests passing, JrTechnology in payload-types.ts, tsc clean, full 85-test suite green
+**Phase**: 7 - Production Refinement - IN PROGRESS
+**Plan**: 2 of 2 plans complete (07-01 npm run test script + vitest config, 07-02 CI test gate in docker-publish.yml)
+**Status**: Phase 7 Plan 02 complete — CI test job with postgis/postgis:16-3.5 gates Docker builds; build-and-push has needs: test
 
-**Progress**: [█████████░] 93% (27 of 29 plans complete)
+**Progress**: [█████████░] 94% (30 of 32 plans complete)
 
 **Blockers**: None
 
@@ -111,6 +111,8 @@ progress:
 | 2026-03-17 | jr_technologies slug cast as any in JrPosts.ts tech_stack relationTo until types regenerated in 06-03 | New collection slug not yet in CollectionSlug union; same temporary cast pattern as Phase 4 Plan 04-01 | Phase 6 Plan 06-01 |
 | 2026-03-17 | No jr_technologies_rels table — icon field is type: upload (single), stored as icon_id INTEGER directly on jr_technologies main table | Per Phase 5 Plan 05-04 discovery: single (non-hasMany) relationship fields are direct FK columns, not _rels tables | Phase 6 Plan 06-02 |
 | 2026-03-17 | MigrateUpArgs/MigrateDownArgs require { db, payload } as any in tests — payload + req required by type but migration logic only uses db; cast avoids constructing fake req | Same pattern used by Phase 5 nitf-trip-structure tests (lines 366/377) | Phase 6 Plan 06-03 |
+| 2026-03-18 | Use postgis/postgis:16-3.5 service container (not plain postgres) in CI test job | Production uses PostGIS; CI service must match to run spatial integration tests | Phase 7 Plan 07-02 |
+| 2026-03-18 | build-and-push gains needs: test — PAYLOAD_SECRET and DATABASE_URL set on test job so Payload initializes during CI | Broken code cannot reach GHCR; every push to master runs the full integration suite first | Phase 7 Plan 07-02 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -134,6 +136,7 @@ progress:
 | Phase 06-jake-reddy-tech-stack-collection P02 | 2 | 2 tasks | 2 files |
 | Phase 06-jake-reddy-tech-stack-collection P03 | 5min | 2 tasks | 2 files |
 | Phase 07-production-refinement P01 | 5 | 1 tasks | 1 files |
+| Phase 07-production-refinement P02 | 3 | 1 tasks | 1 files |
 
 ### Critical Information
 
@@ -163,8 +166,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 06-03 (integration tests + type regeneration: 14 tests pass, JrTechnology in payload-types.ts, tsc clean — 2 files, 2 tasks) - 2026-03-17
-**Next action**: Phase 7 (if planned) or project complete
+**Last action**: Completed Plan 07-02 (CI test gate: test job with postgis/postgis:16-3.5 added to docker-publish.yml, build-and-push gated by needs: test — 1 file, 1 task) - 2026-03-18
+**Next action**: Phase 7 complete (all 2 plans done)
 
 **Context for next session**:
 
@@ -215,6 +218,11 @@ progress:
 - **Phase 6 Plan 06-03 COMPLETE**: 14 integration tests replacing all it.todo() stubs; payload-types.ts regenerated with JrTechnology; tsc --noEmit clean; full 85-test suite passes (7 files)
 - Plan 06-03 commits: 493f633 (integration tests), a48fd7f (type regeneration + migration call signature fix)
 - **PHASE 6 COMPLETE**: jr_technologies collection operational, jr_posts.tech_stack is a structured hasMany relationship, all requirements (JR-01, JR-02, JR-03, JR-04, TEST-04) covered by passing tests
+- **Phase 7 Plan 07-01 COMPLETE**: npm run test script added, vitest config updated to run full integration suite (1 file, 1 task)
+- Plan 07-01 commits: (see 07-01-SUMMARY.md)
+- **Phase 7 Plan 07-02 COMPLETE**: test job added to docker-publish.yml with postgis/postgis:16-3.5 service; build-and-push gated by needs: test — broken code cannot reach GHCR
+- Plan 07-02 commits: 28174bc (feat: test job + needs: test gate)
+- **PHASE 7 COMPLETE**: All 2 production refinement plans executed; CI now gates deployments behind full integration suite
 
 ## Open Questions
 
