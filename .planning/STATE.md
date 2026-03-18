@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-18T11:34:04.074Z"
+last_updated: "2026-03-18T11:37:55.758Z"
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 32
-  completed_plans: 30
+  completed_plans: 31
 ---
 
 # Project State: Basecamp CMS Refinement
@@ -26,10 +26,10 @@ progress:
 
 **Milestone**: v1 Refinement
 **Phase**: 7 - Production Refinement - IN PROGRESS
-**Plan**: 2 of 2 plans complete (07-01 npm run test script + vitest config, 07-02 CI test gate in docker-publish.yml)
-**Status**: Phase 7 Plan 02 complete — CI test job with postgis/postgis:16-3.5 gates Docker builds; build-and-push has needs: test
+**Plan**: 3 of 3 plans complete (07-01 npm run test script + vitest config, 07-02 CI test gate in docker-publish.yml, 07-03 migration entrypoint + Watchtower GHCR auth)
+**Status**: Phase 7 Plan 03 complete (checkpoint: awaiting human verification of migration logs + Watchtower GHCR auth on Droplet)
 
-**Progress**: [█████████░] 94% (30 of 32 plans complete)
+**Progress**: [██████████] 97% (31 of 32 plans complete)
 
 **Blockers**: None
 
@@ -113,6 +113,8 @@ progress:
 | 2026-03-17 | MigrateUpArgs/MigrateDownArgs require { db, payload } as any in tests — payload + req required by type but migration logic only uses db; cast avoids constructing fake req | Same pattern used by Phase 5 nitf-trip-structure tests (lines 366/377) | Phase 6 Plan 06-03 |
 | 2026-03-18 | Use postgis/postgis:16-3.5 service container (not plain postgres) in CI test job | Production uses PostGIS; CI service must match to run spatial integration tests | Phase 7 Plan 07-02 |
 | 2026-03-18 | build-and-push gains needs: test — PAYLOAD_SECRET and DATABASE_URL set on test job so Payload initializes during CI | Broken code cannot reach GHCR; every push to master runs the full integration suite first | Phase 7 Plan 07-02 |
+| 2026-03-18 | Use exec env HOSTNAME=0.0.0.0 node server.js in docker-entrypoint.sh so node becomes PID 1 and receives SIGTERM directly | exec replaces shell with node; without exec the shell is PID 1 and SIGTERM handling is broken | Phase 7 Plan 07-03 |
+| 2026-03-18 | Copy src/migrations/ explicitly into Dockerfile runner stage — Next.js standalone output trace may exclude migration files | Migration files must be present at runtime for npm run payload:migrate to succeed | Phase 7 Plan 07-03 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -137,6 +139,7 @@ progress:
 | Phase 06-jake-reddy-tech-stack-collection P03 | 5min | 2 tasks | 2 files |
 | Phase 07-production-refinement P01 | 5 | 1 tasks | 1 files |
 | Phase 07-production-refinement P02 | 3 | 1 tasks | 1 files |
+| Phase 07-production-refinement P03 | 3 | 1 tasks | 2 files |
 
 ### Critical Information
 
@@ -166,8 +169,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 07-02 (CI test gate: test job with postgis/postgis:16-3.5 added to docker-publish.yml, build-and-push gated by needs: test — 1 file, 1 task) - 2026-03-18
-**Next action**: Phase 7 complete (all 2 plans done)
+**Last action**: Completed Plan 07-03 Task 1 (docker-entrypoint.sh + Dockerfile CMD update — 2 files, 1 task); awaiting human checkpoint for migration log verification + Watchtower GHCR auth - 2026-03-18
+**Next action**: Human verifies Task 2 checkpoint (migration logs visible + Watchtower authenticated on Droplet)
 
 **Context for next session**:
 
@@ -222,7 +225,8 @@ progress:
 - Plan 07-01 commits: (see 07-01-SUMMARY.md)
 - **Phase 7 Plan 07-02 COMPLETE**: test job added to docker-publish.yml with postgis/postgis:16-3.5 service; build-and-push gated by needs: test — broken code cannot reach GHCR
 - Plan 07-02 commits: 28174bc (feat: test job + needs: test gate)
-- **PHASE 7 COMPLETE**: All 2 production refinement plans executed; CI now gates deployments behind full integration suite
+- **Phase 7 Plan 07-03 IN PROGRESS (checkpoint)**: docker-entrypoint.sh created (set -e + npm run payload:migrate + exec node server.js); Dockerfile updated with src/migrations COPY, entrypoint COPY+chmod, new CMD; awaiting human verification of migration logs + Watchtower GHCR auth
+- Plan 07-03 commits: eed97a7 (feat: docker-entrypoint.sh + Dockerfile CMD)
 
 ## Open Questions
 
