@@ -204,7 +204,13 @@ Plans:
 4. CI/CD pipeline builds and pushes Docker image to GHCR
 5. Production deployment completes without errors at cms.jake-reddy.com
 
-**Plans**: TBD
+**Plans**: 3 plans in 2 waves
+
+Plans:
+
+- [ ] 07-01-PLAN.md — Extend access control tests (nitf_trips, nitf_destinations, nitf_places)
+- [ ] 07-02-PLAN.md — Add CI test job to docker-publish.yml (gates build on test success)
+- [ ] 07-03-PLAN.md — Production deployment: migration entrypoint + Watchtower GHCR auth
 
 ---
 
