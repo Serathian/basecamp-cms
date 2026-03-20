@@ -2,34 +2,34 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-18T11:37:55.758Z"
+status: complete
+last_updated: "2026-03-20T11:50:00.000Z"
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 32
-  completed_plans: 31
+  completed_plans: 32
 ---
 
 # Project State: Basecamp CMS Refinement
 
-**Last updated:** 2026-03-18
-**Project phase:** Phase 7 - IN PROGRESS
+**Last updated:** 2026-03-20
+**Project phase:** Phase 7 - COMPLETE
 
 ## Project Reference
 
 **Core Value**: The CMS must align perfectly with how content is authored in Obsidian — every collection, field, and relationship should reduce friction between vault structure and frontend needs, never add ceremony.
 
-**Current Focus**: Phase 7 - Production Refinement
+**Current Focus**: ALL PHASES COMPLETE — v1 milestone achieved
 
 ## Current Position
 
-**Milestone**: v1 Refinement
-**Phase**: 7 - Production Refinement - IN PROGRESS
+**Milestone**: v1 Refinement - COMPLETE
+**Phase**: 7 - Production Refinement - COMPLETE
 **Plan**: 3 of 3 plans complete (07-01 npm run test script + vitest config, 07-02 CI test gate in docker-publish.yml, 07-03 migration entrypoint + Watchtower GHCR auth)
-**Status**: Phase 7 Plan 03 complete (checkpoint: awaiting human verification of migration logs + Watchtower GHCR auth on Droplet)
+**Status**: ALL COMPLETE — migration logs verified, Watchtower GHCR auth configured on Droplet, zero-touch deploys operational
 
-**Progress**: [██████████] 97% (31 of 32 plans complete)
+**Progress**: [██████████] 100% (32 of 32 plans complete)
 
 **Blockers**: None
 
@@ -115,6 +115,8 @@ progress:
 | 2026-03-18 | build-and-push gains needs: test — PAYLOAD_SECRET and DATABASE_URL set on test job so Payload initializes during CI | Broken code cannot reach GHCR; every push to master runs the full integration suite first | Phase 7 Plan 07-02 |
 | 2026-03-18 | Use exec env HOSTNAME=0.0.0.0 node server.js in docker-entrypoint.sh so node becomes PID 1 and receives SIGTERM directly | exec replaces shell with node; without exec the shell is PID 1 and SIGTERM handling is broken | Phase 7 Plan 07-03 |
 | 2026-03-18 | Copy src/migrations/ explicitly into Dockerfile runner stage — Next.js standalone output trace may exclude migration files | Migration files must be present at runtime for npm run payload:migrate to succeed | Phase 7 Plan 07-03 |
+| 2026-03-20 | Call node_modules/.bin/payload migrate directly in docker-entrypoint.sh — cross-env is a devDependency absent in production image; inline NODE_OPTIONS works on Linux without cross-env | npm run payload:migrate depends on cross-env which is not installed in the production runner | Phase 7 Plan 07-03 |
+| 2026-03-20 | Copy full src/ and node_modules from deps stage into Docker runner — payload CLI needs payload.config.ts and its binary; Next.js standalone output trace excludes both | payload CLI cannot resolve config or execute without full source and binary present | Phase 7 Plan 07-03 |
 | Phase 03-site-specific-media-tags P00 | 5 | 1 tasks | 1 files |
 | Phase 03-site-specific-media-tags P01 | 15 | 2 tasks | 14 files |
 | Phase 03-site-specific-media-tags P02 | 1min | 1 tasks | 0 files |
@@ -140,6 +142,7 @@ progress:
 | Phase 07-production-refinement P01 | 5 | 1 tasks | 1 files |
 | Phase 07-production-refinement P02 | 3 | 1 tasks | 1 files |
 | Phase 07-production-refinement P03 | 3 | 1 tasks | 2 files |
+| Phase 07-production-refinement P03 | 706 | 2 tasks | 2 files |
 
 ### Critical Information
 
@@ -169,8 +172,8 @@ progress:
 
 ### Session Continuity
 
-**Last action**: Completed Plan 07-03 Task 1 (docker-entrypoint.sh + Dockerfile CMD update — 2 files, 1 task); awaiting human checkpoint for migration log verification + Watchtower GHCR auth - 2026-03-18
-**Next action**: Human verifies Task 2 checkpoint (migration logs visible + Watchtower authenticated on Droplet)
+**Last action**: Completed Plan 07-03 Task 2 (human checkpoint approved — migration logs confirmed, Watchtower GHCR auth configured on Droplet); Phase 7 fully complete - 2026-03-20
+**Next action**: ALL PLANS COMPLETE — v1 milestone achieved
 
 **Context for next session**:
 
@@ -225,8 +228,10 @@ progress:
 - Plan 07-01 commits: (see 07-01-SUMMARY.md)
 - **Phase 7 Plan 07-02 COMPLETE**: test job added to docker-publish.yml with postgis/postgis:16-3.5 service; build-and-push gated by needs: test — broken code cannot reach GHCR
 - Plan 07-02 commits: 28174bc (feat: test job + needs: test gate)
-- **Phase 7 Plan 07-03 IN PROGRESS (checkpoint)**: docker-entrypoint.sh created (set -e + npm run payload:migrate + exec node server.js); Dockerfile updated with src/migrations COPY, entrypoint COPY+chmod, new CMD; awaiting human verification of migration logs + Watchtower GHCR auth
-- Plan 07-03 commits: eed97a7 (feat: docker-entrypoint.sh + Dockerfile CMD)
+- **Phase 7 Plan 07-03 COMPLETE**: docker-entrypoint.sh (set -e + node_modules/.bin/payload migrate + exec node server.js); Dockerfile copies full src/, tsconfig.json, node_modules for payload CLI resolution; migration logs verified; Watchtower GHCR auth configured on Droplet
+- Plan 07-03 commits: eed97a7 (feat: entrypoint), 38c643f/9f58f73/ceec89d (fix: cross-env), 5cb1a96/79a1428 (fix: payload bin), 2ffc032 (fix: full node_modules), b73053f/c692fa9 (fix: tsconfig + src/)
+- **PHASE 7 COMPLETE**: All 3 plans executed — CI test gate, migration entrypoint, Watchtower auth — zero-touch deploy pipeline fully operational
+- **ALL 7 PHASES COMPLETE**: v1 milestone achieved — 32 of 32 plans executed
 
 ## Open Questions
 

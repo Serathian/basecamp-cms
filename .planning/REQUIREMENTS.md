@@ -151,7 +151,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GEO-04      | 2                   | Complete |
 | GEO-05      | 2                   | Complete |
 | GEO-06      | 2                   | Complete |
-| TEST-01     | 1, 7                | Pending  |
+| TEST-01     | 1, 7                | Complete |
 | TEST-02     | 3, 4, 5             | Complete |
 | TEST-03     | 2                   | Complete |
 | TEST-04     | 1, 2, 3, 4, 5, 6, 7 | Complete |
