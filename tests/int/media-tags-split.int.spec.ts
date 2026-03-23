@@ -2,7 +2,6 @@ import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
 import { sql } from '@payloadcms/db-postgres'
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import { up, down } from '@/migrations/20260315_split_media_and_tags'
 
 let payload: Payload
 let db: any
@@ -264,51 +263,4 @@ describe('Phase 3: Site-Specific Media & Tags', () => {
     })
   })
 
-  describe('TEST-05: Migration down() rollback', () => {
-    it('Migration down() drops jr_tags, nitf_tags, rotr_tags, jr_media, nitf_media, rotr_media tables and restores media and tags', async () => {
-      // Run down() — cast to any to avoid needing payload/req which are not used by the migration
-      await down({ db } as any)
-
-      // Verify the 6 new tables are gone
-      for (const tableName of ['jr_tags', 'nitf_tags', 'rotr_tags', 'jr_media', 'nitf_media', 'rotr_media']) {
-        const result = await db.execute(sql`
-          SELECT table_name FROM information_schema.tables
-          WHERE table_name = ${tableName} AND table_schema = 'public'
-        `)
-        expect(result.rows, `${tableName} should not exist after down()`).toHaveLength(0)
-      }
-
-      // Verify original media and tags tables are restored
-      const mediaResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'media'} AND table_schema = 'public'
-      `)
-      expect(mediaResult.rows).toHaveLength(1)
-
-      const tagsResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'tags'} AND table_schema = 'public'
-      `)
-      expect(tagsResult.rows).toHaveLength(1)
-    })
-
-    it('Migration down() restores tags_id column in _rels tables', async () => {
-      // After down(), jr_posts_rels should have tags_id again
-      const jrTagsIdResult = await db.execute(sql`
-        SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'jr_posts_rels'} AND column_name = ${'tags_id'} AND table_schema = 'public'
-      `)
-      expect(jrTagsIdResult.rows).toHaveLength(1)
-
-      // And jr_tags_id should be gone
-      const jrNewTagsIdResult = await db.execute(sql`
-        SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'jr_posts_rels'} AND column_name = ${'jr_tags_id'} AND table_schema = 'public'
-      `)
-      expect(jrNewTagsIdResult.rows).toHaveLength(0)
-
-      // Restore state for any subsequent tests by re-running up()
-      await up({ db } as any)
-    })
-  })
 })

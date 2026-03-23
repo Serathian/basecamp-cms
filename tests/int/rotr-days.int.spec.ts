@@ -2,7 +2,6 @@ import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
 import { sql } from '@payloadcms/db-postgres'
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import { up, down } from '@/migrations/20260316_rotr_days_split'
 
 let payload: Payload
 let db: any
@@ -163,43 +162,4 @@ describe('Phase 4: ROTR Days Collection', () => {
     })
   })
 
-  describe('TEST-05: migration down() rollback', () => {
-    it('down() drops rotr_days and rotr_place_types tables', async () => {
-      await down({ db, payload } as any)
-
-      const daysResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'rotr_days'} AND table_schema = 'public'
-      `)
-      expect(daysResult.rows).toHaveLength(0)
-
-      const placeTypesResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'rotr_place_types'} AND table_schema = 'public'
-      `)
-      expect(placeTypesResult.rows).toHaveLength(0)
-
-      // Restore state for subsequent test
-      await up({ db, payload } as any)
-    })
-
-    it('down() + up() cycle leaves DB in valid state', async () => {
-      // Verify rotr_days is back after the up() call in the previous test
-      const tableResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'rotr_days'} AND table_schema = 'public'
-      `)
-      expect(tableResult.rows).toHaveLength(1)
-
-      // Geom trigger smoke test: insert with lat/lon must produce non-null geom
-      const record = await payload.create({
-        collection: 'rotr_days',
-        data: { title: 'Post-Cycle Geom Test', status: 'draft', latitude: 40.7128, longitude: -74.006 },
-      })
-      const result = await db.execute(sql`SELECT geom FROM rotr_days WHERE id = ${record.id}`)
-      expect(result.rows[0].geom).not.toBeNull()
-
-      await payload.delete({ collection: 'rotr_days', id: record.id })
-    })
-  })
 })

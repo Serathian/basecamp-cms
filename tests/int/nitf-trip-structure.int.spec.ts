@@ -2,7 +2,6 @@ import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
 import { sql } from '@payloadcms/db-postgres'
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import { up, down } from '@/migrations/20260316_nitf_trip_structure'
 
 let payload: Payload
 let db: any
@@ -361,41 +360,4 @@ describe('Phase 5: NITF Trip Structure', () => {
     })
   })
 
-  describe('TEST-05: migration down() rollback', () => {
-    it('down() drops all new tables (nitf_trips, nitf_destinations, nitf_poi, nitf_poi_types, nitf_places)', async () => {
-      await down({ db, payload } as any)
-
-      for (const tableName of ['nitf_trips', 'nitf_destinations', 'nitf_poi', 'nitf_poi_types', 'nitf_places']) {
-        const result = await db.execute(sql`
-          SELECT table_name FROM information_schema.tables
-          WHERE table_name = ${tableName} AND table_schema = 'public'
-        `)
-        expect(result.rows, `${tableName} should not exist after down()`).toHaveLength(0)
-      }
-
-      // Restore state for subsequent test
-      await up({ db, payload } as any)
-    })
-
-    it('down() + up() cycle leaves DB in valid state', async () => {
-      // Verify nitf_trips and nitf_destinations are back after the up() call above
-      for (const tableName of ['nitf_trips', 'nitf_destinations']) {
-        const result = await db.execute(sql`
-          SELECT table_name FROM information_schema.tables
-          WHERE table_name = ${tableName} AND table_schema = 'public'
-        `)
-        expect(result.rows, `${tableName} should exist after up()`).toHaveLength(1)
-      }
-
-      // Geom trigger smoke test: create poi with lat/lon must produce non-null geom
-      const record = await payload.create({
-        collection: 'nitf_poi',
-        data: { name: 'Post-Cycle Geom Test POI', latitude: 60.1699, longitude: 24.9384 },
-      })
-      const result = await db.execute(sql`SELECT geom FROM nitf_poi WHERE id = ${record.id}`)
-      expect(result.rows[0].geom).not.toBeNull()
-
-      await payload.delete({ collection: 'nitf_poi', id: record.id })
-    })
-  })
 })

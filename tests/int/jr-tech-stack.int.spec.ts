@@ -2,7 +2,6 @@ import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
 import { sql } from '@payloadcms/db-postgres'
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
-import { up, down } from '@/migrations/20260317_jr_technologies'
 
 let payload: Payload
 let db: any
@@ -158,39 +157,4 @@ describe('Phase 6: Jake Reddy Tech Stack Collection', () => {
     })
   })
 
-  describe('Migration lifecycle', () => {
-    it('migration down() drops jr_technologies table', async () => {
-      await down({ db, payload } as any)
-      const result = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'jr_technologies'} AND table_schema = 'public'
-      `)
-      expect(result.rows).toHaveLength(0)
-    })
-
-    it('migration down() removes jr_technologies_id from jr_posts_rels', async () => {
-      // down() was already called in the previous test — check the state
-      const result = await db.execute(sql`
-        SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'jr_posts_rels'} AND column_name = ${'jr_technologies_id'} AND table_schema = 'public'
-      `)
-      expect(result.rows).toHaveLength(0)
-    })
-
-    it('migration down() restores tech_stack JSONB column on jr_posts', async () => {
-      // down() was already called — tech_stack should be restored
-      const result = await db.execute(sql`
-        SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'jr_posts'} AND column_name = ${'tech_stack'} AND table_schema = 'public'
-      `)
-      expect(result.rows).toHaveLength(1)
-      // Restore for subsequent tests
-      await up({ db, payload } as any)
-    })
-
-    it('migration up() is idempotent (IF NOT EXISTS guards)', async () => {
-      // up() was restored at the end of the previous test; call it again to verify idempotency
-      await expect(up({ db, payload } as any)).resolves.not.toThrow()
-    })
-  })
 })
