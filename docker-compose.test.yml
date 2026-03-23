@@ -1,0 +1,27 @@
+services:
+  app:
+    image: basecamp-cms-local
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgresql://payload:payload@postgres:5432/payload
+      PAYLOAD_SECRET: test-secret
+      NODE_ENV: production
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgis/postgis:16-3.5
+    platform: linux/amd64
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: payload
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U payload -d payload']
+      interval: 5s
+      timeout: 5s
+      retries: 10
