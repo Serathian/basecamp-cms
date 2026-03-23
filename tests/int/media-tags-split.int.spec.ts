@@ -133,16 +133,16 @@ describe('Phase 3: Site-Specific Media & Tags', () => {
       expect(hasOldTagsId.rows).toHaveLength(0)
     })
 
-    it('rotr_posts_rels has rotr_tags_id column (not tags_id)', async () => {
+    it('rotr_days_rels has rotr_tags_id column (not tags_id)', async () => {
       const hasRotrTagsId = await db.execute(sql`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'rotr_posts_rels'} AND column_name = ${'rotr_tags_id'} AND table_schema = 'public'
+        WHERE table_name = ${'rotr_days_rels'} AND column_name = ${'rotr_tags_id'} AND table_schema = 'public'
       `)
       expect(hasRotrTagsId.rows).toHaveLength(1)
 
       const hasOldTagsId = await db.execute(sql`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'rotr_posts_rels'} AND column_name = ${'tags_id'} AND table_schema = 'public'
+        WHERE table_name = ${'rotr_days_rels'} AND column_name = ${'tags_id'} AND table_schema = 'public'
       `)
       expect(hasOldTagsId.rows).toHaveLength(0)
     })

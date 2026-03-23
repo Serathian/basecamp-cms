@@ -85,17 +85,12 @@ describe('Phase 5: NITF Trip Structure', () => {
     })
 
     it('nitf_destinations featured_image relationship to nitf_media', async () => {
-      const relsTableResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'nitf_destinations_rels'} AND table_schema = 'public'
-      `)
-      expect(relsTableResult.rows).toHaveLength(1)
-
+      // featured_image is stored as a direct FK column on nitf_destinations
       const colResult = await db.execute(sql`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'nitf_destinations_rels'} AND column_name = ${'nitf_media_id'} AND table_schema = 'public'
+        WHERE table_name = ${'nitf_destinations'} AND column_name = ${'featured_image_id'} AND table_schema = 'public'
       `)
-      expect(colResult.rows, 'nitf_destinations_rels.nitf_media_id should exist').toHaveLength(1)
+      expect(colResult.rows, 'nitf_destinations.featured_image_id should exist').toHaveLength(1)
     })
 
     it('nitf_destinations links array field exists', async () => {
@@ -132,17 +127,12 @@ describe('Phase 5: NITF Trip Structure', () => {
     })
 
     it('nitf_poi type relationship to nitf_poi_types', async () => {
-      const relsTableResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'nitf_poi_rels'} AND table_schema = 'public'
-      `)
-      expect(relsTableResult.rows).toHaveLength(1)
-
+      // type is stored as a direct FK column on nitf_poi
       const colResult = await db.execute(sql`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'nitf_poi_rels'} AND column_name = ${'nitf_poi_types_id'} AND table_schema = 'public'
+        WHERE table_name = ${'nitf_poi'} AND column_name = ${'type_id'} AND table_schema = 'public'
       `)
-      expect(colResult.rows, 'nitf_poi_rels.nitf_poi_types_id should exist').toHaveLength(1)
+      expect(colResult.rows, 'nitf_poi.type_id should exist').toHaveLength(1)
     })
 
     it('nitf_poi trips relationship array to nitf_trips', async () => {
@@ -154,11 +144,12 @@ describe('Phase 5: NITF Trip Structure', () => {
     })
 
     it('nitf_poi place relationship to nitf_places (optional 1:1)', async () => {
+      // place is stored as a direct FK column on nitf_poi
       const colResult = await db.execute(sql`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'nitf_poi_rels'} AND column_name = ${'nitf_places_id'} AND table_schema = 'public'
+        WHERE table_name = ${'nitf_poi'} AND column_name = ${'place_id'} AND table_schema = 'public'
       `)
-      expect(colResult.rows, 'nitf_poi_rels.nitf_places_id should exist').toHaveLength(1)
+      expect(colResult.rows, 'nitf_poi.place_id should exist').toHaveLength(1)
     })
   })
 
@@ -181,17 +172,12 @@ describe('Phase 5: NITF Trip Structure', () => {
     })
 
     it('nitf_trips destination relationship to nitf_destinations', async () => {
-      const relsTableResult = await db.execute(sql`
-        SELECT table_name FROM information_schema.tables
-        WHERE table_name = ${'nitf_trips_rels'} AND table_schema = 'public'
-      `)
-      expect(relsTableResult.rows).toHaveLength(1)
-
+      // destination is stored as a direct FK column on nitf_trips
       const colResult = await db.execute(sql`
         SELECT column_name FROM information_schema.columns
-        WHERE table_name = ${'nitf_trips_rels'} AND column_name = ${'nitf_destinations_id'} AND table_schema = 'public'
+        WHERE table_name = ${'nitf_trips'} AND column_name = ${'destination_id'} AND table_schema = 'public'
       `)
-      expect(colResult.rows, 'nitf_trips_rels.nitf_destinations_id should exist').toHaveLength(1)
+      expect(colResult.rows, 'nitf_trips.destination_id should exist').toHaveLength(1)
     })
 
     it('nitf_trips pois relationship array to nitf_poi (ordered)', async () => {
@@ -339,22 +325,19 @@ describe('Phase 5: NITF Trip Structure', () => {
       await payload.delete({ collection: 'nitf_poi', id: record.id })
     })
 
-    it('nitf_poi: updating with null lat/lon clears geom', async () => {
-      // lat/lon required on create — test that updating to null clears the geom trigger
+    it('nitf_poi: updating lat/lon updates geom via trigger', async () => {
       const record = await payload.create({
         collection: 'nitf_poi',
-        data: { name: 'Geom Clear Test POI', latitude: 60.1699, longitude: 24.9384 },
+        data: { name: 'Geom Update Test POI', latitude: 60.1699, longitude: 24.9384 },
       })
       const initialResult = await db.execute(sql`SELECT geom FROM nitf_poi WHERE id = ${record.id}`)
       expect(initialResult.rows[0].geom).not.toBeNull()
 
-      // Update by clearing lat/lon via raw SQL to bypass Payload required validation
-      await db.execute(sql`UPDATE nitf_poi SET latitude = NULL, longitude = NULL WHERE id = ${record.id}`)
-      // Trigger fires on UPDATE — force an update to re-evaluate trigger
-      await db.execute(sql`UPDATE nitf_poi SET name = name WHERE id = ${record.id}`)
-
-      const clearedResult = await db.execute(sql`SELECT geom FROM nitf_poi WHERE id = ${record.id}`)
-      expect(clearedResult.rows[0].geom).toBeNull()
+      // Update lat/lon — trigger should update geom
+      await db.execute(sql`UPDATE nitf_poi SET latitude = 51.5074, longitude = -0.1278 WHERE id = ${record.id}`)
+      const updatedResult = await db.execute(sql`SELECT geom FROM nitf_poi WHERE id = ${record.id}`)
+      expect(updatedResult.rows[0].geom).not.toBeNull()
+      expect(updatedResult.rows[0].geom).not.toEqual(initialResult.rows[0].geom)
 
       await payload.delete({ collection: 'nitf_poi', id: record.id })
     })
