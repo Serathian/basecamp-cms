@@ -1,5 +1,4 @@
 import type { CollectionConfig, CollectionAfterChangeHook } from 'payload'
-import { sql } from '@payloadcms/db-postgres'
 import published from '../users/access/published'
 import admin from '../users/access/admin'
 
@@ -120,20 +119,6 @@ export const NitfTrails: CollectionConfig = {
   hooks: {
     afterChange: [
       computeGpxStats,
-      async ({ doc, req }: any) => {
-        if (doc.latitude_start != null && doc.longitude_start != null) {
-          const txID = req.transactionID
-          const db = txID
-            ? ((req.payload.db as any).sessions[await txID]?.db ?? (req.payload.db as any).drizzle)
-            : (req.payload.db as any).drizzle
-          await db.execute(sql`
-            UPDATE nitf_trails
-            SET geom = ST_SetSRID(ST_MakePoint(${doc.longitude_start}, ${doc.latitude_start}), 4326)
-            WHERE id = ${doc.id}
-          `)
-        }
-        return doc
-      },
     ],
   },
   fields: [
