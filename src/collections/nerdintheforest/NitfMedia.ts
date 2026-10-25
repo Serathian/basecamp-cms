@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 import admin from '../users/access/admin'
 
 export const NitfMedia: CollectionConfig = {
@@ -13,6 +13,13 @@ export const NitfMedia: CollectionConfig = {
     update: admin,
     delete: admin,
   },
-  fields: [{ name: 'alt', type: 'text', required: true }],
+  fields: [
+    {
+      name: 'alt',
+      type: 'text',
+      required: true,
+    },
+  ],
   upload: true,
+  timestamps: true,
 }

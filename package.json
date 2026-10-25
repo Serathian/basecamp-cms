@@ -13,6 +13,7 @@
     "lint": "NODE_OPTIONS=--no-deprecation next lint",
     "payload": "NODE_OPTIONS=--no-deprecation payload",
     "payload:migrate": "NODE_OPTIONS=--no-deprecation payload migrate",
+    "seed": "NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" tsx src/seed.ts",
     "start": "NODE_OPTIONS=--no-deprecation next start",
     "test": "npm run test:int",
     "test:e2e": "NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",

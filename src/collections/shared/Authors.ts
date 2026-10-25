@@ -15,7 +15,7 @@ export const Authors: CollectionConfig = {
     { name: 'name', type: 'text', required: true },
     { name: 'slug', type: 'text', required: true, unique: true },
     { name: 'bio', type: 'textarea' },
-    { name: 'avatar', type: 'upload', relationTo: ['jr_media', 'nitf_media', 'rotr_media'] as any },
+    { name: 'avatar', type: 'upload', relationTo: 'jr_media' },
     {
       name: 'sites',
       type: 'select',

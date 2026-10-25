@@ -15,26 +15,17 @@ import { Authors } from './collections/shared/Authors'
 
 // jake-reddy.com
 import { JrMedia } from './collections/jake-reddy/JrMedia'
-import { JrTags } from './collections/jake-reddy/JrTags'
-import { JrTechnologies } from './collections/jake-reddy/JrTechnologies'
 import { JrPosts } from './collections/jake-reddy/JrPosts'
+import { JrProjects } from './collections/jake-reddy/JrProjects'
 
 // nerdintheforest.com
 import { NitfMedia } from './collections/nerdintheforest/NitfMedia'
-import { NitfTags } from './collections/nerdintheforest/NitfTags'
-import { NitfPosts } from './collections/nerdintheforest/NitfPosts'
-import { NitfTrails } from './collections/nerdintheforest/NitfTrails'
-import { NitfTrips } from './collections/nerdintheforest/NitfTrips'
-import { NitfDestinations } from './collections/nerdintheforest/NitfDestinations'
-import { NitfPoi } from './collections/nerdintheforest/NitfPoi'
-import { NitfPoiTypes } from './collections/nerdintheforest/NitfPoiTypes'
-import { NitfPlaces } from './collections/nerdintheforest/NitfPlaces'
-
-// reddyontheroad.com
-import { RotrMedia } from './collections/reddyontheroad/RotrMedia'
-import { RotrTags } from './collections/reddyontheroad/RotrTags'
-import { RotrDays } from './collections/reddyontheroad/RotrDays'
-import { RotrPlaceTypes } from './collections/reddyontheroad/RotrPlaceTypes'
+import { NitfAreas } from './collections/nerdintheforest/NitfAreas'
+import { NitfLocations } from './collections/nerdintheforest/NitfLocations'
+import { NitfDispatches } from './collections/nerdintheforest/NitfDispatches'
+import { NitfGearItems } from './collections/nerdintheforest/NitfGearItems'
+import { NitfGearReviews } from './collections/nerdintheforest/NitfGearReviews'
+import { NitfLoadouts } from './collections/nerdintheforest/NitfLoadouts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -51,24 +42,16 @@ export default buildConfig({
     Authors,
     // jake-reddy.com
     JrMedia,
-    JrTags,
-    JrTechnologies,
     JrPosts,
+    JrProjects,
     // nerdintheforest.com
     NitfMedia,
-    NitfTags,
-    NitfPosts,
-    NitfTrails,
-    NitfTrips,
-    NitfDestinations,
-    NitfPoi,
-    NitfPoiTypes,
-    NitfPlaces,
-    // reddyontheroad.com
-    RotrMedia,
-    RotrTags,
-    RotrDays,
-    RotrPlaceTypes,
+    NitfAreas,
+    NitfLocations,
+    NitfDispatches,
+    NitfGearItems,
+    NitfGearReviews,
+    NitfLoadouts,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

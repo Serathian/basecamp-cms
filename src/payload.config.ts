@@ -6,32 +6,17 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Users } from './collections/users/Users'
-
-// Shared
 import { Authors } from './collections/shared/Authors'
-
-// jake-reddy.com
 import { JrMedia } from './collections/jake-reddy/JrMedia'
-import { JrTags } from './collections/jake-reddy/JrTags'
-import { JrTechnologies } from './collections/jake-reddy/JrTechnologies'
 import { JrPosts } from './collections/jake-reddy/JrPosts'
-
-// nerdintheforest.com
+import { JrProjects } from './collections/jake-reddy/JrProjects'
 import { NitfMedia } from './collections/nerdintheforest/NitfMedia'
-import { NitfTags } from './collections/nerdintheforest/NitfTags'
-import { NitfPosts } from './collections/nerdintheforest/NitfPosts'
-import { NitfTrails } from './collections/nerdintheforest/NitfTrails'
-import { NitfTrips } from './collections/nerdintheforest/NitfTrips'
-import { NitfDestinations } from './collections/nerdintheforest/NitfDestinations'
-import { NitfPoi } from './collections/nerdintheforest/NitfPoi'
-import { NitfPoiTypes } from './collections/nerdintheforest/NitfPoiTypes'
-import { NitfPlaces } from './collections/nerdintheforest/NitfPlaces'
-
-// reddyontheroad.com
-import { RotrMedia } from './collections/reddyontheroad/RotrMedia'
-import { RotrTags } from './collections/reddyontheroad/RotrTags'
-import { RotrDays } from './collections/reddyontheroad/RotrDays'
-import { RotrPlaceTypes } from './collections/reddyontheroad/RotrPlaceTypes'
+import { NitfAreas } from './collections/nerdintheforest/NitfAreas'
+import { NitfLocations } from './collections/nerdintheforest/NitfLocations'
+import { NitfDispatches } from './collections/nerdintheforest/NitfDispatches'
+import { NitfGearItems } from './collections/nerdintheforest/NitfGearItems'
+import { NitfGearReviews } from './collections/nerdintheforest/NitfGearReviews'
+import { NitfLoadouts } from './collections/nerdintheforest/NitfLoadouts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -45,42 +30,29 @@ export default buildConfig({
   },
   collections: [
     Users,
-    // Shared
     Authors,
-    // jake-reddy.com
     JrMedia,
-    JrTags,
-    JrTechnologies,
     JrPosts,
-    // nerdintheforest.com
+    JrProjects,
     NitfMedia,
-    NitfTags,
-    NitfPosts,
-    NitfTrails,
-    NitfTrips,
-    NitfDestinations,
-    NitfPoi,
-    NitfPoiTypes,
-    NitfPlaces,
-    // reddyontheroad.com
-    RotrMedia,
-    RotrTags,
-    RotrDays,
-    RotrPlaceTypes,
+    NitfAreas,
+    NitfLocations,
+    NitfDispatches,
+    NitfGearItems,
+    NitfGearReviews,
+    NitfLoadouts,
   ],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || 'dev-secret-must-be-at-least-32-chars-long',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || '',
+      connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload@localhost:5432/payload',
     },
     extensions: ['postgis'],
     migrationDir: path.resolve(dirname, 'migrations'),
-    // Never auto-push schema — always use explicit migrations.
-    // This preserves custom columns (e.g. PostGIS geom) not tracked by Drizzle.
     push: false,
   }),
   sharp,

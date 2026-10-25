@@ -70,48 +70,41 @@ export interface Config {
     users: User;
     authors: Author;
     jr_media: JrMedia;
-    jr_tags: JrTag;
-    jr_technologies: JrTechnology;
     jr_posts: JrPost;
+    jr_projects: JrProject;
     nitf_media: NitfMedia;
-    nitf_tags: NitfTag;
-    nitf_posts: NitfPost;
-    nitf_trails: NitfTrail;
-    nitf_trips: NitfTrip;
-    nitf_destinations: NitfDestination;
-    nitf_poi: NitfPoi;
-    nitf_poi_types: NitfPoiType;
-    nitf_places: NitfPlace;
-    rotr_media: RotrMedia;
-    rotr_tags: RotrTag;
-    rotr_days: RotrDay;
-    rotr_place_types: RotrPlaceType;
+    nitf_areas: NitfArea;
+    nitf_locations: NitfLocation;
+    nitf_dispatches: NitfDispatch;
+    nitf_gear_items: NitfGearItem;
+    nitf_gear_reviews: NitfGearReview;
+    nitf_loadouts: NitfLoadout;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    nitf_gear_items: {
+      reviews: 'nitf_gear_reviews';
+    };
+    nitf_loadouts: {
+      dispatches: 'nitf_dispatches';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     jr_media: JrMediaSelect<false> | JrMediaSelect<true>;
-    jr_tags: JrTagsSelect<false> | JrTagsSelect<true>;
-    jr_technologies: JrTechnologiesSelect<false> | JrTechnologiesSelect<true>;
     jr_posts: JrPostsSelect<false> | JrPostsSelect<true>;
+    jr_projects: JrProjectsSelect<false> | JrProjectsSelect<true>;
     nitf_media: NitfMediaSelect<false> | NitfMediaSelect<true>;
-    nitf_tags: NitfTagsSelect<false> | NitfTagsSelect<true>;
-    nitf_posts: NitfPostsSelect<false> | NitfPostsSelect<true>;
-    nitf_trails: NitfTrailsSelect<false> | NitfTrailsSelect<true>;
-    nitf_trips: NitfTripsSelect<false> | NitfTripsSelect<true>;
-    nitf_destinations: NitfDestinationsSelect<false> | NitfDestinationsSelect<true>;
-    nitf_poi: NitfPoiSelect<false> | NitfPoiSelect<true>;
-    nitf_poi_types: NitfPoiTypesSelect<false> | NitfPoiTypesSelect<true>;
-    nitf_places: NitfPlacesSelect<false> | NitfPlacesSelect<true>;
-    rotr_media: RotrMediaSelect<false> | RotrMediaSelect<true>;
-    rotr_tags: RotrTagsSelect<false> | RotrTagsSelect<true>;
-    rotr_days: RotrDaysSelect<false> | RotrDaysSelect<true>;
-    rotr_place_types: RotrPlaceTypesSelect<false> | RotrPlaceTypesSelect<true>;
+    nitf_areas: NitfAreasSelect<false> | NitfAreasSelect<true>;
+    nitf_locations: NitfLocationsSelect<false> | NitfLocationsSelect<true>;
+    nitf_dispatches: NitfDispatchesSelect<false> | NitfDispatchesSelect<true>;
+    nitf_gear_items: NitfGearItemsSelect<false> | NitfGearItemsSelect<true>;
+    nitf_gear_reviews: NitfGearReviewsSelect<false> | NitfGearReviewsSelect<true>;
+    nitf_loadouts: NitfLoadoutsSelect<false> | NitfLoadoutsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -186,19 +179,7 @@ export interface Author {
   name: string;
   slug: string;
   bio?: string | null;
-  avatar?:
-    | ({
-        relationTo: 'jr_media';
-        value: number | JrMedia;
-      } | null)
-    | ({
-        relationTo: 'nitf_media';
-        value: number | NitfMedia;
-      } | null)
-    | ({
-        relationTo: 'rotr_media';
-        value: number | RotrMedia;
-      } | null);
+  avatar?: (number | null) | JrMedia;
   sites?: ('jake-reddy' | 'nerdintheforest' | 'reddyontheroad')[] | null;
   updatedAt: string;
   createdAt: string;
@@ -224,6 +205,58 @@ export interface JrMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_posts".
+ */
+export interface JrPost {
+  id: number;
+  status: 'draft' | 'published' | 'archived';
+  title: string;
+  slug: string;
+  published_at?: string | null;
+  excerpt?: string | null;
+  body?: string | null;
+  cover_image?: (number | null) | JrMedia;
+  featured?: boolean | null;
+  tags?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  reading_time_minutes?: number | null;
+  seo_title?: string | null;
+  seo_description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_projects".
+ */
+export interface JrProject {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  featured?: boolean | null;
+  tags?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  links?:
+    | {
+        label: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "nitf_media".
  */
 export interface NitfMedia {
@@ -243,271 +276,219 @@ export interface NitfMedia {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_media".
+ * via the `definition` "nitf_areas".
  */
-export interface RotrMedia {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_tags".
- */
-export interface JrTag {
+export interface NitfArea {
   id: number;
   name: string;
   slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_technologies".
- */
-export interface JrTechnology {
-  id: number;
-  name: string;
-  icon?: (number | null) | JrMedia;
-  category?: ('language' | 'framework' | 'database' | 'infrastructure' | 'tool' | 'library') | null;
+  country: string;
   description?: string | null;
+  center_latitude: number;
+  center_longitude: number;
+  default_zoom?: number | null;
+  hero_image?: (number | null) | NitfMedia;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_posts".
+ * via the `definition` "nitf_locations".
  */
-export interface JrPost {
-  id: number;
-  status: 'draft' | 'published' | 'archived';
-  title: string;
-  slug: string;
-  published_at?: string | null;
-  excerpt?: string | null;
-  body?: string | null;
-  cover_image?: (number | null) | JrMedia;
-  project_type?: ('open-source' | 'personal' | 'home-lab' | 'professional') | null;
-  project_status?: ('active' | 'in-progress' | 'completed' | 'archived') | null;
-  tech_stack?: (number | JrTechnology)[] | null;
-  github_url?: string | null;
-  live_url?: string | null;
-  featured?: boolean | null;
-  sort?: number | null;
-  author?: (number | null) | Author;
-  tags?: (number | JrTag)[] | null;
-  reading_time_minutes?: number | null;
-  seo_title?: string | null;
-  seo_description?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_tags".
- */
-export interface NitfTag {
+export interface NitfLocation {
   id: number;
   name: string;
   slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_posts".
- */
-export interface NitfPost {
-  id: number;
-  status: 'draft' | 'published' | 'archived';
-  title: string;
-  slug: string;
-  type: 'review' | 'recipe' | 'article';
-  excerpt?: string | null;
-  body?: string | null;
-  cover_image?: (number | null) | NitfMedia;
-  author?: (number | null) | Author;
-  tags?: (number | NitfTag)[] | null;
-  published_at?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_trails".
- */
-export interface NitfTrail {
-  id: number;
-  status: 'draft' | 'published';
-  title: string;
-  gpx_file?: (number | null) | NitfMedia;
-  distance_km?: number | null;
-  elevation_gain_m?: number | null;
-  elevation_loss_m?: number | null;
-  duration_hours?: number | null;
-  difficulty?: ('easy' | 'moderate' | 'hard' | 'expert') | null;
-  trail_type?: ('loop' | 'out-and-back' | 'point-to-point') | null;
-  latitude_start?: number | null;
-  longitude_start?: number | null;
-  bounding_box?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
+  area: number | NitfArea;
+  category: 'shelter' | 'hearth' | 'springhead' | 'summit' | 'viewpoint';
+  latitude: number;
+  longitude: number;
+  elevation?: number | null;
+  /**
+   * Number of people who fit inside the shelter (0 or empty if no shelter)
+   */
+  shelter_capacity?: number | null;
+  /**
+   * Approximate number of tent pitching spaces at the location
+   */
+  tent_spaces?: number | null;
+  summary?: string | null;
+  amenities?:
+    | (
+        | 'timber_shelter'
+        | 'stone_hearth'
+        | 'potable_water'
+        | 'dry_wood'
+        | 'lake_view'
+        | 'lake_water'
+        | 'tent_pitch'
+        | 'parking'
+      )[]
     | null;
-  country?: string | null;
-  region?: string | null;
-  season_start?: string | null;
-  season_end?: string | null;
+  /**
+   * Link to a location that has Parking / Trailhead amenity (leave empty if this location itself has parking)
+   */
+  trailhead?: (number | null) | NitfLocation;
+  elevation_gain?: number | null;
+  elevation_loss?: number | null;
+  cover_image?: (number | null) | NitfMedia;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_trips".
+ * via the `definition` "nitf_dispatches".
  */
-export interface NitfTrip {
+export interface NitfDispatch {
   id: number;
-  status: 'draft' | 'published';
+  status: 'draft' | 'published' | 'archived';
   title: string;
   slug: string;
-  body?: string | null;
-  destination?: (number | null) | NitfDestination;
-  cover_image?: (number | null) | NitfMedia;
-  date_range?: {
-    start_date?: string | null;
-    end_date?: string | null;
-  };
-  tags?: (number | NitfTag)[] | null;
-  pois?: (number | NitfPoi)[] | null;
+  /**
+   * Date and time the article was published
+   */
   published_at?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_destinations".
- */
-export interface NitfDestination {
-  id: number;
-  status: 'draft' | 'published';
-  name: string;
-  slug: string;
-  description?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
-  featured_image?: (number | null) | NitfMedia;
-  links?:
+  /**
+   * Start date of the field expedition / hike
+   */
+  start_date?: string | null;
+  /**
+   * End date of the field expedition (leave empty or same as start date for single-day outings)
+   */
+  end_date?: string | null;
+  /**
+   * Select all surveyed locations passed or visited during this hike
+   */
+  locations?: (number | NitfLocation)[] | null;
+  /**
+   * Optional: Gear loadout carried during this field expedition
+   */
+  loadout?: (number | null) | NitfLoadout;
+  excerpt: string;
+  weather?: string | null;
+  hero_image?: (number | null) | NitfMedia;
+  /**
+   * Photos taken during this outing. Tag individual locations to link them to location dossiers.
+   */
+  gallery?:
     | {
-        url?: string | null;
-        label?: string | null;
+        image: number | NitfMedia;
+        /**
+         * Optional: Surveyed location shown in this photo
+         */
+        location?: (number | null) | NitfLocation;
+        caption?: string | null;
         id?: string | null;
       }[]
     | null;
-  difficulty?: ('easy' | 'moderate' | 'hard' | 'expert') | null;
-  season_info?: string | null;
-  published_at?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_poi".
+ * via the `definition` "nitf_loadouts".
  */
-export interface NitfPoi {
+export interface NitfLoadout {
   id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  type?: (number | null) | NitfPoiType;
-  trips?: (number | NitfTrip)[] | null;
-  place?: (number | null) | NitfPlace;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_poi_types".
- */
-export interface NitfPoiType {
-  id: number;
-  name: string;
+  title: string;
   slug: string;
+  season: 'spring' | 'summer' | 'autumn' | 'winter';
+  temp_range: string;
+  description?: string | null;
+  items: {
+    item: number | NitfGearItem;
+    status: 'packed' | 'essential' | 'worn' | 'consumable';
+    custom_note?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * Field dispatches where this loadout was carried
+   */
+  dispatches?: {
+    docs?: (number | NitfDispatch)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_places".
+ * via the `definition` "nitf_gear_items".
  */
-export interface NitfPlace {
+export interface NitfGearItem {
+  id: number;
+  name: string;
+  brand: string;
+  category: 'shelter_sleep' | 'cook_water' | 'navigation_tools' | 'pack_apparel' | 'hygiene_repair';
+  weight_grams: number;
+  spec_note?: string | null;
+  notes?: string | null;
+  image?: (number | null) | NitfMedia;
+  product_url?: string | null;
+  /**
+   * Field reviews and durability logs linked to this gear item
+   */
+  reviews?: {
+    docs?: (number | NitfGearReview)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_gear_reviews".
+ */
+export interface NitfGearReview {
   id: number;
   status: 'draft' | 'published';
   title: string;
   slug: string;
-  body?: string | null;
-  cover_image?: (number | null) | NitfMedia;
-  tags?: (number | NitfTag)[] | null;
-  poi?: (number | null) | NitfPoi;
+  gear_item: number | NitfGearItem;
+  topic: 'durability' | 'thermal' | 'maintenance' | 'philosophy';
   published_at?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_tags".
- */
-export interface RotrTag {
-  id: number;
-  name: string;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_days".
- */
-export interface RotrDay {
-  id: number;
-  status: 'draft' | 'published';
-  title: string;
-  date?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
-  location_name?: string | null;
-  location_type?: (number | null) | RotrPlaceType;
-  weather?: string | null;
-  temperature?: number | null;
-  summary?: string | null;
-  content?: string | null;
-  tags?: (number | RotrTag)[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_place_types".
- */
-export interface RotrPlaceType {
-  id: number;
-  name: string;
-  slug: string;
+  duration_tested?: string | null;
+  summary: string;
+  verdict: string;
+  key_takeaways?:
+    | {
+        takeaway: string;
+        id?: string | null;
+      }[]
+    | null;
+  hero_image?: (number | null) | NitfMedia;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -548,68 +529,40 @@ export interface PayloadLockedDocument {
         value: number | JrMedia;
       } | null)
     | ({
-        relationTo: 'jr_tags';
-        value: number | JrTag;
-      } | null)
-    | ({
-        relationTo: 'jr_technologies';
-        value: number | JrTechnology;
-      } | null)
-    | ({
         relationTo: 'jr_posts';
         value: number | JrPost;
+      } | null)
+    | ({
+        relationTo: 'jr_projects';
+        value: number | JrProject;
       } | null)
     | ({
         relationTo: 'nitf_media';
         value: number | NitfMedia;
       } | null)
     | ({
-        relationTo: 'nitf_tags';
-        value: number | NitfTag;
+        relationTo: 'nitf_areas';
+        value: number | NitfArea;
       } | null)
     | ({
-        relationTo: 'nitf_posts';
-        value: number | NitfPost;
+        relationTo: 'nitf_locations';
+        value: number | NitfLocation;
       } | null)
     | ({
-        relationTo: 'nitf_trails';
-        value: number | NitfTrail;
+        relationTo: 'nitf_dispatches';
+        value: number | NitfDispatch;
       } | null)
     | ({
-        relationTo: 'nitf_trips';
-        value: number | NitfTrip;
+        relationTo: 'nitf_gear_items';
+        value: number | NitfGearItem;
       } | null)
     | ({
-        relationTo: 'nitf_destinations';
-        value: number | NitfDestination;
+        relationTo: 'nitf_gear_reviews';
+        value: number | NitfGearReview;
       } | null)
     | ({
-        relationTo: 'nitf_poi';
-        value: number | NitfPoi;
-      } | null)
-    | ({
-        relationTo: 'nitf_poi_types';
-        value: number | NitfPoiType;
-      } | null)
-    | ({
-        relationTo: 'nitf_places';
-        value: number | NitfPlace;
-      } | null)
-    | ({
-        relationTo: 'rotr_media';
-        value: number | RotrMedia;
-      } | null)
-    | ({
-        relationTo: 'rotr_tags';
-        value: number | RotrTag;
-      } | null)
-    | ({
-        relationTo: 'rotr_days';
-        value: number | RotrDay;
-      } | null)
-    | ({
-        relationTo: 'rotr_place_types';
-        value: number | RotrPlaceType;
+        relationTo: 'nitf_loadouts';
+        value: number | NitfLoadout;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -709,28 +662,6 @@ export interface JrMediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_tags_select".
- */
-export interface JrTagsSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "jr_technologies_select".
- */
-export interface JrTechnologiesSelect<T extends boolean = true> {
-  name?: T;
-  icon?: T;
-  category?: T;
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "jr_posts_select".
  */
 export interface JrPostsSelect<T extends boolean = true> {
@@ -741,18 +672,41 @@ export interface JrPostsSelect<T extends boolean = true> {
   excerpt?: T;
   body?: T;
   cover_image?: T;
-  project_type?: T;
-  project_status?: T;
-  tech_stack?: T;
-  github_url?: T;
-  live_url?: T;
   featured?: T;
-  sort?: T;
-  author?: T;
-  tags?: T;
+  tags?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
   reading_time_minutes?: T;
   seo_title?: T;
   seo_description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "jr_projects_select".
+ */
+export interface JrProjectsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  featured?: T;
+  tags?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  links?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -776,201 +730,132 @@ export interface NitfMediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_tags_select".
+ * via the `definition` "nitf_areas_select".
  */
-export interface NitfTagsSelect<T extends boolean = true> {
+export interface NitfAreasSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_posts_select".
- */
-export interface NitfPostsSelect<T extends boolean = true> {
-  status?: T;
-  title?: T;
-  slug?: T;
-  type?: T;
-  excerpt?: T;
-  body?: T;
-  cover_image?: T;
-  author?: T;
-  tags?: T;
-  published_at?: T;
-  latitude?: T;
-  longitude?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_trails_select".
- */
-export interface NitfTrailsSelect<T extends boolean = true> {
-  status?: T;
-  title?: T;
-  gpx_file?: T;
-  distance_km?: T;
-  elevation_gain_m?: T;
-  elevation_loss_m?: T;
-  duration_hours?: T;
-  difficulty?: T;
-  trail_type?: T;
-  latitude_start?: T;
-  longitude_start?: T;
-  bounding_box?: T;
   country?: T;
-  region?: T;
-  season_start?: T;
-  season_end?: T;
+  description?: T;
+  center_latitude?: T;
+  center_longitude?: T;
+  default_zoom?: T;
+  hero_image?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_trips_select".
+ * via the `definition` "nitf_locations_select".
  */
-export interface NitfTripsSelect<T extends boolean = true> {
+export interface NitfLocationsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  area?: T;
+  category?: T;
+  latitude?: T;
+  longitude?: T;
+  elevation?: T;
+  shelter_capacity?: T;
+  tent_spaces?: T;
+  summary?: T;
+  amenities?: T;
+  trailhead?: T;
+  elevation_gain?: T;
+  elevation_loss?: T;
+  cover_image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_dispatches_select".
+ */
+export interface NitfDispatchesSelect<T extends boolean = true> {
   status?: T;
   title?: T;
   slug?: T;
-  body?: T;
-  destination?: T;
-  cover_image?: T;
-  date_range?:
-    | T
-    | {
-        start_date?: T;
-        end_date?: T;
-      };
-  tags?: T;
-  pois?: T;
   published_at?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_destinations_select".
- */
-export interface NitfDestinationsSelect<T extends boolean = true> {
-  status?: T;
-  name?: T;
-  slug?: T;
-  description?: T;
-  latitude?: T;
-  longitude?: T;
-  featured_image?: T;
-  links?:
+  start_date?: T;
+  end_date?: T;
+  locations?: T;
+  loadout?: T;
+  excerpt?: T;
+  weather?: T;
+  hero_image?: T;
+  gallery?:
     | T
     | {
-        url?: T;
-        label?: T;
+        image?: T;
+        location?: T;
+        caption?: T;
         id?: T;
       };
-  difficulty?: T;
-  season_info?: T;
-  published_at?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_poi_select".
- */
-export interface NitfPoiSelect<T extends boolean = true> {
-  name?: T;
-  latitude?: T;
-  longitude?: T;
-  type?: T;
-  trips?: T;
-  place?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_poi_types_select".
- */
-export interface NitfPoiTypesSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "nitf_places_select".
- */
-export interface NitfPlacesSelect<T extends boolean = true> {
-  status?: T;
-  title?: T;
-  slug?: T;
-  body?: T;
-  cover_image?: T;
-  tags?: T;
-  poi?: T;
-  published_at?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_media_select".
- */
-export interface RotrMediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_tags_select".
- */
-export interface RotrTagsSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_days_select".
- */
-export interface RotrDaysSelect<T extends boolean = true> {
-  status?: T;
-  title?: T;
-  date?: T;
-  latitude?: T;
-  longitude?: T;
-  location_name?: T;
-  location_type?: T;
-  weather?: T;
-  temperature?: T;
-  summary?: T;
   content?: T;
-  tags?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rotr_place_types_select".
+ * via the `definition` "nitf_gear_items_select".
  */
-export interface RotrPlaceTypesSelect<T extends boolean = true> {
+export interface NitfGearItemsSelect<T extends boolean = true> {
   name?: T;
+  brand?: T;
+  category?: T;
+  weight_grams?: T;
+  spec_note?: T;
+  notes?: T;
+  image?: T;
+  product_url?: T;
+  reviews?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_gear_reviews_select".
+ */
+export interface NitfGearReviewsSelect<T extends boolean = true> {
+  status?: T;
+  title?: T;
   slug?: T;
+  gear_item?: T;
+  topic?: T;
+  published_at?: T;
+  duration_tested?: T;
+  summary?: T;
+  verdict?: T;
+  key_takeaways?:
+    | T
+    | {
+        takeaway?: T;
+        id?: T;
+      };
+  hero_image?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "nitf_loadouts_select".
+ */
+export interface NitfLoadoutsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  season?: T;
+  temp_range?: T;
+  description?: T;
+  items?:
+    | T
+    | {
+        item?: T;
+        status?: T;
+        custom_note?: T;
+        id?: T;
+      };
+  dispatches?: T;
   updatedAt?: T;
   createdAt?: T;
 }

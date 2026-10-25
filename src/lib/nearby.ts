@@ -1,7 +1,7 @@
 import { DatabaseAdapter } from 'payload'
 import { sql } from '@payloadcms/db-postgres'
 
-export default async function getNearbyPosts(
+export default async function getNearbyLocations(
   lat: number,
   lon: number,
   radius: number,
@@ -10,14 +10,13 @@ export default async function getNearbyPosts(
   try {
     const db = (payloadDb as any).drizzle
     const results = await db.execute(sql`
-      SELECT id, title, slug, latitude, longitude,
+      SELECT id, name, slug, category, latitude, longitude,
         ST_Distance(
           geom::geography,
           ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 4326)::geography
         ) AS distance_m
-      FROM nitf_posts
-      WHERE status = 'published'
-        AND geom IS NOT NULL
+      FROM nitf_locations
+      WHERE geom IS NOT NULL
         AND ST_DWithin(
           geom::geography,
           ST_SetSRID(ST_MakePoint(${lon}, ${lat}), 4326)::geography,
