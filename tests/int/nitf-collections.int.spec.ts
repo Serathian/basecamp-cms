@@ -141,10 +141,20 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
           location: testLocationId,
           excerpt: 'Hand-hewn timber lean-to with double spruce notch joints.',
           weather: '4°C • MIST • BARO 1018 HPA',
+          trail_geometry: [
+            [10.753, 60.2785],
+            [10.742, 60.275],
+            [10.732, 60.271],
+          ],
+          distance_km: 2.1,
+          elevation_gain_m: 85,
+          elevation_loss_m: 10,
         },
       })
       expect(dispatch.id).toBeDefined()
       expect(dispatch.title).toContain('Langvatnet')
+      expect(dispatch.trail_geometry).toHaveLength(3)
+      expect(dispatch.distance_km).toBe(2.1)
       testDispatchId = Number(dispatch.id)
     })
 

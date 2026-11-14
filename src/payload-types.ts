@@ -300,7 +300,7 @@ export interface NitfLocation {
   name: string;
   slug: string;
   area: number | NitfArea;
-  category: 'shelter' | 'hearth' | 'springhead' | 'summit' | 'viewpoint';
+  category: 'shelter' | 'hearth' | 'springhead' | 'summit' | 'viewpoint' | 'trailhead';
   latitude: number;
   longitude: number;
   elevation?: number | null;
@@ -326,7 +326,7 @@ export interface NitfLocation {
       )[]
     | null;
   /**
-   * Link to a location that has Parking / Trailhead amenity (leave empty if this location itself has parking)
+   * Link to a trailhead/parking access point (leave empty if this location itself is a trailhead or has parking)
    */
   trailhead?: (number | null) | NitfLocation;
   elevation_gain?: number | null;
@@ -356,6 +356,38 @@ export interface NitfDispatch {
    * End date of the field expedition (leave empty or same as start date for single-day outings)
    */
   end_date?: string | null;
+  /**
+   * Upload GPX track file recorded during this dispatch outing. Auto-populates trail_geometry and statistics.
+   */
+  gpx_file?: (number | null) | NitfMedia;
+  /**
+   * Array of [lng, lat] coordinate pairs defining the traversed GPS route (auto-generated from GPX or manual).
+   */
+  trail_geometry?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Total distance traversed in kilometers (auto-computed from GPX or manual).
+   */
+  distance_km?: number | null;
+  /**
+   * Total elevation gain in meters (auto-computed from GPX or manual).
+   */
+  elevation_gain_m?: number | null;
+  /**
+   * Total elevation loss in meters (auto-computed from GPX or manual).
+   */
+  elevation_loss_m?: number | null;
+  /**
+   * Total moving or outing duration in hours.
+   */
+  duration_hours?: number | null;
   /**
    * Select all surveyed locations passed or visited during this hike
    */
@@ -778,6 +810,12 @@ export interface NitfDispatchesSelect<T extends boolean = true> {
   published_at?: T;
   start_date?: T;
   end_date?: T;
+  gpx_file?: T;
+  trail_geometry?: T;
+  distance_km?: T;
+  elevation_gain_m?: T;
+  elevation_loss_m?: T;
+  duration_hours?: T;
   locations?: T;
   loadout?: T;
   excerpt?: T;

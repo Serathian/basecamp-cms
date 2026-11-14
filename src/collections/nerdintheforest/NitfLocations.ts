@@ -33,6 +33,7 @@ export const NitfLocations: CollectionConfig = {
         { label: 'Potable Spring', value: 'springhead' },
         { label: 'Mountain Summit', value: 'summit' },
         { label: 'Viewpoint / Vista', value: 'viewpoint' },
+        { label: 'Trailhead / Access Point', value: 'trailhead' },
       ],
     },
     { name: 'latitude', type: 'number', required: true },
@@ -75,10 +76,10 @@ export const NitfLocations: CollectionConfig = {
       type: 'relationship',
       relationTo: 'nitf_locations',
       filterOptions: {
-        amenities: { contains: 'parking' },
+        category: { equals: 'trailhead' },
       },
       admin: {
-        description: 'Link to a location that has Parking / Trailhead amenity (leave empty if this location itself has parking)',
+        description: 'Link to a trailhead/parking access point (leave empty if this location itself is a trailhead or has parking)',
       },
     },
     { name: 'elevation_gain', type: 'number' },

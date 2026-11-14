@@ -82,3 +82,14 @@ jobs:
           build-args: |
             PAYLOAD_SECRET=build-secret-not-used-at-runtime
             DATABASE_URL=postgresql://placeholder:placeholder@localhost:5432/placeholder
+
+      - name: Trigger Watchtower Webhook
+        run: |
+          if [ -n "${{ secrets.WATCHTOWER_TOKEN }}" ]; then
+            echo "Triggering Watchtower update..."
+            curl -f -X POST \
+              -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" \
+              https://watchtower.jake-reddy.com/v1/update || echo "Watchtower webhook call failed (droplet may be offline or initializing)"
+          else
+            echo "WATCHTOWER_TOKEN secret is not set; skipping webhook trigger."
+          fi

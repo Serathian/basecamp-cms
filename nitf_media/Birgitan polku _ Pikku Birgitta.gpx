@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="fabulator:gpx-builder" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Birgitan polku / Pikku Birgitta</name>
+    <author>
+      <name>Exported from Luontoon.fi</name>
+      <link href="https://luontoon.fi"></link>
+    </author>
+  </metadata>
+  <trk>
+    <name>Birgitan polku / Pikku Birgitta</name>
+    <trkseg>
+      <trkpt lat="61.419460554" lon="23.821726502"></trkpt>
+      <trkpt lat="61.41959034" lon="23.822025835"></trkpt>
+      <trkpt lat="61.419792054" lon="23.822199084"></trkpt>
+      <trkpt lat="61.419988957" lon="23.822422832"></trkpt>
+      <trkpt lat="61.420071298" lon="23.82287077"></trkpt>
+      <trkpt lat="61.420215433" lon="23.823399937"></trkpt>
+      <trkpt lat="61.420354103" lon="23.823823398"></trkpt>
+      <trkpt lat="61.420496488" lon="23.82427774"></trkpt>
+      <trkpt lat="61.420578608" lon="23.82458819"></trkpt>
+      <trkpt lat="61.420642801" lon="23.824900464"></trkpt>
+      <trkpt lat="61.42063281" lon="23.825114015"></trkpt>
+      <trkpt lat="61.420526043" lon="23.825287395"></trkpt>
+      <trkpt lat="61.420405724" lon="23.825393392"></trkpt>
+      <trkpt lat="61.420186224" lon="23.825484465"></trkpt>
+      <trkpt lat="61.420027722" lon="23.825494327"></trkpt>
+      <trkpt lat="61.419940783" lon="23.825490663"></trkpt>
+      <trkpt lat="61.419759319" lon="23.82567163"></trkpt>
+      <trkpt lat="61.419586673" lon="23.825845449"></trkpt>
+      <trkpt lat="61.419450173" lon="23.826028094"></trkpt>
+      <trkpt lat="61.419320598" lon="23.826122523"></trkpt>
+      <trkpt lat="61.419166898" lon="23.826338166"></trkpt>
+      <trkpt lat="61.419100572" lon="23.826576182"></trkpt>
+      <trkpt lat="61.419009312" lon="23.827029253"></trkpt>
+      <trkpt lat="61.418988966" lon="23.827312601"></trkpt>
+      <trkpt lat="61.419060159" lon="23.82741163"></trkpt>
+      <trkpt lat="61.419126025" lon="23.827667468"></trkpt>
+      <trkpt lat="61.419179436" lon="23.827774556"></trkpt>
+      <trkpt lat="61.419382596" lon="23.8280102"></trkpt>
+      <trkpt lat="61.41949583" lon="23.828242479"></trkpt>
+      <trkpt lat="61.419694663" lon="23.828934877"></trkpt>
+      <trkpt lat="61.419855313" lon="23.829531147"></trkpt>
+      <trkpt lat="61.420008322" lon="23.82992817"></trkpt>
+      <trkpt lat="61.420261219" lon="23.830627605"></trkpt>
+      <trkpt lat="61.420413644" lon="23.830999695"></trkpt>
+      <trkpt lat="61.420559158" lon="23.831203712"></trkpt>
+      <trkpt lat="61.420669709" lon="23.831192494"></trkpt>
+      <trkpt lat="61.420792399" lon="23.831573858"></trkpt>
+      <trkpt lat="61.420875956" lon="23.831946694"></trkpt>
+      <trkpt lat="61.420889047" lon="23.832251666"></trkpt>
+      <trkpt lat="61.420767974" lon="23.83258275"></trkpt>
+      <trkpt lat="61.420701637" lon="23.832820766"></trkpt>
+      <trkpt lat="61.420633618" lon="23.833115209"></trkpt>
+      <trkpt lat="61.420600292" lon="23.833356126"></trkpt>
+      <trkpt lat="61.420469007" lon="23.833763248"></trkpt>
+      <trkpt lat="61.420315789" lon="23.834128835"></trkpt>
+      <trkpt lat="61.420173651" lon="23.834455789"></trkpt>
+      <trkpt lat="61.420015847" lon="23.834753073"></trkpt>
+      <trkpt lat="61.419877936" lon="23.835229612"></trkpt>
+      <trkpt lat="61.419895981" lon="23.835490318"></trkpt>
+      <trkpt lat="61.419696749" lon="23.835422996"></trkpt>
+      <trkpt lat="61.419511327" lon="23.835691815"></trkpt>
+      <trkpt lat="61.419410725" lon="23.836002043"></trkpt>
+      <trkpt lat="61.419292544" lon="23.835813994"></trkpt>
+      <trkpt lat="61.419243752" lon="23.835518904"></trkpt>
+      <trkpt lat="61.419261272" lon="23.835242098"></trkpt>
+      <trkpt lat="61.419289292" lon="23.834901721"></trkpt>
+      <trkpt lat="61.419164435" lon="23.834426821"></trkpt>
+      <trkpt lat="61.419152364" lon="23.834165516"></trkpt>
+      <trkpt lat="61.419112035" lon="23.833719555"></trkpt>
+      <trkpt lat="61.418951319" lon="23.833248299"></trkpt>
+      <trkpt lat="61.41898635" lon="23.832694689"></trkpt>
+      <trkpt lat="61.419046443" lon="23.832188541"></trkpt>
+      <trkpt lat="61.418968925" lon="23.831946378"></trkpt>
+      <trkpt lat="61.418831025" lon="23.832197891"></trkpt>
+      <trkpt lat="61.418691383" lon="23.83237457"></trkpt>
+      <trkpt lat="61.418507463" lon="23.832193206"></trkpt>
+      <trkpt lat="61.418328358" lon="23.831961353"></trkpt>
+      <trkpt lat="61.418170831" lon="23.831627304"></trkpt>
+      <trkpt lat="61.418087918" lon="23.831410698"></trkpt>
+      <trkpt lat="61.418000646" lon="23.831007021"></trkpt>
+      <trkpt lat="61.417803902" lon="23.830789468"></trkpt>
+      <trkpt lat="61.41756093" lon="23.830901628"></trkpt>
+      <trkpt lat="61.417436021" lon="23.830939304"></trkpt>
+    </trkseg>
+  </trk>
+</gpx>
