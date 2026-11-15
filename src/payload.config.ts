@@ -49,7 +49,10 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || 'postgresql://payload:payload@localhost:5432/payload',
+      connectionString:
+        process.env.DATABASE_URL ||
+        process.env.DATABASE_URI ||
+        'postgresql://payload:payload@localhost:5432/payload',
     },
     extensions: ['postgis'],
     migrationDir: path.resolve(dirname, 'migrations'),

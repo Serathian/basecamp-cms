@@ -2,7 +2,7 @@ name: Build & Push Docker Image
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 env:
   REGISTRY: ghcr.io
@@ -39,6 +39,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Run database migrations
+        run: CI=true npm run payload:migrate
+
+      - name: Seed database for integration tests
+        run: npm run seed
 
       - name: Run integration tests
         run: npm run test

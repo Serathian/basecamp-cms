@@ -11,8 +11,8 @@ Frontends read from the CMS REST API.
 | Item | Value |
 |---|---|
 | GitHub | `github.com/Serathian/basecamp-cms` |
-| Docker image | `ghcr.io/Serathian/basecamp-cms:latest` (built by CI on push to `master`) |
-| Branch | `master` |
+| Docker image | `ghcr.io/Serathian/basecamp-cms:latest` (built by CI on push to `main`) |
+| Branch | `main` |
 | Local dev | `http://localhost:3000` |
 | Production admin | `https://basecamp.jake-reddy.com/admin` |
 | Database | PostgreSQL 16 + PostGIS 3.4 |

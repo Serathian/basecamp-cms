@@ -2,7 +2,7 @@ name: Publish Types Package
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - 'src/collections/**'
       - 'src/payload.config.ts'
@@ -55,4 +55,4 @@ jobs:
 
       - name: Publish
         working-directory: packages/types
-        run: npm publish
+        run: npm publish --provenance --access public

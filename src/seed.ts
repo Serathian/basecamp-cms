@@ -185,7 +185,7 @@ export async function seed(existingPayload?: Payload) {
 
   const areaMap: Record<string, any> = {}
   for (const area of areasData) {
-    let existing = await payload.find({
+    const existing = await payload.find({
       collection: 'nitf_areas',
       where: { slug: { equals: area.slug } },
       limit: 1,
@@ -219,7 +219,7 @@ export async function seed(existingPayload?: Payload) {
         name: 'Savontie P-alue (Birgitan polku)',
         slug: 'savontie-trailhead',
         area: pirkanmaaId,
-        category: 'hearth',
+        category: 'trailhead',
         latitude: 61.398,
         longitude: 23.892,
         elevation: 125,
@@ -246,7 +246,7 @@ export async function seed(existingPayload?: Payload) {
         name: 'Kankimäki P-alue (Helvetinjärvi)',
         slug: 'kankimaki-trailhead',
         area: pirkanmaaId,
-        category: 'hearth',
+        category: 'trailhead',
         latitude: 62.038,
         longitude: 23.832,
         elevation: 180,

@@ -59,13 +59,35 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
   })
 
   describe('CRUD Operations & Relational Integrity', () => {
-    let testAreaId: number
-    let testTrailheadId: number
-    let testLocationId: number
-    let testDispatchId: number
-    let testGearItemId: number
-    let testGearReviewId: number
-    let testLoadoutId: number
+    let testAreaId: number | undefined
+    let testTrailheadId: number | undefined
+    let testLocationId: number | undefined
+    let testDispatchId: number | undefined
+    let testGearItemId: number | undefined
+    let testGearReviewId: number | undefined
+    let testLoadoutId: number | undefined
+
+    afterAll(async () => {
+      const cleanupTargets: Array<{ collection: 'nitf_loadouts' | 'nitf_gear_reviews' | 'nitf_gear_items' | 'nitf_dispatches' | 'nitf_locations' | 'nitf_areas'; id?: number }> = [
+        { collection: 'nitf_loadouts', id: testLoadoutId },
+        { collection: 'nitf_gear_reviews', id: testGearReviewId },
+        { collection: 'nitf_gear_items', id: testGearItemId },
+        { collection: 'nitf_dispatches', id: testDispatchId },
+        { collection: 'nitf_locations', id: testLocationId },
+        { collection: 'nitf_locations', id: testTrailheadId },
+        { collection: 'nitf_areas', id: testAreaId },
+      ]
+
+      for (const target of cleanupTargets) {
+        if (target.id !== undefined) {
+          try {
+            await payload.delete({ collection: target.collection, id: target.id })
+          } catch {
+            // Document may already have been deleted during test execution
+          }
+        }
+      }
+    })
 
     it('creates an Area (nitf_areas)', async () => {
       const area = await payload.create({
@@ -182,7 +204,7 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
           title: 'Hilleberg Kerlon 1200 Durability Report',
           slug: `kerlon-durability-${Date.now()}`,
           status: 'published',
-          gear_item: testGearItemId,
+          gear_item: testGearItemId!,
           topic: 'durability',
           published_at: new Date().toISOString(),
           duration_tested: '48 Backcountry Nights Across 4 Seasons',
@@ -223,13 +245,20 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
     })
 
     it('cleans up test documents gracefully', async () => {
-      await payload.delete({ collection: 'nitf_loadouts', id: testLoadoutId })
-      await payload.delete({ collection: 'nitf_gear_reviews', id: testGearReviewId })
-      await payload.delete({ collection: 'nitf_gear_items', id: testGearItemId })
-      await payload.delete({ collection: 'nitf_dispatches', id: testDispatchId })
-      await payload.delete({ collection: 'nitf_locations', id: testLocationId })
-      await payload.delete({ collection: 'nitf_locations', id: testTrailheadId })
-      await payload.delete({ collection: 'nitf_areas', id: testAreaId })
+      await payload.delete({ collection: 'nitf_loadouts', id: testLoadoutId! })
+      testLoadoutId = undefined
+      await payload.delete({ collection: 'nitf_gear_reviews', id: testGearReviewId! })
+      testGearReviewId = undefined
+      await payload.delete({ collection: 'nitf_gear_items', id: testGearItemId! })
+      testGearItemId = undefined
+      await payload.delete({ collection: 'nitf_dispatches', id: testDispatchId! })
+      testDispatchId = undefined
+      await payload.delete({ collection: 'nitf_locations', id: testLocationId! })
+      testLocationId = undefined
+      await payload.delete({ collection: 'nitf_locations', id: testTrailheadId! })
+      testTrailheadId = undefined
+      await payload.delete({ collection: 'nitf_areas', id: testAreaId! })
+      testAreaId = undefined
     })
   })
 })

@@ -15,7 +15,7 @@ Basecamp CMS is the headless data authority for Jake Reddy's personal web ecosys
 
 ## 2. Collections Inventory
 
-* **Shared & Auth**: `users` (auth), `authors` (shared), `tags` (shared).
+* **Shared & Auth**: `users` (auth), `authors` (shared).
 * **Nerd in the Forest (`nitf_*`)**:
   * `nitf_dispatches`: Trip logs with GPX track upload, elevation telemetry, loadout relation, and surveyed locations.
   * `nitf_locations`: Shelters, camp hearths, potable springs, summits, viewpoints, and trailheads.
@@ -26,8 +26,8 @@ Basecamp CMS is the headless data authority for Jake Reddy's personal web ecosys
   * `nitf_media`: Image and GPX file uploads.
 * **Jake Reddy (`jr_*`)**:
   * `jr_posts`: Blog essays, technical articles, and project highlights.
-* **Reddy on the Road (`rotr_*`)**:
-  * Content collections for overland travel journal.
+  * `jr_projects`: Portfolio projects and links.
+  * `jr_media`: Portfolio media uploads.
 
 ---
 
