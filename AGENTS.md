@@ -39,4 +39,4 @@ All 8 migrations are applied to the local dev database and run automatically on 
 2. **PostGIS Triggers**: PostGIS `geom` columns are updated via PostgreSQL BEFORE INSERT OR UPDATE triggers, ensuring instantaneous transaction visibility.
 3. **GPX Ingestion**: GPX file uploads to `nitf_dispatches` are automatically parsed into elevation gain/loss, outing duration, distance in km, and GeoJSON `trail_geometry` via an `afterChange` hook in `NitfDispatches.ts`.
 4. **Access Control**: Public reads access published documents via `published.ts`; authenticated admin users see all drafts.
-5. **Types Generation**: Always run `npm run generate:types` after modifying collection definitions.
+5. **Types Generation & Export Package**: After modifying collection definitions, run `npm run generate:types` (`src/payload-types.ts`) and verify `PAYLOAD_CONFIG_PATH=src/payload.config.export-types.ts npm run generate:types && (cd packages/types && npm run build)`. Pushes to `main` touching `src/collections/**`, `src/payload.config.ts`, or `packages/types/**` trigger `.github/workflows/publish-types.yml` to publish `@basecamp-cms/basecamp-cms-types` to npm.

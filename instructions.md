@@ -31,7 +31,17 @@ Basecamp CMS is the headless data authority for Jake Reddy's personal web ecosys
 
 ---
 
-## 3. Testing & Verification
+## 3. Shared Types Package (`@basecamp-cms/basecamp-cms-types`)
+
+Payload generates two type outputs from the collection definitions:
+
+* **Internal CMS types (`src/payload-types.ts`)**: Generated via `npm run generate:types` using `src/payload.config.ts` (includes Payload module augmentation for server/hook code inside this repo).
+* **Published npm types package (`packages/types/`)**: `.github/workflows/publish-types.yml` runs on `push` to `main` whenever `src/collections/**`, `src/payload.config.ts`, or `packages/types/**` changes. It generates `src/payload-types-export.ts` via `src/payload.config.export-types.ts` (`declare: false`, stripping `declare module "payload"` so frontends do not need `payload` installed), compiles `packages/types/`, and publishes `@basecamp-cms/basecamp-cms-types@1.0.<run_number>` publicly to `https://registry.npmjs.org` with OIDC provenance.
+* **Local verification**: After modifying collection schemas, run `npm run generate:types`, `PAYLOAD_CONFIG_PATH=src/payload.config.export-types.ts npm run generate:types`, and `(cd packages/types && npm run build)` before committing. Note that frontend apps (`jake-reddy.com`, `nerdintheforest.com`, `reddyontheroad.com`) currently define local TypeScript interfaces rather than installing the npm package.
+
+---
+
+## 4. Testing & Verification
 
 Integration tests run against a live PostgreSQL + PostGIS instance:
 ```bash
