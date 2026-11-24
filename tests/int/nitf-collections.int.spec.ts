@@ -326,6 +326,17 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
       expect(s3NitfMedia.upload.disableLocalStorage).toBe(true)
     })
 
+    it('registers all admin component providers (including S3ClientUploadHandler) in importMap', () => {
+      const importMapPath = path.resolve(process.cwd(), 'src/app/(payload)/admin/importMap.js')
+      const importMapSource = fs.readFileSync(importMapPath, 'utf8')
+      const providers = payload.config.admin?.components?.providers ?? []
+      expect(providers.length).toBeGreaterThan(0)
+      for (const provider of providers) {
+        const componentPath = typeof provider === 'string' ? provider : provider.path
+        expect(importMapSource).toContain(`"${componentPath}"`)
+      }
+    })
+
     it('stores GPX uploads in media/nitf_media and computes dispatch trail stats', async () => {
       const gpxSample = `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="test">
