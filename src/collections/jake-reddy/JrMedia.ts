@@ -14,5 +14,7 @@ export const JrMedia: CollectionConfig = {
     delete: admin,
   },
   fields: [{ name: 'alt', type: 'text', required: true }],
-  upload: true,
+  upload: {
+    staticDir: 'media/jr_media',
+  },
 }

@@ -20,6 +20,8 @@ export const NitfMedia: CollectionConfig = {
       required: true,
     },
   ],
-  upload: true,
+  upload: {
+    staticDir: 'media/nitf_media',
+  },
   timestamps: true,
 }

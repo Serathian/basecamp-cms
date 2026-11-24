@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
 import { sql } from '@payloadcms/db-postgres'
@@ -259,6 +261,84 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
       testTrailheadId = undefined
       await payload.delete({ collection: 'nitf_areas', id: testAreaId! })
       testAreaId = undefined
+    })
+  })
+
+  describe('Media Upload Storage & GPX Hook Integration', () => {
+    let uploadedMediaId: number | undefined
+    let gpxDispatchId: number | undefined
+
+    afterAll(async () => {
+      if (gpxDispatchId !== undefined) {
+        try {
+          await payload.delete({ collection: 'nitf_dispatches', id: gpxDispatchId })
+        } catch {
+          // Ignore if already deleted
+        }
+      }
+      if (uploadedMediaId !== undefined) {
+        try {
+          await payload.delete({ collection: 'nitf_media', id: uploadedMediaId })
+        } catch {
+          // Ignore if already deleted
+        }
+      }
+    })
+
+    it('configures upload staticDir for nitf_media and jr_media under media/', () => {
+      expect(payload.collections['nitf_media'].config.upload.staticDir).toBe('media/nitf_media')
+      expect(payload.collections['jr_media'].config.upload.staticDir).toBe('media/jr_media')
+    })
+
+    it('stores GPX uploads in media/nitf_media and computes dispatch trail stats', async () => {
+      const gpxSample = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="test">
+  <trk><trkseg>
+    <trkpt lat="61.4045" lon="23.9085"><ele>130</ele></trkpt>
+    <trkpt lat="61.4090" lon="23.9120"><ele>145</ele></trkpt>
+  </trkseg></trk>
+</gpx>`
+
+      const filename = `test-track-${Date.now()}.gpx`
+      const uploaded = await payload.create({
+        collection: 'nitf_media',
+        data: { alt: 'Test GPX Track' },
+        file: {
+          data: Buffer.from(gpxSample, 'utf8'),
+          mimetype: 'application/gpx+xml',
+          name: filename,
+          size: Buffer.byteLength(gpxSample, 'utf8'),
+        },
+      })
+      uploadedMediaId = Number(uploaded.id)
+
+      const expectedFilePath = path.resolve(
+        process.cwd(),
+        'media/nitf_media',
+        String(uploaded.filename)
+      )
+      expect(fs.existsSync(expectedFilePath)).toBe(true)
+
+      const dispatch = await payload.create({
+        collection: 'nitf_dispatches',
+        data: {
+          title: 'GPX Hook Storage Test',
+          slug: `gpx-hook-storage-${Date.now()}`,
+          status: 'draft',
+          excerpt: 'GPX upload storage integration test',
+          gpx_file: uploadedMediaId,
+        },
+      })
+      gpxDispatchId = Number(dispatch.id)
+
+      const reloaded = await payload.findByID({
+        collection: 'nitf_dispatches',
+        id: gpxDispatchId,
+      })
+      expect(reloaded.trail_geometry).toHaveLength(2)
+      expect(reloaded.distance_km).toBeGreaterThan(0)
+      expect(reloaded.elevation_gain_m).toBe(15)
+      expect(reloaded.elevation_loss_m).toBe(0)
     })
   })
 })

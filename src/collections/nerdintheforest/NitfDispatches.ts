@@ -116,9 +116,14 @@ const computeDispatchGpxStats: CollectionAfterChangeHook = async ({ doc, req, pr
 
     // First try reading directly from local filesystem
     if (file.filename) {
-      const uploadDir = path.resolve(process.cwd(), 'nitf_media')
-      const localFilePath = path.join(uploadDir, file.filename)
-      if (fs.existsSync(localFilePath)) {
+      const configuredDir = req.payload.collections?.['nitf_media']?.config?.upload?.staticDir
+      const candidateDirs = [configuredDir, 'media/nitf_media', 'nitf_media'].filter(
+        (dir): dir is string => Boolean(dir)
+      )
+      const localFilePath = candidateDirs
+        .map((dir) => path.resolve(process.cwd(), dir, file.filename!))
+        .find((candidate) => fs.existsSync(candidate))
+      if (localFilePath) {
         gpxContent = fs.readFileSync(localFilePath, 'utf8')
       }
     }
