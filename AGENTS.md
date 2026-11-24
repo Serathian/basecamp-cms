@@ -40,3 +40,20 @@ All 8 migrations are applied to the local dev database and run automatically on 
 3. **GPX Ingestion**: GPX file uploads to `nitf_dispatches` are automatically parsed into elevation gain/loss, outing duration, distance in km, and GeoJSON `trail_geometry` via an `afterChange` hook in `NitfDispatches.ts`.
 4. **Access Control**: Public reads access published documents via `published.ts`; authenticated admin users see all drafts.
 5. **Types Generation & Export Package**: After modifying collection definitions, run `npm run generate:types` (`src/payload-types.ts`) and verify `PAYLOAD_CONFIG_PATH=src/payload.config.export-types.ts npm run generate:types && (cd packages/types && npm run build)`. Pushes to `main` touching `src/collections/**`, `src/payload.config.ts`, or `packages/types/**` trigger `.github/workflows/publish-types.yml` to publish `@basecamp-cms/basecamp-cms-types` to npm.
+
+---
+
+## Agent skills
+
+### Issue tracker
+
+Issues are tracked centrally in GitHub Issues (`Serathian/website-stack` via `gh --repo Serathian/website-stack`). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Uses the default five-role triage label vocabulary (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context layout (`GLOSSARY.md` + `docs/adr/` at the repo root). See `docs/agents/domain.md`.
+
