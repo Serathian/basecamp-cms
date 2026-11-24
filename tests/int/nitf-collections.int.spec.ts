@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
+import { buildS3StoragePlugin, createPublicFileUrlGenerator } from '@/lib/s3StoragePlugin'
 import { sql } from '@payloadcms/db-postgres'
 import { describe, it, beforeAll, afterAll, expect } from 'vitest'
 
@@ -288,6 +289,41 @@ describe('Nerd in the Forest (NITF) 6-Model Architecture', () => {
     it('configures upload staticDir for nitf_media and jr_media under media/', () => {
       expect(payload.collections['nitf_media'].config.upload.staticDir).toBe('media/nitf_media')
       expect(payload.collections['jr_media'].config.upload.staticDir).toBe('media/jr_media')
+    })
+
+    it('includes prefix column on nitf_media and jr_media and builds S3 storage config from env', async () => {
+      const prefixCols = await db.execute(sql`
+        SELECT table_name, column_name FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name IN ('nitf_media', 'jr_media')
+          AND column_name = 'prefix'
+      `)
+      expect(prefixCols.rows).toHaveLength(2)
+
+      const urlGen = createPublicFileUrlGenerator('https://media.jake-reddy.com/')
+      expect(
+        urlGen({
+          collection: payload.collections['nitf_media'].config,
+          filename: 'Birgitan polku.gpx',
+          prefix: 'nitf_media',
+        })
+      ).toBe('https://media.jake-reddy.com/nitf_media/Birgitan%20polku.gpx')
+
+      const disabledPlugin = buildS3StoragePlugin({} as NodeJS.ProcessEnv)
+      const disabledResult = disabledPlugin(payload.config) as any
+      const localNitfMedia = disabledResult.collections.find((c: any) => c.slug === 'nitf_media')
+      expect(localNitfMedia.upload.disableLocalStorage).not.toBe(true)
+
+      const enabledPlugin = buildS3StoragePlugin({
+        S3_BUCKET: 'hot-media',
+        S3_ACCESS_KEY_ID: 'key',
+        S3_SECRET_ACCESS_KEY: 'secret',
+        S3_ENDPOINT: 'https://example.r2.cloudflarestorage.com',
+        S3_PUBLIC_URL: 'https://media.jake-reddy.com',
+      } as unknown as NodeJS.ProcessEnv)
+      const enabledResult = enabledPlugin(payload.config) as any
+      const s3NitfMedia = enabledResult.collections.find((c: any) => c.slug === 'nitf_media')
+      expect(s3NitfMedia.upload.disableLocalStorage).toBe(true)
     })
 
     it('stores GPX uploads in media/nitf_media and computes dispatch trail stats', async () => {

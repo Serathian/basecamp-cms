@@ -191,6 +191,7 @@ export interface Author {
 export interface JrMedia {
   id: number;
   alt: string;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -262,6 +263,7 @@ export interface JrProject {
 export interface NitfMedia {
   id: number;
   alt: string;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -680,6 +682,7 @@ export interface AuthorsSelect<T extends boolean = true> {
  */
 export interface JrMediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -748,6 +751,7 @@ export interface JrProjectsSelect<T extends boolean = true> {
  */
 export interface NitfMediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

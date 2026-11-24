@@ -17,6 +17,7 @@ import { NitfDispatches } from './collections/nerdintheforest/NitfDispatches'
 import { NitfGearItems } from './collections/nerdintheforest/NitfGearItems'
 import { NitfGearReviews } from './collections/nerdintheforest/NitfGearReviews'
 import { NitfLoadouts } from './collections/nerdintheforest/NitfLoadouts'
+import { buildS3StoragePlugin } from './lib/s3StoragePlugin'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -59,5 +60,5 @@ export default buildConfig({
     push: false,
   }),
   sharp,
-  plugins: [],
+  plugins: [buildS3StoragePlugin()],
 })

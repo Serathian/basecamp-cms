@@ -130,8 +130,10 @@ const computeDispatchGpxStats: CollectionAfterChangeHook = async ({ doc, req, pr
 
     // Fallback to fetching URL if file was not on disk directly
     if (!gpxContent && file.url) {
-      const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || `http://localhost:${process.env.PORT || 3000}`
-      const targetUrl = file.url.startsWith('http') ? file.url : `${baseUrl}${file.url}`
+      const localBaseUrl = `http://127.0.0.1:${process.env.PORT || 3000}`
+      const targetUrl = file.url.startsWith('http')
+        ? file.url
+        : `${file.url.startsWith('/') ? localBaseUrl : process.env.PAYLOAD_PUBLIC_SERVER_URL || localBaseUrl}${file.url}`
       const res = await fetch(targetUrl)
       if (res.ok) {
         gpxContent = await res.text()

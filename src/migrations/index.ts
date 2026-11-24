@@ -6,6 +6,7 @@ import * as migration_20261025_175000_add_location_parking_amenity from './20261
 import * as migration_20261025_181200_add_dispatch_date_range from './20261025_181200_add_dispatch_date_range';
 import * as migration_20261025_190500_add_dispatch_loadout from './20261025_190500_add_dispatch_loadout';
 import * as migration_20261025_193200_add_dispatch_gpx_and_trail_geometry from './20261025_193200_add_dispatch_gpx_and_trail_geometry';
+import * as migration_20261124_122407_add_s3_media_prefix from './20261124_122407_add_s3_media_prefix';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20261025_193200_add_dispatch_gpx_and_trail_geometry.up,
     down: migration_20261025_193200_add_dispatch_gpx_and_trail_geometry.down,
-    name: '20261025_193200_add_dispatch_gpx_and_trail_geometry'
+    name: '20261025_193200_add_dispatch_gpx_and_trail_geometry',
+  },
+  {
+    up: migration_20261124_122407_add_s3_media_prefix.up,
+    down: migration_20261124_122407_add_s3_media_prefix.down,
+    name: '20261124_122407_add_s3_media_prefix'
   },
 ];

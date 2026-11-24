@@ -21,7 +21,7 @@ Frontends read from the CMS REST API.
 
 **Tests: 26/26 passing** (`npm run test:int`)
 
-All 8 migrations are applied to the local dev database and run automatically on container startup:
+All 9 migrations are applied to the local dev database and run automatically on container startup:
 1. `20261005_091006_clean_slate_initial_schema`
 2. `20261011_110908_add_nitf_collections`
 3. `20261025_090908_fix_dispatches`
@@ -30,6 +30,7 @@ All 8 migrations are applied to the local dev database and run automatically on 
 6. `20261025_181200_add_dispatch_date_range`
 7. `20261025_190500_add_dispatch_loadout`
 8. `20261025_193200_add_dispatch_gpx_and_trail_geometry`
+9. `20261124_122407_add_s3_media_prefix`
 
 ---
 
